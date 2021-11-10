@@ -1,0 +1,25 @@
+
+<div class=" me-auto ms-auto mt-5" style="width: 40%;">
+    <h1>Add Brand</h1>
+    <form action="/admin/brand-managment" method="post" enctype="multipart/form-data" class="mt-5">
+        <div class="mb-3">
+          <label for="" class="form-label">Brand Name</label>
+          <input type="text" name="brandName" class="form-control" >
+        </div>
+
+             <div class="mb-3">
+          <p>{{bannerExistError}}</p>
+        </div>
+        <div class="mb-3">
+            <label for="" class="form-label">Brand Description</label><br>
+          <textarea name="brandDescription" id="" cols="40" rows="5" class="brandmanagment-textarea"></textarea>
+        </div>
+
+         <div class="mb-3">
+            <label for="" class="form-label">Logo</label><br>
+          <input type="file" name="logo">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
