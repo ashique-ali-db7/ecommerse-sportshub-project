@@ -4,9 +4,12 @@
           Add category
         </div>
         <div class="card-body">
+          <form action="/admin/add-category" method="post">
             <label for="">Enter category</label>
-            <input type="text">
+            <input type="text" name="category">
           <button type="submit" class="btn btn-primary">Add</button>
+          <p style="color: red;">{{categoryExistError}}</p>
+          </form>
         </div>
       </div>
 
@@ -15,15 +18,18 @@
           Add sub category
         </div>
         <div class="card-body">
+          <form action="/admin/add-subcategory" method="post">
             <label for="">Select category</label>
           
-            <select name="cars" id="cars">
-              <option value="volvo">Volvo</option>
-              <option value="saab">Saab</option>
-              <option value="mercedes">Mercedes</option>
-              <option value="audi">Audi</option>
+            <select name="categorySubcategory" >
+              {{#each categoryData}}
+              <option >{{this.category}}</option>
+             {{/each}}
             </select>
-            <input type="text"><button class="btn btn-primary ms-4">Add sub category</button>
+            <input type="text" name="subcategory">
+            <button type="submit" class="btn btn-primary ms-4">Add sub category</button>
+            <p style="color: red;">{{subcategoryExistError}}</p>
+            </form>
         </div>
       </div>
 
@@ -32,30 +38,30 @@
       <table class="table mt-5">
         <thead>
           <tr>
-            <th scope="col">#</th>
+            <th scope="col">No</th>
             <th scope="col">Category</th>
-            <th scope="col">Subcategory</th>
-            <!-- <th scope="col">Handle</th> -->
+             <th scope="col">Subcategory</th> 
+            
           </tr>
         </thead>
         <tbody>
+          {{#each categoryData}}
           <tr>
             <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-          
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
+            <td>{{this.category}}</td>
             
+            <td>
+              <ul>
+                {{#each subcategory}}
+                <li>{{this}}</li>
+                 {{/each}}
+                </ul>
+                </td>
+         
           </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-       
-          </tr>
+          
+        
+          {{/each}}
         </tbody>
       </table>
   
