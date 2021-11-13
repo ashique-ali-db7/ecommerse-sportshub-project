@@ -248,3 +248,64 @@
 	});
 
 })(jQuery);
+
+
+
+
+// validation
+
+
+$("#register-form").validate({
+    rules:{
+        emailaddress:{
+            required:true,
+            email:true
+        },
+        password:{
+            required:true,
+            minlength:8
+        },
+        name:{
+            required:true
+        },
+        phonenumber:{
+            required:true,
+            minlength:10,
+            number: true
+        },
+       
+        confirmpassword:{
+            required:true
+        }
+       
+        
+    },
+    messages:{
+        password:{
+            required: 'Password is required'
+        }
+    }
+  
+});
+
+
+$("#userlogin").validate({
+    rules:{
+        emailaddress:{
+            required:true,
+            email:true
+        },
+        password:{
+            required:true,
+            minlength:8
+        }
+       
+       
+       
+       
+       
+        
+    }
+   
+  
+});

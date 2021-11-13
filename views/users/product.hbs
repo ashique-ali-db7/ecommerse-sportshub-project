@@ -145,29 +145,29 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="product-pic-zoom">
-                                <img class="product-big-img" src="images/users/product-single/product-1.jpg" alt="">
+                                <img class="product-big-img" src="/images/product-images/{{response._id}}1.png" alt="">
                                 <div class="zoom-icon">
                                     <i class="fa fa-search-plus"></i>
                                 </div>
                             </div>
                             <div class="product-thumbs">
                                 <div class="product-thumbs-track ps-slider owl-carousel">
-                                    <div class="pt active" data-imgbigurl="img/product-single/product-1.jpg"><img
-                                            src="images/users/product-single/product-1.jpg" alt=""></div>
-                                    <div class="pt" data-imgbigurl="img/product-single/product-2.jpg"><img
-                                            src="images/users/product-single/product-2.jpg" alt=""></div>
-                                    <div class="pt" data-imgbigurl="img/product-single/product-3.jpg"><img
-                                            src="images/users/product-single/product-3.jpg" alt=""></div>
-                                    <div class="pt" data-imgbigurl="img/product-single/product-3.jpg"><img
-                                            src="images/users/product-single/product-3.jpg" alt=""></div>
+                                    <div class="pt active" data-imgbigurl="/images/product-images/{{response._id}}1.png"><img
+                                            src="/images/product-images/{{response._id}}1.png" alt=""></div>
+                                    <div class="pt" data-imgbigurl="/images/product-images/{{response._id}}2.png"><img
+                                            src="/images/product-images/{{response._id}}2.png" alt=""></div>
+                                    <div class="pt" data-imgbigurl="/images/product-images/{{response._id}}3.png"><img
+                                            src="/images/product-images/{{response._id}}3.png" alt=""></div>
+                                    {{!-- <div class="pt" data-imgbigurl="img/product-single/product-3.jpg"><img
+                                            src="images/users/product-single/product-3.jpg" alt=""></div> --}}
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="product-details">
                                 <div class="pd-title">
-                                    <span>oranges</span>
-                                    <h3>Pure Pineapple</h3>
+                                    <span>{{response.brand}}</span>
+                                    <h3>{{response.productname}}</h3>
                                     <a href="#" class="heart-icon"><i class="icon_heart_alt"></i></a>
                                 </div>
                                 {{!-- <div class="pd-rating">
@@ -179,9 +179,8 @@
                                     <span>(5)</span>
                                 </div> --}}
                                 <div class="pd-desc">
-                                    <p>Lorem ipsum dolor sit amet, consectetur ing elit, sed do eiusmod tempor sum dolor
-                                        sit amet, consectetur adipisicing elit, sed do mod tempor</p>
-                                    <h4>$495.00 <span>629.99</span></h4>
+                                    <p>{{response.description}}</p>
+                                    <h4><i class="fas fa-rupee-sign"></i>{{response.price}} <span>629.99</span></h4>
                                 </div>
                                 {{!-- <div class="pd-color">
                                     <h6>Color</h6>
@@ -222,8 +221,14 @@
                                     <div class="pro-qty">
                                         <input type="text" value="1">
                                     </div>
-                                    <a href="#" class="primary-btn pd-cart">Add To Cart</a>
+                                   
+                                    
                                 </div>
+
+                                 <a href="#" class="primary-btn pd-cart"><i class="fas fa-shopping-cart mr-2"></i>Add To Cart</a>
+                                 <a href="#" class="primary-btn pd-cart "><i class="fas fa-fire mr-2"></i>Buy Now</a>
+
+                                
                                 <ul class="pd-tags">
                                     <li><span>CATEGORIES</span>: More Accessories, Wallets & Cases</li>
                                     <li><span>TAGS</span>: Clothing, T-shirt, Woman</li>

@@ -6,6 +6,7 @@ var logger = require('morgan');
 var hbs = require('express-handlebars');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
+var session = require('express-session');
 
 var app = express();
 var fileUpload = require('express-fileupload')
@@ -20,7 +21,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(fileUpload())
+app.use(fileUpload());
+app.use(
+  session({
+    secret: "123",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 1000000 },
+    
+  })
+);
 db.connect((err)=>{
   if(err){
     console.log("database is not connected");

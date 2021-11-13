@@ -1,5 +1,5 @@
   <!-- Breadcrumb Section Begin -->
-    <div class="breacrumb-section">
+    {{!-- <div class="breacrumb-section">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -10,7 +10,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- Breadcrumb Form Section Begin -->
 
     <!-- Register Section Begin -->
@@ -20,23 +20,35 @@
                 <div class="col-lg-6 offset-lg-3">
                     <div class="register-form">
                         <h2>Register</h2>
-                        <form action="#">
+                        <form action="/register" id="register-form" method="post">
                             <div class="group-input">
-                                <label for="username">Username or email address *</label>
-                                <input type="text" id="username">
+                                <label for="username">Name</label>
+                                <input type="text" name="name" id="username">
+                            </div>
+<p style="color: red;">{{emailphonenumberExistError}}</p>
+                            <div class="group-input">
+                                  
+                                <label for="username">phone number</label>
+                                <input type="text" name="phonenumber" id="username">
+                            </div>
+
+                            <div class="group-input">
+                                <label for="username">email address </label>
+                                <input type="text" name="emailaddress" id="username">
                             </div>
                             <div class="group-input">
-                                <label for="pass">Password *</label>
-                                <input type="text" id="pass">
+                                <label for="pass">Password </label>
+                                <input type="password" name="password" id="pass">
                             </div>
                             <div class="group-input">
-                                <label for="con-pass">Confirm Password *</label>
-                                <input type="text" id="con-pass">
+                                <label for="con-pass">Confirm Password </label>
+                                <input type="password" name="confirmpassword" id="con-pass">
+                                <p style="color: red;">{{confirmPasswordError}}</p>
                             </div>
                             <button type="submit" class="site-btn register-btn">REGISTER</button>
                         </form>
                         <div class="switch-login">
-                            <a href="./login.html" class="or-login">Or Login</a>
+                         <p style="display: inline-block;">already have an account?</p>   <a href="/userlogin" class="text-primary">Login</a>
                         </div>
                     </div>
                 </div>

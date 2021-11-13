@@ -2,30 +2,47 @@
 <div class="container">
   <a href="/admin/add-product" class="btn btn-success mt-4">Add product</a>
             <h2 class="mt-5">PRODUCT DETAILS</h2>
-    <table class="table table-striped mt-5">
+     <table class="table table-striped mt-5" id="producttable">
         <thead>
           <tr>
-            <th scope="col">product Id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Brand</th>
-            <th scope="col">Category</th>
-            <th scope="col">Price</th>
-            <th scope="col">Qty</th>
-            <th scope="col">Images</th>
+            <th class="tableheaderfontsize" scope="col">product Id</th>
+            <th class="tableheaderfontsize" scope="col">Name</th>
+            <th class="tableheaderfontsize" scope="col">Brand</th>
+            <th class="tableheaderfontsize" scope="col">Category</th>
+            <th class="tableheaderfontsize" scope="col">Price</th>
+            <th class="tableheaderfontsize" scope="col">Small Quantity</th>
+            <th class="tableheaderfontsize" scope="col">Medium Quantity</th>
+            <th class="tableheaderfontsize" scope="col">Large Quantity</th>
+          
+             <th class="tableheaderfontsize" scope="col">Images</th> 
+             <th class="tableheaderfontsize" scope="col">Edit</th> 
+             <th class="tableheaderfontsize" scope="col">Delete</th> 
+            
             
           </tr>
         </thead>
         <tbody>
+          {{#each products}}
           <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
+          
+            
+            <td class="tabledatafontsize">{{this.productid}}</td>
+            <td class="tabledatafontsize">{{this.productname}}</td>
+            <td class="tabledatafontsize">{{this.brand}}</td>
+            <td class="tabledatafontsize">{{this.category}}</td>
+            <td class="tabledatafontsize">{{this.price}}</td>
+             <td class="tabledatafontsize">{{this.smallquantity}}</td>
+            <td class="tabledatafontsize">{{this.mediumquantity}}</td>
+            <td class="tabledatafontsize">{{this.largequantity}}</td>
+         
+             <td><img style="width:50px;height:50px;" src="/images/product-images/{{this._id}}1.png" alt=""></td> 
+            
+            <td><a href="/admin/edit-product?id={{this._id}}" class="btn btn-primary">Edit</a></td>
+            <td><a href="" class="btn btn-danger">Delete</a></td>
+          
           
           </tr>
-        </tbody>
+            {{/each}}
+        </tbody> 
       </table>
    </div>

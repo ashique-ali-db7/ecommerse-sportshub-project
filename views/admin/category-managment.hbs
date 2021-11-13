@@ -10,6 +10,19 @@
           <button type="submit" class="btn btn-primary">Add</button>
           <p style="color: red;">{{categoryExistError}}</p>
           </form>
+
+ <form action="/admin/delete-category" method="post">
+            <label for="">Delete category</label>
+              <select name="category" >
+              {{#each categoryData}}
+              <option >{{this.category}}</option>
+              {{/each}}
+            </select>
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+           
+
+
         </div>
       </div>
 
@@ -25,8 +38,8 @@
               {{#each categoryData}}
               <option >{{this.category}}</option>
              {{/each}}
-            </select>
-            <input type="text" name="subcategory">
+            </select><br>
+            <input type="text" name="subcategory" class="mt-4">
             <button type="submit" class="btn btn-primary ms-4">Add sub category</button>
             <p style="color: red;">{{subcategoryExistError}}</p>
             </form>
@@ -35,7 +48,7 @@
 
 
 
-      <table class="table mt-5">
+      <table class="table mt-5" id="categorytable">
         <thead>
           <tr>
             <th scope="col">No</th>
@@ -47,13 +60,13 @@
         <tbody>
           {{#each categoryData}}
           <tr>
-            <th scope="row">1</th>
+            <th scope="row">{{@key}}</th>
             <td>{{this.category}}</td>
-            
+           
             <td>
               <ul>
                 {{#each subcategory}}
-                <li>{{this}}</li>
+                <li>{{this}} <a href="/admin/delete-subcategory?category={{../this.category}}&subcategory={{this}}"><i class="far fa-trash-alt"></i></a></li>
                  {{/each}}
                 </ul>
                 </td>
@@ -67,3 +80,5 @@
   
         
 </div>
+
+

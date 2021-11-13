@@ -144,6 +144,21 @@ body {
 -----------------------*/
 /* home */
 /* The side navigation menu */
+/* Limit image width to avoid overflow the container */
+
+img {
+    display: block;
+    max-width: 100%;
+}
+.preview{
+    width: 160px;
+    height: 160px;
+    margin: 10px;
+    border: 1px solid red;
+}
+
+
+
 .sidebar {
     margin: 0;
     padding: 0;
@@ -208,9 +223,15 @@ body {
 }
 
 
-/* brand managment */
-.brandmanagment-textarea{
-   
+.tableheaderfontsize{
+    font-size: 0.8rem;
+}
+.tabledatafontsize{
+    font-size: 0.7rem;
+}
+
+.editimage{
+    display: none;
 }
     
     /*---------------------

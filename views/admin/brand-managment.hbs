@@ -15,11 +15,47 @@
           <textarea name="brandDescription" id="" cols="40" rows="5" class="brandmanagment-textarea"></textarea>
         </div>
 
-         <div class="mb-3">
+         {{!-- <div class="mb-3">
             <label for="" class="form-label">Logo</label><br>
           <input type="file" name="logo">
-        </div>
+        </div> --}}
+
+        <div class="mb-3" id="img-preview">
+            <label for="" class="form-label">Logo</label><br>
+            <input type="file"  name="logo" accept="image/*" onchange="viewLogoImage(event)">
+            <img src="" alt="" class="mt-4" style="width: 6rem;height:6rem;display:none" id="imagelogo"><br>
+           
+          </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </div>
+
+
+
+    <table class="table" id="brandtable">
+  <thead>
+    <tr>
+      <th scope="col">No</th>
+      <th scope="col">Brand</th>
+      <th scope="col">Logo</th>
+      <th scope="col">Delete</th>
+     
+      
+    </tr>
+  </thead>
+  <tbody>
+    {{#each brandData}}
+    <tr>
+     
+     <td>{{@key}}</td>
+      <td>{{this.brandName}}</td>
+      <td><img style="width:50px;height:50px;" src="/images/brand-images/{{this._id}}.png" alt=""></td>
+     <td><a href="" class="btn btn-danger">Delete</a></td>
+     
+     
+      
+    </tr>
+  {{/each}}
+  </tbody>
+</table>

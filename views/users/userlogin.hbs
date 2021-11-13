@@ -20,29 +20,30 @@
                 <div class="col-lg-6 offset-lg-3">
                     <div class="login-form">
                         <h2>Login</h2>
-                        <form action="#">
+                        <form action="/userlogin" method="post" id="userlogin">
+                        <p style="color: red;">{{loginError}}</p>
                             <div class="group-input">
-                                <label for="username">Username or email address *</label>
-                                <input type="text" id="username">
+                                <label for="username">email address</label>
+                                <input type="text" name="emailaddress">
                             </div>
                             <div class="group-input">
-                                <label for="pass">Password *</label>
-                                <input type="text" id="pass">
+                                <label for="">Password</label>
+                                <input type="password" name="password" >
                             </div>
-                            <div class="group-input gi-check">
+                            {{!-- <div class="group-input gi-check">
                                 <div class="gi-more">
-                                    <label for="save-pass">
+                                     <label for="save-pass">
                                         Save Password
                                         <input type="checkbox" id="save-pass">
                                         <span class="checkmark"></span>
-                                    </label>
-                                    <a href="#" class="forget-pass">Forget your Password</a>
+                                    </label> 
+                                  
                                 </div>
-                            </div>
+                            </div> --}}
                             <button type="submit" class="site-btn login-btn">Sign In</button>
                         </form>
                         <div class="switch-login">
-                            <a href="./register.html" class="or-login">Or Create An Account</a>
+                          <p style="display:inline-block">don't have an account</p>  <a href="/register" class="text-primary">Create An Account</a>
                         </div>
                     </div>
                 </div>
