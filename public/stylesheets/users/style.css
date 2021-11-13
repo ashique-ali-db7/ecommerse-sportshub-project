@@ -112,8 +112,12 @@ ol {
  my styling
 -----------------------*/
 /* home */
+/* validation error */
+.error {
 
-
+    color: red;
+    font-style: italic;
+}
 
 .login-button{
 background-color: #e7ab3c;

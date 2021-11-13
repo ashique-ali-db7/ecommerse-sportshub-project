@@ -75,7 +75,7 @@
                                 </a>
                             </li>
                             <li class="cart-icon">
-                                <a href="#">
+                                <a href="/shopping-cart">
                                     <i class="fas fa-shopping-bag"></i>
                                     <span>3</span>
                                 </a>
@@ -121,7 +121,11 @@
                                 </div> --}}
                             </li>
                             {{!-- <li class="cart-price">$150.00</li> --}}
-                            <li><button type="button" class="btn btn-primary login-button">Login</button></li>
+                            {{#if user}}
+                            <li><a href="/userlogout" class="btn btn-primary login-button">Logout</a></li>
+                            {{else}}
+                            <li><a href="/userlogin" class="btn btn-primary login-button">Login</a></li>
+                            {{/if}}
                         </ul>
                     </div>
                 </div>
@@ -147,16 +151,17 @@
                 </div> --}}
                 <nav class="nav-menu mobile-menu">
                     <ul>
-                        <li class="active"><a href="">Home</a></li>
-                        <li><a href="">Clothings</a></li>
-                        <li><a href="#">Shoes</a>
+                        <li class="active"><a href="/">Home</a></li>
+                        
+                        <li><a href="/clothings">Clothings</a></li>
+                       
                             {{!-- <ul class="dropdown">
                                 <li><a href="#">Men's</a></li>
                                 <li><a href="#">Women's</a></li>
                                 <li><a href="#">Kid's</a></li>
                             </ul> --}}
                         </li>
-                        <li><a href="">Accessories</a></li>
+                       
                         {{!-- <li><a href="./contact.html">Contact</a></li>
                         <li><a href="#">Pages</a>
                             <ul class="dropdown">

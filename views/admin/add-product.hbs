@@ -2,20 +2,27 @@
 
 <div class=" me-auto ms-auto mt-5" style="width: 40%;">
     <h1>Add Product</h1>
-    <form action="" class="mt-5">
+    <form action="/admin/add-product" class="mt-5" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+          <p style="color: red;">{{productExistError}}</p>
+          <label for="" class="form-label">Product Id</label>
+          <input name="productid" type="text" class="form-control" >
+         
+        </div>
+
+
         <div class="mb-3">
           <label for="" class="form-label">Product Name</label>
-          <input type="text" class="form-control" >
+          <input name="productname" type="text" class="form-control" >
          
         </div>
         <div class="mb-3">
             <label for="" class="form-label">Brand</label><br>
         
             <select name="brand" id="brand" style="width: 100%;height: 40px;">
-              <option value="volvo">Volvo</option>
-              <option value="saab">Saab</option>
-              <option value="opel">Opel</option>
-              <option value="audi">Audi</option>
+              {{#each brandData}}
+              <option>{{this.brandName}}</option>
+             {{/each}}
             </select>
          
         </div>
@@ -23,72 +30,106 @@
         <div class="mb-3">
             <label for="" class="form-label">Select category</label><br>
         
-            <select name="brand" id="brand" style="width: 100%;height: 40px;">
-              <option value="volvo">Volvo</option>
-              <option value="saab">Saab</option>
-              <option value="opel">Opel</option>
-              <option value="audi">Audi</option>
+            <select name="category" id="categorychange" style="width: 100%;height: 40px;" onchange="formCategory()">
+              <option selected="">select</option>
+              {{#each categoryData}}
+              <option>{{this.category}}</option>
+              {{/each}}
+
             </select>
-         
+ 
         </div>
 
         <div class="mb-3">
             <label for="" class="form-label">Select sub category</label><br>
         
-            <select name="brand" id="brand" style="width: 100%;height: 40px;">
-              <option value="volvo">Volvo</option>
-              <option value="saab">Saab</option>
-              <option value="opel">Opel</option>
-              <option value="audi">Audi</option>
+            <select name="subcategory" id="formsubcategory" style="width: 100%;height: 40px;">
+            
+            
+  
             </select>
          
         </div>
 
-        <div class="mb-3">
-            <label for="" class="form-label">Select sub category</label><br>
-        
-            <select name="brand" id="brand" style="width: 100%;height: 40px;">
-              <option value="volvo">Volvo</option>
-              <option value="saab">Saab</option>
-              <option value="opel">Opel</option>
-              <option value="audi">Audi</option>
-            </select>
-         
-        </div>
+       
 
 
         <div class="mb-3">
             <label for="" class="form-label" >Small quantity</label>
-            <input type="text" style="width: 30%;" class="ms-4 mt-3">
+            <input type="text" name="smallquantity" style="width: 30%;" class="ms-4 mt-3">
         </div>
 
         <div class="mb-3">
             <label for="" class="form-label" >Medium quantity</label>
-            <input type="text" style="width: 30%;"class="ms-1">
+            <input type="text" name="mediumquantity" style="width: 30%;"class="ms-1">
         </div>
 
         <div class="mb-3">
             <label for="" class="form-label" >Large quantity</label>
-            <input type="text" style="width: 30%;"class="ms-4">
+            <input type="text" name="largequantity" style="width: 30%;"class="ms-4">
         </div>
 
 
         <div class="mb-3">
             <label for="" class="form-label">Price</label>
-            <input type="text" class="form-control" >
+            <input type="text" name="price" class="form-control" >
            
           </div>
 
 
           <div class="mb-3">
             <label for="" class="form-label">Description</label><br>
-           <textarea name="" id="" cols="50" rows="5"></textarea>
+           <textarea name="description" id="" cols="50" rows="5"></textarea>
            
           </div>
 
-        
+          <div class="mb-3" id="img-preview">
+            <label for="" class="form-label">Image1</label><br>
+            <input type="file"  name="image1" accept="image/*" onchange="viewMainImage(event)">
+            <img src="" alt="" class="mt-4" style="width: 400px;height:240px;display:none" id="imageview1"><br>
+           
+          </div>
+
+           <div class="mb-3">
+            <label for="" class="form-label">Image2</label><br>
+           
+            <input type="file"  name="image2" accept="image/*" onchange="viewSecondImage(event)">
+             <img src="" alt="" class="mt-4" style="width: 400px;height:240px;display:none" id="imageview2"><br>
+          </div>
+
+
+
+           <div class="mb-3">
+            <label for="" class="form-label">Image3</label><br>
+           
+            <input type="file"  name="image3" accept="image/*" onchange="viewThirdImage(event)">
+             <img src="" alt="" class="mt-4" style="width: 400px;height:240px;display:none" id="imageview3"><br>
+          </div>
+
+
+
+
+
+           <div class="mb-3">
+            <label for="" class="form-label">Image4</label><br>
+           
+            <input type="file"  name="image4" accept="image/*" onchange="viewFourthImage(event)">
+             <img src="" alt="" class="mt-4" style="width: 400px;height:240px;display:none" id="imageview4"><br>
+          </div>
+
+          
+
+
+
+         
+
+
+
+       
 
         <button type="submit" class="btn btn-primary mt-1" style="width: 100%;">Submit</button>
+
       </form>
     </div>
             </div>
+

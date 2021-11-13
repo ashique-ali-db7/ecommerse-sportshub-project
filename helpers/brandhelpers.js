@@ -33,6 +33,12 @@ resolve(response);
 
         })
 
+    },
+    getBrand:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let allBrand = await db.get().collection(collections.BRAND_DETAILS_COLLECTION).find().toArray();
+            resolve(allBrand);
+        })
     }
  
 

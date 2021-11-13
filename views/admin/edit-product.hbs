@@ -1,0 +1,164 @@
+<div class="container">
+
+<div class=" me-auto ms-auto mt-5" style="width: 40%;">
+    <h1>EDIT PRODUCT</h1>
+    <form action="/admin/edit-product?productid={{data.productid}}&id={{data._id}}" class="mt-5" method="post" id="editproduct" enctype="multipart/form-data">
+{{!--        
+        <div class="mb-3">
+    <p style="color: red;">{{productExistError}}</p> 
+          
+          <label for="" class="form-label">Product Id</label>
+          <input name="productid" value="{{data.productid}}" type="text" class="form-control" >
+         
+        </div> --}}
+
+
+        <div class="mb-3">
+          <label for="" class="form-label">Product Name</label>
+          <input name="productname" value="{{data.productname}}" type="text" class="form-control" >
+         
+        </div>
+         <div class="mb-3">
+            <label for="" class="form-label">Brand</label><br>
+        
+            <select name="brand" id="brand" style="width: 100%;height: 40px;">
+            
+              {{#each brandData}}
+              <option>{{this.brandName}}</option>
+             {{/each}}
+            </select>
+         
+        </div>
+
+        <div class="mb-3">
+            <label for="" class="form-label">Select category</label><br>
+        
+            <select name="category" id="categorychange" style="width: 100%;height: 40px;" onchange="formCategory()">
+              <option selected="">select</option>
+              {{#each categoryData}}
+              <option>{{this.category}}</option>
+              {{/each}}
+
+            </select>
+ 
+        </div>
+
+        <div class="mb-3">
+            <label for="" class="form-label">Select sub category</label><br>
+        
+            <select name="subcategory" id="formsubcategory" style="width: 100%;height: 40px;">
+            
+            
+  
+            </select>
+         
+        </div> 
+
+       
+
+
+        <div class="mb-3">
+            <label for="" class="form-label" >Small quantity</label>
+            <input type="text" name="smallquantity" value="{{data.smallquantity}}" style="width: 30%;" class="ms-4 mt-3">
+        </div>
+
+        <div class="mb-3">
+            <label for="" class="form-label" >Medium quantity</label>
+            <input type="text" name="mediumquantity" value="{{data.mediumquantity}}" style="width: 30%;"class="ms-1">
+        </div>
+
+        <div class="mb-3">
+            <label for="" class="form-label" >Large quantity</label>
+            <input type="text" name="largequantity" value="{{data.largequantity}}" style="width: 30%;"class="ms-4">
+        </div>
+
+
+        <div class="mb-3">
+            <label for="" class="form-label">Price</label>
+            <input type="text" name="price" value="{{data.price}}" class="form-control" >
+           
+          </div>
+
+
+          <div class="mb-3">
+            <label for="" class="form-label">Description</label><br>
+           <textarea name="description" id=""  cols="50" rows="5">{{data.description}}</textarea>
+           
+          </div>
+
+          <div class="mb-3" id="img-preview">
+            <label for="" class="form-label">Image1</label><br>
+            <input type="file"  name="image1" accept="image/*" onchange="viewMainImage(event)">
+            <img src="" alt="" class="mt-4" style="width: 15rem;height:17rem;display:none" id="imageview1"><br>
+           <img style="width:15rem;height:17rem" src="/images/product-images/{{data._id}}1.png" id="editimageview1" alt="">
+          </div>
+
+   
+           
+
+           <div class="mb-3">
+            <label for="" class="form-label">Image2</label><br>
+           
+            <input type="file"  name="image2" accept="image/*" onchange="viewSecondImage(event)">
+             <img src="" alt="" class="mt-4" style="width: 15rem;height:17rem;display:none" id="imageview2"><br>
+             <img style="width:15rem;height:17rem" src="/images/product-images/{{data._id}}2.png" id="editimageview2" alt="">
+          </div>
+
+
+
+           <div class="mb-3">
+            <label for="" class="form-label">Image3</label><br>
+           
+            <input type="file"  name="image3" accept="image/*" onchange="viewThirdImage(event)">
+             <img src="" alt="" class="mt-4" style="width: 15rem;height:17rem;display:none" id="imageview3"><br>
+              <img style="width:15rem;height:17rem" src="/images/product-images/{{data._id}}3.png" id="editimageview3" alt="">
+          </div>
+
+
+
+
+
+           <div class="mb-3">
+            <label for="" class="form-label">Image4</label><br>
+           
+            <input type="file"  name="image4" accept="image/*" onchange="viewFourthImage(event)">
+             <img src="" alt="" class="mt-4" style="width: 15rem;height:17rem;display:none" id="imageview4"><br>
+             <img style="width:15rem;height:17rem" src="/images/product-images/{{data._id}}4.png" id="editimageview4" alt="">
+          </div>
+
+
+
+
+         
+
+
+
+       
+
+        <a type="button" class="btn btn-primary mt-1" style="width: 100%;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Submit</a>
+
+      </form>
+    </div>
+            </div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Update user</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modal-body-id">
+        Are you sure do you want to update {{data.productname}}?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button onclick="updateproductdetails()"   type="button" class="btn btn-primary">yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+

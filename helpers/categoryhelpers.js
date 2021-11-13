@@ -57,7 +57,36 @@ let response = {};
             }
 
         });
-    }
+    },
+    deleteCategory:(data)=>{
+        return new Promise(async(resolve,reject)=>{
 
+await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
+.deleteOne({category:data.category}).then((result)=>{
+    resolve();
+})
+
+        })
+    },
+
+    deletesubCategory:(data)=>{
+
+        return new Promise(async(resolve,reject)=>{
+
+            await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
+            .updateOne({category:data.category},{$pull:{subcategory:data.subcategory}}).then((data)=>{
+                resolve();
+            })
+        })
+    },
+    getSubcategoriesForForm:(data)=>{
+        return new Promise(async(resolve,reject)=>{
+           let result = await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
+             .findOne({category:data.category});
+             resolve(result);
+  
+        })
+    }
+   
 
 }
