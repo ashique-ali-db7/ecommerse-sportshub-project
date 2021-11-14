@@ -2,7 +2,7 @@
 
 <div class=" me-auto ms-auto mt-5" style="width: 40%;">
     <h1>EDIT PRODUCT</h1>
-    <form action="/admin/edit-product?productid={{data.productid}}&id={{data._id}}" class="mt-5" method="post" id="editproduct" enctype="multipart/form-data">
+    <form action="/admin/edit-product?productid={{data.productid}}&id={{data._id}}"  class="mt-5" method="post" id="editproduct" enctype="multipart/form-data">
 {{!--        
         <div class="mb-3">
     <p style="color: red;">{{productExistError}}</p> 
@@ -88,7 +88,7 @@
 
           <div class="mb-3" id="img-preview">
             <label for="" class="form-label">Image1</label><br>
-            <input type="file"  name="image1" accept="image/*" onchange="viewMainImage(event)">
+            <input type="file" id="image1" name="image1" accept="image/*" onchange="viewMainImage(event)">
             <img src="" alt="" class="mt-4" style="width: 15rem;height:17rem;display:none" id="imageview1"><br>
            <img style="width:15rem;height:17rem" src="/images/product-images/{{data._id}}1.png" id="editimageview1" alt="">
           </div>
@@ -99,7 +99,7 @@
            <div class="mb-3">
             <label for="" class="form-label">Image2</label><br>
            
-            <input type="file"  name="image2" accept="image/*" onchange="viewSecondImage(event)">
+            <input type="file" id="image2"  name="image2" accept="image/*" onchange="viewSecondImage(event)">
              <img src="" alt="" class="mt-4" style="width: 15rem;height:17rem;display:none" id="imageview2"><br>
              <img style="width:15rem;height:17rem" src="/images/product-images/{{data._id}}2.png" id="editimageview2" alt="">
           </div>
@@ -109,7 +109,7 @@
            <div class="mb-3">
             <label for="" class="form-label">Image3</label><br>
            
-            <input type="file"  name="image3" accept="image/*" onchange="viewThirdImage(event)">
+            <input type="file" id="image3" name="image3" accept="image/*" onchange="viewThirdImage(event)">
              <img src="" alt="" class="mt-4" style="width: 15rem;height:17rem;display:none" id="imageview3"><br>
               <img style="width:15rem;height:17rem" src="/images/product-images/{{data._id}}3.png" id="editimageview3" alt="">
           </div>
@@ -121,7 +121,7 @@
            <div class="mb-3">
             <label for="" class="form-label">Image4</label><br>
            
-            <input type="file"  name="image4" accept="image/*" onchange="viewFourthImage(event)">
+            <input type="file" id="image4" name="image4" accept="image/*" onchange="viewFourthImage(event)">
              <img src="" alt="" class="mt-4" style="width: 15rem;height:17rem;display:none" id="imageview4"><br>
              <img style="width:15rem;height:17rem" src="/images/product-images/{{data._id}}4.png" id="editimageview4" alt="">
           </div>

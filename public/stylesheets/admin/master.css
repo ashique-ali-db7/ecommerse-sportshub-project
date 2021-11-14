@@ -233,6 +233,9 @@ img {
 .editimage{
     display: none;
 }
+.error{
+    color: red;
+}
     
     /*---------------------
      my styling end

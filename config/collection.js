@@ -3,4 +3,5 @@ module.exports={
     CATEGORY_DETAILS_COLLECTION:'category',
     PRODUCTS_DETAILS_COLLECTION:'products',
     USERS_DETAILS_COLLECTION:'users',
+    ADMIN_DETAILS_COLLECTION:'admin',
 }

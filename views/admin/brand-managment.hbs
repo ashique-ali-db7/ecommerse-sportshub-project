@@ -1,7 +1,7 @@
 
 <div class=" me-auto ms-auto mt-5" style="width: 40%;">
     <h1>Add Brand</h1>
-    <form action="/admin/brand-managment" method="post" enctype="multipart/form-data" class="mt-5">
+    <form action="/admin/brand-managment" method="post" id="brandvalidationform" enctype="multipart/form-data" class="mt-5">
         <div class="mb-3">
           <label for="" class="form-label">Brand Name</label>
           <input type="text" name="brandName" class="form-control" >
@@ -51,11 +51,37 @@
      <td>{{@key}}</td>
       <td>{{this.brandName}}</td>
       <td><img style="width:50px;height:50px;" src="/images/brand-images/{{this._id}}.png" alt=""></td>
-     <td><a href="" class="btn btn-danger">Delete</a></td>
+     <td><a onclick="deletebrand('{{this._id}}')" href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop" >Delete</a></td>
      
      
-      
+     
     </tr>
   {{/each}}
   </tbody>
 </table>
+
+
+
+<!-- Modal -->
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Delete user</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body" id="modal-body-id">
+            
+        
+       
+      </div>
+     
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+         <a href="" id="deletebrand" type="button" class="btn btn-primary">yes</a>
+      </div>
+    </div>
+  </div>
+</div>

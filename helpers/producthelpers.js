@@ -69,6 +69,14 @@ await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION)
 
 
       })
+  },
+  deleteProduct:(data)=>{
+      return new Promise(async(resolve,reject)=>{
+          await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION)
+          .deleteOne({_id:objectId(data.id)}).then((data)=>{
+              resolve(data);
+          })
+      })
   }
 
 
