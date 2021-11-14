@@ -23,7 +23,7 @@ $.ajax({
 // preview add image
 function viewMainImageToAdd(event) {
    
-    
+  
     document.getElementById('imageview1').src = URL.createObjectURL(event.target.files[0])
     let file = event.target.files[0].name
     let extension = file.split('.').pop()
@@ -103,6 +103,21 @@ function viewFourthImageToAdd(event) {
 
 
 function viewMainImage(event) {
+
+    var fileInput = 
+    document.getElementById('image1');
+  
+var filePath = fileInput.value;
+
+// Allowing file type
+var allowedExtensions = 
+        /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+  
+if (!allowedExtensions.exec(filePath)) {
+    alert('Invalid file type');
+    fileInput.value = '';
+    return false;
+} 
    
     document.getElementById('editimageview1').classList.add("editimage");
     document.getElementById('imageview1').src = URL.createObjectURL(event.target.files[0])
@@ -123,6 +138,25 @@ function viewMainImage(event) {
 
 
 function viewSecondImage(event) {
+
+
+    var fileInput = 
+    document.getElementById('image2');
+  
+var filePath = fileInput.value;
+
+// Allowing file type
+var allowedExtensions = 
+        /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+  
+if (!allowedExtensions.exec(filePath)) {
+    alert('Invalid file type');
+    fileInput.value = '';
+    return false;
+} 
+
+
+    
     document.getElementById('editimageview2').classList.add("editimage");
     document.getElementById('imageview2').src = URL.createObjectURL(event.target.files[0])
     let file = event.target.files[0].name
@@ -141,6 +175,25 @@ function viewSecondImage(event) {
 
 
 function viewThirdImage(event) {
+
+    var fileInput = 
+    document.getElementById('image3');
+  
+var filePath = fileInput.value;
+
+// Allowing file type
+var allowedExtensions = 
+        /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+  
+if (!allowedExtensions.exec(filePath)) {
+    alert('Invalid file type');
+    fileInput.value = '';
+    return false;
+} 
+
+
+
+
     document.getElementById('editimageview3').classList.add("editimage");
     document.getElementById('imageview3').src = URL.createObjectURL(event.target.files[0])
     let file = event.target.files[0].name
@@ -160,6 +213,25 @@ function viewThirdImage(event) {
 
 
 function viewFourthImage(event) {
+
+    var fileInput = 
+    document.getElementById('image4');
+  
+var filePath = fileInput.value;
+
+// Allowing file type
+var allowedExtensions = 
+        /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+  
+if (!allowedExtensions.exec(filePath)) {
+    alert('Invalid file type');
+    fileInput.value = '';
+    return false;
+} 
+
+
+
+
     document.getElementById('editimageview4').classList.add("editimage");
     document.getElementById('imageview4').src = URL.createObjectURL(event.target.files[0])
     let file = event.target.files[0].name
@@ -217,6 +289,23 @@ function updateproductdetails(){
   document.getElementById("editproduct").submit();
   }
 
+  function deletebrand(id){
+     
+    document.getElementById("deletebrand").href = "/admin/deletebrand?id="+id;
+   
+    document.getElementById("modal-body-id").innerHTML = "Are you sure do you want to delete";
+  }
+
+  function deletecategory(){
+      document.getElementById("deletecategory").submit();
+  }
+
+  function deleteproducts(id,productname){
+document.getElementById('deleteproductmodal').href = "/admin/deleteproduct?id="+id;
+document.getElementById("modal-body-id").innerHTML = "Are you sure do you want to delete "+productname;
+
+  }
+
 //validatton
 
 $("#addproducts").validate({
@@ -257,13 +346,85 @@ $("#addproducts").validate({
             required:true,
             number:true
         },
+        description:{
+            required:true,
+          
+        },
+        image1:{
+            required:true,
+        },
+        image2:{
+            required:true,
+        },
+        image3:{
+            required:true,
+        },
+        image4:{
+            required:true,
+        }
        
         
-    },
-    messages:{
-        password:{
-            required: 'Password is required'
-        }
     }
+   
   
 });
+
+
+
+$("#addcategory").validate({
+    rules:{
+       
+        category:{
+            required:true,
+           
+        },
+      
+        
+    }
+   
+  
+});
+
+$("#subcategoryformvalidation").validate({
+    rules:{
+       
+        subcategory:{
+            required:true,
+          
+        },
+      
+        
+    }
+   
+  
+});
+
+
+$("#brandvalidationform").validate({
+    rules:{
+       
+        brandName:{
+            required:true,
+            maxlength:10
+        },
+        brandDescription:{
+            required:true,
+           
+        },
+        logo:{
+            required:true,
+           
+        }
+        
+    }
+   
+  
+});
+
+
+//sweet alert
+
+
+
+   
+

@@ -7,6 +7,8 @@ const { response } = require('express');
 
 module.exports = {
 
+    
+
     emailAndPasswordCheck:(data)=>{
         return new Promise(async(resolve,reject)=>{
             let response={};
@@ -74,6 +76,19 @@ resolve(user);
                 resolve(response);
             }
         })
+    },
+    adminLogin:(data)=>{
+       return new Promise(async(resolve,reject)=>{
+        let   response={}
+        let user =   await db.get().collection(collections.ADMIN_DETAILS_COLLECTION).findOne({$and:[{emailaddres:data.emailaddress},{password:data.password}]})
+        if(user){
+            response.exist = true;
+            resolve(response);
+        }else{
+            response.exist = false;
+            resolve(response);
+        }
+       })
     }
 
 

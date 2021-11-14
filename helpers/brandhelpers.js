@@ -2,6 +2,8 @@ var db = require('../config/connection');
 
 var collections = require('../config/collection');
 
+var objectId = require('mongodb').ObjectId;
+
 module.exports={
 
  
@@ -39,7 +41,16 @@ resolve(response);
             let allBrand = await db.get().collection(collections.BRAND_DETAILS_COLLECTION).find().toArray();
             resolve(allBrand);
         })
-    }
+    },
+    deleteBrand:(id)=>{
+      
+        return new Promise(async(resolve,reject)=>{
+          await db.get().collection(collections.BRAND_DETAILS_COLLECTION).deleteOne({_id:objectId(id.id)}).then((data)=>{
+              resolve();
+          })
+        })
+    },
+  
  
 
 

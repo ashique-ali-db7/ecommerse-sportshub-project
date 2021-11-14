@@ -8,9 +8,7 @@ var categoryhelpers = require('../helpers/categoryhelpers');
 var userhelpers = require('../helpers/userhelpers');
 const session = require('express-session');
 
-const serviceId = "";
-const accountId = "";
-const authToken = "";
+
 
 const client = require("twilio")(accountId,authToken)
 
@@ -24,13 +22,13 @@ var phonenumberExistError = "";
 
 
 // verify login middleware
-// const verifyLogin = (req,res,next)=>{
-//   if(req.session?.user){
-//     next();
-//   }else{
-//     res.redirect('/userlogin');
-//   }
-// }
+//  const verifyLogin = (req,res,next)=>{
+//    if(req.session?.user){
+//      next();
+//    }else{
+//      res.redirect('/userlogin');
+//    }
+//  }
 
 // const verifyLoginForLoginpage = (req,res,next)=>{
 //   if(req.session?.user){
