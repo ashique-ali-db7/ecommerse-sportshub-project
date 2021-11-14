@@ -246,55 +246,55 @@ router.post('/edit-product',(req,res)=>{
   productid = req.query
   let id = req.query.id;
 
-  let image1Path = './public/images/product-images/'+id+'1.png';
-  let image2Path = './public/images/product-images/'+id+'2.png';
-  let image3Path = './public/images/product-images/'+id+'3.png';
-  let image4Path = './public/images/product-images/'+id+'4.png';
-//Delete the file image.png:
+//   let image1Path = './public/images/product-images/'+id+'1.png';
+//   let image2Path = './public/images/product-images/'+id+'2.png';
+//   let image3Path = './public/images/product-images/'+id+'3.png';
+//   let image4Path = './public/images/product-images/'+id+'4.png';
+// //Delete the file image.png:
 
-  if (fs.existsSync(image1Path)) {
-    fs.unlink('./public/images/product-images/'+id+'1.png', function (err) {
-      if (err) throw err;
-      console.log('File deleted!');
-    });
-  } else {
-    console.log("File does not exist.")
-  }
+//   if (fs.existsSync(image1Path)) {
+//     fs.unlink('./public/images/product-images/'+id+'1.png', function (err) {
+//       if (err) throw err;
+//       console.log('File deleted!');
+//     });
+//   } else {
+//     console.log("File does not exist.")
+//   }
 
 
-  if (fs.existsSync(image2Path)) {
+//   if (fs.existsSync(image2Path)) {
     
-fs.unlink('./public/images/product-images/'+id+'2.png', function (err) {
-  if (err) throw err;
-  console.log('File deleted!');
-});
-  } else {
-    console.log("File does not exist.")
-  }
+// fs.unlink('./public/images/product-images/'+id+'2.png', function (err) {
+//   if (err) throw err;
+//   console.log('File deleted!');
+// });
+//   } else {
+//     console.log("File does not exist.")
+//   }
 
 
-  if (fs.existsSync(image3Path)) {
+//   if (fs.existsSync(image3Path)) {
     
    
-fs.unlink('./public/images/product-images/'+id+'3.png', function (err) {
-  if (err) throw err;
-  console.log('File deleted!');
-});
-      } else {
-        console.log("File does not exist.")
-      }
+// fs.unlink('./public/images/product-images/'+id+'3.png', function (err) {
+//   if (err) throw err;
+//   console.log('File deleted!');
+// });
+//       } else {
+//         console.log("File does not exist.")
+//       }
 
-      if (fs.existsSync(image4Path)) {
+//       if (fs.existsSync(image4Path)) {
     
    
        
-fs.unlink('./public/images/product-images/'+id+'4.png', function (err) {
-  if (err) throw err;
-  console.log('File deleted!');
-});
-              } else {
-                console.log("File does not exist.")
-              }
+// fs.unlink('./public/images/product-images/'+id+'4.png', function (err) {
+//   if (err) throw err;
+//   console.log('File deleted!');
+// });
+//               } else {
+//                 console.log("File does not exist.")
+//               }
 
 
 
@@ -304,39 +304,97 @@ fs.unlink('./public/images/product-images/'+id+'4.png', function (err) {
 
   producthelpers.editProduct(req.body,productid).then((response)=>{
     
-    let image1 = req.files.image1;
-    let image2 = req.files.image2;
-    let image3 = req.files.image3;
-    let image4 = req.files.image4;
-    image1.mv('./public/images/product-images/'+id+'1.png',(err,done)=>{
-      if(!err){
-        image2.mv('./public/images/product-images/'+id+'2.png',(err,done)=>{
-          if(!err){
-            image3.mv('./public/images/product-images/'+id+'3.png',(err,done)=>{
-              if(!err){
-                image4.mv('./public/images/product-images/'+id+'4.png',(err,done)=>{
-                  if(!err){
-                     res.redirect('/admin/view-product');
-                  }
-                  else{
-                    console.log(err);
-                  }
-                })
-              }
-              else{
-                console.log(err);
-              }
-            })
-          }
-          else{
-            console.log(err);
-          }
-        })
-      }
-      else{
-        console.log(err);
-      }
-    })
+    let image1 = req.files?.image1;
+    let image2 = req.files?.image2;
+    let image3 = req.files?.image3;
+    let image4 = req.files?.image4;
+    if(image1){
+      fs.unlink('./public/images/product-images/'+id+'1.png', function (err) {
+        if (err) throw err;
+        console.log('File deleted!');
+      });
+      image1.mv('./public/images/product-images/'+id+'1.png',(err,done)=>{
+        if(!err){
+          
+        }
+        else{
+          console.log(err);
+        }
+      })
+    }
+    if(image2){
+      fs.unlink('./public/images/product-images/'+id+'2.png', function (err) {
+        if (err) throw err;
+        console.log('File deleted!');
+      });
+      image2.mv('./public/images/product-images/'+id+'2.png',(err,done)=>{
+        if(!err){
+          
+        }
+        else{
+          console.log(err);
+        }
+      })
+    }
+    if(image3){
+      fs.unlink('./public/images/product-images/'+id+'3.png', function (err) {
+        if (err) throw err;
+        console.log('File deleted!');
+      });
+      image3.mv('./public/images/product-images/'+id+'3.png',(err,done)=>{
+        if(!err){
+          
+        }
+        else{
+          console.log(err);
+        }
+      })
+    }
+    if(image4){
+      fs.unlink('./public/images/product-images/'+id+'4.png', function (err) {
+        if (err) throw err;
+        console.log('File deleted!');
+      });
+      image4.mv('./public/images/product-images/'+id+'4.png',(err,done)=>{
+        if(!err){
+          res.redirect('/admin/view-product');
+        }
+        else{
+          console.log(err);
+        }
+      })
+    }else{
+      res.redirect('/admin/view-product');
+    }
+    // image1.mv('./public/images/product-images/'+id+'1.png',(err,done)=>{
+    //   if(!err){
+    //     image2.mv('./public/images/product-images/'+id+'2.png',(err,done)=>{
+    //       if(!err){
+    //         image3.mv('./public/images/product-images/'+id+'3.png',(err,done)=>{
+    //           if(!err){
+    //             image4.mv('./public/images/product-images/'+id+'4.png',(err,done)=>{
+    //               if(!err){
+    //                  res.redirect('/admin/view-product');
+    //               }
+    //               else{
+    //                 console.log(err);
+    //               }
+    //             })
+    //           }
+    //           else{
+    //             console.log(err);
+    //           }
+    //         })
+    //       }
+    //       else{
+    //         console.log(err);
+    //       }
+    //     })
+    //   }
+    //   else{
+    //     console.log(err);
+    //   }
+    // })
 
   });
 })
