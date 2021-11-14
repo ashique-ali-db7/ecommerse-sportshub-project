@@ -1,0 +1,46 @@
+<link rel='stylesheet' href='/stylesheets/users/otp.css'/>
+
+
+
+
+    <div class="container height-100 d-flex justify-content-center align-items-center">
+        <div class="position-relative">
+            <div class="card p-2 text-center">
+                <h3 style="color: red;" class="text-center otperror" id="error">Invalid otp</h3>
+                <h6>Please enter the one time password <br> to verify your account</h6>
+                {{!-- <div> <span>A code has been sent to</span> <small>***9897</small> </div> --}}
+                <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2"> 
+                    <input
+                        class="m-2 text-center form-control rounded" type="text" name="otp" id="first" maxlength="1" />
+                    <input 
+                     class="m-2 text-center form-control rounded" type="text" name="otp" id="second" maxlength="1" />
+                     <input
+                        class="m-2 text-center form-control rounded" type="text" id="third" name="otp" maxlength="1" />
+                         <input
+                        class="m-2 text-center form-control rounded" type="text" id="fourth" name="otp" maxlength="1" />
+                         <input
+                        class="m-2 text-center form-control rounded" type="text" id="fifth" name="otp" maxlength="1" />
+                         <input
+                        class="m-2 text-center form-control rounded" type="text" id="sixth" name="otp" maxlength="1" />
+                         <input
+                        class="m-2 text-center form-control rounded" style="display: none;" type="text" id="phonnumber" name="phonenumber" value="{{phoneNumber}}"  maxlength="1" />
+                         </div>
+                <div class="mt-4"> <button  id="btn-submit" class="btn btn-danger px-4 validate" onclick="otpform()">Validate</button> </div>
+            </div>
+            <div class="card-2">
+
+
+{{!-- <div class="content d-flex justify-content-center align-items-center">Time left = <span id="timer"></span></div> --}}
+                <div class="content d-flex justify-content-center align-items-center" id="timer"> <span>Didn't get the code</span><span id="timer"></span></div>
+                 <div class="content d-flex justify-content-center align-items-center otprequest" id="resend"> <a  class="text-decoration-none ms-3 " >Resend(1/3)</a> </div>
+            </div> 
+
+
+
+
+
+        </div>
+    </div>
+
+
+<script src="/javascripts/users/otp.js"></script>

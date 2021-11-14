@@ -20,13 +20,90 @@ $.ajax({
 
 }
 
+// preview add image
+function viewMainImageToAdd(event) {
+   
+    
+    document.getElementById('imageview1').src = URL.createObjectURL(event.target.files[0])
+    let file = event.target.files[0].name
+    let extension = file.split('.').pop()
+    if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
+
+        $('#imageview1').show()
+        $('#sub').show()
+        $('#errMsg').hide()
+
+    }
+    else {
+        $('#sub').hide()
+        $('#errMsg').show()
+    }
+}
 
 
-// preview image
+function viewSecondImageToAdd(event) {
+   
+    document.getElementById('imageview2').src = URL.createObjectURL(event.target.files[0])
+    let file = event.target.files[0].name
+    let extension = file.split('.').pop()
+    if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
+        $('#imageview2').show()
+        $('#sub').show()
+        $('#errMsg').hide()
+
+    }
+    else {
+        $('#sub').hide()
+        $('#errMsg').show()
+    }
+}
+
+
+function viewThirdImageToAdd(event) {
+    
+    document.getElementById('imageview3').src = URL.createObjectURL(event.target.files[0])
+    let file = event.target.files[0].name
+    let extension = file.split('.').pop()
+    if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
+        $('#imageview3').show()
+        $('#sub').show()
+        $('#errMsg').hide()
+
+    }
+    else {
+        $('#sub').hide()
+        $('#errMsg').show()
+    }
+}
+
+
+
+function viewFourthImageToAdd(event) {
+   
+    document.getElementById('imageview4').src = URL.createObjectURL(event.target.files[0])
+    let file = event.target.files[0].name
+    let extension = file.split('.').pop()
+    if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
+        $('#imageview4').show()
+        $('#sub').show()
+        $('#errMsg').hide()
+
+    }
+    else {
+        $('#sub').hide()
+        $('#errMsg').show()
+    }
+}
+
+
+
+
+// preview edit image
 
 
 
 function viewMainImage(event) {
+   
     document.getElementById('editimageview1').classList.add("editimage");
     document.getElementById('imageview1').src = URL.createObjectURL(event.target.files[0])
     let file = event.target.files[0].name
@@ -141,3 +218,52 @@ function updateproductdetails(){
   }
 
 //validatton
+
+$("#addproducts").validate({
+    rules:{
+        productid:{
+            required:true,
+            number:true
+        },
+        productname:{
+            required:true,
+            maxlength:20
+        },
+        brand:{
+            required:true,
+            maxlength:14
+        },
+        category:{
+            required:true,
+          
+        },
+       
+        subcategory:{
+            required:true
+        },
+        smallquantity:{
+            required:true,
+            number:true
+        },
+        mediumquantity:{
+            required:true,
+            number:true
+        },
+        largequantity:{
+            required:true,
+            number:true
+        },
+        price:{
+            required:true,
+            number:true
+        },
+       
+        
+    },
+    messages:{
+        password:{
+            required: 'Password is required'
+        }
+    }
+  
+});

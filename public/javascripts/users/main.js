@@ -7,7 +7,12 @@
     Created: Colorlib
 ---------------------------------------------------------  */
 
-'use strict';
+ 'use strict';
+
+// verifuacation
+
+
+
 
 (function ($) {
 
@@ -309,3 +314,6 @@ $("#userlogin").validate({
    
   
 });
+
+
+

@@ -16,7 +16,7 @@ var db = require('./config/connection')
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.engine('hbs',hbs({extname:'hbs',defaultLayout:'layout',layoutsDir:__dirname+'/views/layout/',partialsDir:__dirname+'/views/partials/'}))
-app.use(logger('dev'));
+ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -28,6 +28,8 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 1000000 },
+   resave:false,
+   saveUninitialized:true,
     
   })
 );
