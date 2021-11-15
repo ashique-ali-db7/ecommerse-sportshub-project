@@ -17,14 +17,16 @@ module.exports = {
             if(exist){
             response.exist = true;
             resolve(response)
-            }else{
-
-                data.password = await bcryptjs.hash(data.password,10)
-                 db.get().collection(collections.USERS_DETAILS_COLLECTION)
-                .insertOne(data);
-                response.exist = false;
-                resolve(response)
             }
+          
+             else{
+
+                 data.password = await bcryptjs.hash(data.password,10)
+                  db.get().collection(collections.USERS_DETAILS_COLLECTION)
+                 .insertOne(data);
+                 response.exist = false;
+                 resolve(response)
+             }
         })
     },
 
@@ -89,6 +91,24 @@ resolve(user);
             resolve(response);
         }
        })
+    },
+
+
+    findNumberChangepassword:(data)=>{
+        return new Promise(async(resolve,reject)=>{
+            data.newpassword = await bcryptjs.hash(data.newpassword,10);
+
+          let user =  await db.get().collection(collections.USERS_DETAILS_COLLECTION)
+            .findOne({phonenumber:data.phonenumber})
+
+
+
+            await db.get().collection(collections.USERS_DETAILS_COLLECTION)
+            .updateOne({phonenumber:data.phonenumber},{$set:{password:data.newpassword}}).then((data)=>{
+              resolve(user);
+            })
+        })
+
     }
 
 
