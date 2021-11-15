@@ -110,7 +110,20 @@ userhelpers.emailAndPasswordCheck(req.body).then((response)=>{
     emailphonenumberExistError = "Entered email or phone number is already exist"
     res.redirect('/register');
   }else{
-res.redirect('/userlogin')
+    let phoneNumber = req.body.phonenumber;
+    req.session.tempararysignup = req.body;
+let phonenumber = Number(req.body.phonenumber);
+    client.verify
+    .services(serviceId)
+    .verifications.create({
+      to:`+91${phonenumber}`,
+      channel:"sms"
+    })
+    .then((resp)=>{
+      // console.log(resp);
+      // res.status(200).json({resp});
+      res.render('users/otplogin',{admin:false,phoneNumber,notheader:true,registerotp:true})
+    });
   }
 })
 }else{
@@ -119,6 +132,39 @@ res.redirect('/userlogin')
 }
  
 });
+
+
+// get register otp check and sessions creation
+router.get("/registerotplogin",(req,res)=>{
+ 
+  let phoneNumber = req.query.phonenumber;
+  let otpNumber = Number(req.query.otpnumber);
+typeof(otpNumber)
+  client.verify
+  .services(serviceId)
+  .verificationChecks.create({
+    to:"+91"+phoneNumber,
+    code:otpNumber
+  })
+  .then((resp=>{
+    if(resp.valid){
+ let user = req.session.tempararysignup;
+ userhelpers.addUser(user).then((response)=>{
+req.session.user = response;
+req.session.user.loggedIn = true;
+let valid = true;
+res.send(valid);
+ })  
+    }else{
+      let valid = false;
+
+      res.send(valid);
+    }
+  }));
+})
+
+
+
 
 /* GET user login. */
 
@@ -314,7 +360,7 @@ router.get('/passwordchange',(req,res)=>{
 router.post('/passwordchange',(req,res)=>{
  
    userhelpers.findNumberChangepassword(req.body).then((response)=>{
-    console.log(response)
+  
    req.session.user = response;
    req.session.user.loggedIn = true;
    res.redirect('/')

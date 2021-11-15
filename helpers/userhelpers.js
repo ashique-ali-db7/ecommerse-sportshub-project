@@ -17,16 +17,19 @@ module.exports = {
             if(exist){
             response.exist = true;
             resolve(response)
+            }else{
+                response.exist = false;
+                resolve(response);
             }
           
-             else{
+            //  else{
 
-                 data.password = await bcryptjs.hash(data.password,10)
-                  db.get().collection(collections.USERS_DETAILS_COLLECTION)
-                 .insertOne(data);
-                 response.exist = false;
-                 resolve(response)
-             }
+            //      data.password = await bcryptjs.hash(data.password,10)
+            //       db.get().collection(collections.USERS_DETAILS_COLLECTION)
+            //      .insertOne(data);
+            //      response.exist = false;
+            //      resolve(response)
+            //  }
         })
     },
 
@@ -108,6 +111,15 @@ resolve(user);
               resolve(user);
             })
         })
+
+    },
+
+    addUser:(data)=>{
+return new Promise(async(resolve,reject)=>{
+  let user  = await db.get().collection(collections.USERS_DETAILS_COLLECTION).insertOne(data);
+   resolve(user);
+})
+
 
     }
 
