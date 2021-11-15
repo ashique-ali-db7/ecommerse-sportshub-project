@@ -25,9 +25,11 @@
                          <input
                         class="m-2 text-center form-control rounded" style="display: none;" type="text" id="phonnumber" name="phonenumber" value="{{phoneNumber}}"  maxlength="1" />
                          </div>
-
+                  {{#if registerotp}}
+                 <div class="mt-4"> <button  id="btn-submit" class="btn btn-danger px-4 validate" onclick="otpregisterform()">Validate</button> </div>
+                  {{else}}
                 <div class="mt-4"> <button  id="btn-submit" class="btn btn-danger px-4 validate" onclick="otpform()">Validate</button> </div>
-             
+             {{/if}}
             </div>
             <div class="card-2">
 
