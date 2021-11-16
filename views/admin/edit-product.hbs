@@ -2,7 +2,7 @@
 
 <div class=" me-auto ms-auto mt-5" style="width: 40%;">
     <h1>EDIT PRODUCT</h1>
-    <form action="/admin/edit-product?productid={{data.productid}}&id={{data._id}}"  class="mt-5" method="post" id="editproduct" enctype="multipart/form-data">
+    <form action="/admin/edit-product?productid={{data.productid}}&id={{data._id}}" onsubmit="return onsubmitForm(this)"  class="mt-5" method="post" id="editproduct" enctype="multipart/form-data">
 {{!--        
         <div class="mb-3">
     <p style="color: red;">{{productExistError}}</p> 
@@ -135,7 +135,7 @@
 
        
 
-        <a type="button" class="btn btn-primary mt-1" style="width: 100%;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Submit</a>
+        <button type="submit"  class="btn btn-primary mt-1" style="width: 100%;">Submit</button>
 
       </form>
     </div>
@@ -143,7 +143,7 @@
 
 
 
-<!-- Modal -->
+ {{!-- <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -160,5 +160,5 @@
       </div>
     </div>
   </div>
-</div>
-
+</div> --}}
+ 

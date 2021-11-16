@@ -116,6 +116,7 @@ resolve(user);
 
     addUser:(data)=>{
 return new Promise(async(resolve,reject)=>{
+    data.password = await bcryptjs.hash(data.password,10)
   let user  = await db.get().collection(collections.USERS_DETAILS_COLLECTION).insertOne(data);
    resolve(user);
 })

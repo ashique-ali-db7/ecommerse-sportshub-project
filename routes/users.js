@@ -8,9 +8,9 @@ var categoryhelpers = require('../helpers/categoryhelpers');
 var userhelpers = require('../helpers/userhelpers');
 const session = require('express-session');
 
-const serviceId = "VA50948f9669d28fb947244dc94fdebacd";
-const accountId = "AC5d0a3d2d3944bd50b8d94628b9d1fcb0";
-const authToken = "0156c9f1cfdaecef274beea8db4876ad";
+const serviceId = "VAc457a650e0ab09a6060cd944236cc2fd";
+const accountId = "AC31e88f489ff280f19d02450fc8528448";
+const authToken = "73538af34ff0ac4b3656cdd4a65c8ece";
 
 const client = require("twilio")(accountId,authToken)
 
@@ -26,7 +26,7 @@ var signupotp = "";
 
 // verify login middleware
   const verifyLogin = (req,res,next)=>{
-    if(req.session.user?.loggedIn){
+    if(req.session.user){
       res.redirect('/');
     
     }else{
@@ -37,7 +37,7 @@ var signupotp = "";
 
 
  const verifyLoginForLoginpage = (req,res,next)=>{
-   if(req.session.user?.loggedIn){
+   if(req.session.user){
     next();
    }else{
      res.redirect('/userlogin')
@@ -90,7 +90,7 @@ router.get('/checkout', function(req, res, next) {
 
 router.get('/register',verifyLogin, function(req, res) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  if(req.session.user?.loggedIn){
+  if(req.session.user){
     res.redirect('/');
   }else{
     res.render('users/register',{ admin:false,confirmPasswordError,emailphonenumberExistError,notheader:true});
@@ -102,7 +102,7 @@ router.get('/register',verifyLogin, function(req, res) {
 
 /* post user register. */
 router.post('/register', function(req, res) {
-
+  req.session.phonenumber = req.body.phonenumber;
   if(req.body.password == req.body.confirmpassword){
   delete req.body.confirmpassword;
 userhelpers.emailAndPasswordCheck(req.body).then((response)=>{
@@ -132,6 +132,37 @@ let phonenumber = Number(req.body.phonenumber);
 }
  
 });
+
+
+
+//register for resend
+router.get('/registerresend',verifyLogin,(req,res)=>{
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+  let phoneNumber = req.session.phonenumber
+ 
+ 
+  
+       client.verify
+       .services(serviceId)
+       .verifications.create({
+         to:`+91${req.session.phonenumber}`,
+         channel:"sms"
+       })
+       .then((resp)=>{
+         
+          res.render('users/otplogin',{admin:false,phoneNumber,notheader:true,registerotp:true})
+       });
+   
+ 
+ 
+ 
+ 
+ 
+ })
+
+
+
+
 
 
 // get register otp check and sessions creation
@@ -170,7 +201,7 @@ res.send(valid);
 
 router.get('/userlogin', function(req, res) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  if(req.session.user?.loggedIn){
+  if(req.session.user){
     res.redirect('/')
   }else{
     res.render('users/userlogin',{ admin:false,loginError,notheader:true});
@@ -204,7 +235,7 @@ res.redirect('/');
 //get user phonenumber
 router.get('/phonenumberpage',(req,res)=>{
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  if(req.session.user?.loggedIn){
+  if(req.session.user){
     res.redirect('/')
   }else{
     res.render('users/phonenumberpage',{admin:false,phonenumberExistError,notheader:true});
@@ -219,37 +250,63 @@ router.get('/phonenumberpage',(req,res)=>{
 
 //post user phonenumber
 router.post('/phonenumberpage',(req,res)=>{
-let phoneNumber = req.body.number
-phoneNumber = phoneNumber.toString();
+  req.session.phonenumber = req.body.number;
+// let phoneNumber = req.body.number
+phoneNumber = req.session.phonenumber.toString();
 
 userhelpers.phoneNumberChecking(phoneNumber).then((response)=>{
-  if(response.exist){
-    client.verify
-    .services(serviceId)
-    .verifications.create({
-      to:`+91${req.body.number}`,
-      channel:"sms"
-    })
-    .then((resp)=>{
-      // console.log(resp);
-      // res.status(200).json({resp});
+   if(response.exist){
+     client.verify
+     .services(serviceId)
+     .verifications.create({
+       to:`+91${req.session.phonenumber}`,
+       channel:"sms"
+     })
+     .then((resp)=>{
+    
       res.render('users/otplogin',{admin:false,phoneNumber,notheader:true})
-    });
-  }else{
-    phonenumberExistError = "Enterd phone number does not exist";
+     });
+   }else{
+     phonenumberExistError = "Enterd phone number does not exist";
     res.redirect('/phonenumberpage')
 
-  }
+   }
 })
 
 
 });
 
 
+//login for resend
+router.get('/loginresend',verifyLogin,(req,res)=>{
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+ let phoneNumber = req.session.phonenumber
+
+
+ 
+      client.verify
+      .services(serviceId)
+      .verifications.create({
+        to:`+91${req.session.phonenumber}`,
+        channel:"sms"
+      })
+      .then((resp)=>{
+        // console.log(resp);
+        // res.status(200).json({resp});
+         res.render('users/otplogin',{admin:false,phoneNumber,notheader:true})
+      });
+  
+
+
+
+
+
+})
+
 
 //post otp login
  router.get("/otplogin",(req,res)=>{
- 
+
    let phoneNumber = req.query.phonenumber;
    let otpNumber = Number(req.query.otpnumber);
  typeof(otpNumber)
@@ -345,7 +402,7 @@ typeof(otpNumber)
 //get change for password otp
 router.get('/passwordchange',(req,res)=>{
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  if(req.session.user?.loggedIn){
+  if(req.session.user){
 
     res.redirect('/');
   }
@@ -384,7 +441,7 @@ router.post('/passwordchange',(req,res)=>{
 // get user logout
 router.get('/userlogout',(req,res)=>{
   
-  req.session.user.loggedIn = false;
+  // req.session.userloggedIn = false;
   req.session.user = null;
   res.redirect('/');
   

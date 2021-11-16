@@ -60,14 +60,16 @@ function timer(remaining) {
     return;
   }
   
-document.getElementById("otprequest").classList.remove("otprequest");
-document.getElementById("otprequest").classList.add("timer");
+  document.getElementById("resend").classList.remove("otprequest");
+  document.getElementById("timeleft").classList.add("otprequest");
+  document.getElementById("timer").classList.add("otprequest");
+
 }
 
 
 
 
-timer(60);
+timer(45);
 
 
 
@@ -82,7 +84,10 @@ function otpform(){
          var fifth = document.getElementById("fifth").value;
          var sixth= document.getElementById("sixth").value;
 
-         var otpnumber = first+second+third+fourth+fifth+sixth
+    var otpnumber = `${first}${second}${third}${fourth}${fifth}${sixth}`
+
+    console.log(otpnumber);
+  
          var phoneNumber = document.getElementById("phonnumber").value;
 
 
@@ -100,6 +105,26 @@ $.ajax({
 
 
 }
+
+
+
+function resendotpoflogin(){
+   
+console.log("eda");
+    $.ajax({
+        url:'/loginresend',
+        method:'get',
+        // success:(response)=>{
+        //     if(response){
+        //         window.location.replace("/");
+        //     }else{
+        //         document.getElementById("error").classList.remove("otperror");
+        //     }
+        // }
+    })
+}
+
+
 
 
 
@@ -130,6 +155,10 @@ success:(response)=>{
 })
 
 }
+
+
+
+
 
 
 
