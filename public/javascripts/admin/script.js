@@ -284,10 +284,10 @@ $(document).ready(function() {
 
 
 //modal
-function updateproductdetails(){
-    console.log("monnee")
-  document.getElementById("editproduct").submit();
-  }
+ function updateproductdetails(){
+     console.log("monnee")
+   document.getElementById("editproduct").submit();
+   }
 
   function deletebrand(id){
      
@@ -420,6 +420,75 @@ $("#brandvalidationform").validate({
    
   
 });
+
+
+
+    $("#editproduct").validate({
+        rules:{
+           
+            productid:{
+                required:true,
+                number:true
+            },
+            productname:{
+                required:true,
+                maxlength:20
+            },
+            brand:{
+                required:true,
+                maxlength:14
+            },
+            category:{
+                required:true,
+              
+            },
+           
+            subcategory:{
+                required:true
+            },
+            smallquantity:{
+                required:true,
+                number:true
+            },
+            mediumquantity:{
+                required:true,
+                number:true
+            },
+            largequantity:{
+                required:true,
+                number:true
+            },
+            price:{
+                required:true,
+                number:true
+            },
+            description:{
+                required:true,
+              
+            },
+            
+        },
+        submitHandler:
+        function onsubmitForm(form){
+          
+            swal({
+                title: "Are you sure?",
+                text: "do you want to update this product?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+              })
+              .then((willDelete) => {
+                if (willDelete) {
+               form.submit();
+                } 
+              });
+        }
+       
+      
+    });
+    
+
 
 
 //sweet alert

@@ -42,10 +42,10 @@
                 <div class="row">
                     <div class="col-lg-2 col-md-2">
                         <div class="logo">
-                            <a href="./index.html">
-                                 <img src="images/users/logo.png" alt=""> 
-                                
-                            </a>
+                          
+                                 {{!-- <img src="images/users/logo.png" alt="">  --}}
+                                <h4 style="color:#e7ab3c;">Sportshub</h4> 
+                           
                         </div>
                     </div>
                     <div class="col-lg-7 col-md-7">
@@ -126,6 +126,7 @@
                             {{else}}
                             <li><a href="/userlogin" class="btn btn-primary login-button">Login</a></li>
                             {{/if}}
+                            <li><p>{{user.name}}</p></li>
                         </ul>
                     </div>
                 </div>
