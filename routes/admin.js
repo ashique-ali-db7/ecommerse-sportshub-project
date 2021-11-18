@@ -18,7 +18,7 @@ var varsubcategoryError = "";
 var invalidusername = "";
 
 const verifyLogin = (req,res,next)=>{
-  if(req.session.admin?.loggedIn){
+  if(req.session.admin){
     next();
   }else{
     res.redirect('/admin/adminlogin');
@@ -184,10 +184,7 @@ router.get('/editbrand',(req,res)=>{
    
     let id = req.query.id;
   brandhelpers.updateBrand(req.body,id).then((response)=>{
-    if(response.exist){
-      brandExistError = "enterd brand already exist";
-res.redirect('/admin/editbrand')
-    }else{
+ 
     let logo = req.files?.logo;
 
     if(logo){
@@ -204,7 +201,7 @@ res.redirect('/admin/editbrand')
         }
       })
     }
-  }
+  
   })
   
   })
@@ -536,7 +533,7 @@ userhelpers.unblockUser(phonenumber).then((response)=>{
 /* GET admin login. */
 router.get('/adminlogin', function(req, res, next) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  if(req.session.admin?.loggedIn){
+  if(req.session.admin){
 res.redirect('/admin');
   }else{
     res.render('admin/adminlogin', { admin:true,login:true,invalidusername});
@@ -551,7 +548,7 @@ router.post('/adminlogin',(req,res)=>{
  userhelpers.adminLogin(req.body).then((response)=>{
    if(response.exist){
     req.session.admin = response;
-    req.session.admin.loggedIn = true;
+    
     res.redirect('/admin');
    }
    else{
@@ -566,7 +563,7 @@ router.post('/adminlogin',(req,res)=>{
 /* GET admin logout. */
 router.get('/adminlogout', function(req, res, next) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  req.session.admin.loggedIn = false;
+
   req.session.admin = null;
   res.redirect('/admin/adminlogin');
 });

@@ -1,12 +1,13 @@
 <div class="container">
 
 <h2 class="text-center">User details</h2>
-<table class="table table-striped">
+<table class="table table-striped" id="usertable">
   <thead>
     <tr>
       <th scope="col">Name</th>
       <th scope="col">Email</th>
       <th scope="col">Phone number</th>
+      <th scope="col">Status</th>
       <th scope="col">Block</th>
     </tr>
   </thead>
@@ -16,6 +17,11 @@
       <td>{{this.name}}</td>
       <td>{{this.emailaddress}}</td>
       <td>{{this.phonenumber}}</td>
+      {{#if this.blocked}}
+      <td>blocked</td>
+      {{else}}
+      <td>active</td>
+      {{/if}}
       {{#if this.blocked}}
 
      
