@@ -499,7 +499,29 @@ router.get('/deleteproduct',verifyLogin,(req,res)=>{
 // user managment
 
 router.get('/usermanagment',(req,res)=>{
-  res.render('admin/user-managment',{admin:true});
+  userhelpers.getAllUsers().then((response)=>{
+    let allusers = response
+    res.render('admin/user-managment',{admin:true,allusers});
+  })
+  
+})
+
+//block user
+
+router.get('/blockuser',(req,res)=>{
+  let phonenumber = req.query.phonenumber;
+userhelpers.blockUser(phonenumber).then((response)=>{
+  res.redirect('/admin/usermanagment');
+})
+
+})
+
+router.get('/unblockuser',(req,res)=>{
+  let phonenumber = req.query.phonenumber;
+userhelpers.unblockUser(phonenumber).then((response)=>{
+  res.redirect('/admin/usermanagment');
+})
+
 })
 
 
