@@ -930,6 +930,20 @@ document.getElementById("modal-body-id").innerHTML = "Are you sure do you want t
 
   }
 
+
+
+ function blockuser(phonenumber,name){
+    
+     document.getElementById("updateUser").href = '/admin/blockuser?phonenumber='+phonenumber;
+     document.getElementById("modal-body-id").innerHTML = "Are you sure do you want to block "+name;
+ }
+
+function unblockuser(phonenumber,name){
+     document.getElementById("updateUser").href = '/admin/unblockuser?phonenumber='+phonenumber;
+     document.getElementById("modal-body-id").innerHTML = "Are you sure do you want to unblock "+name;
+}
+
+
 //validatton
 
 $("#addproducts").validate({

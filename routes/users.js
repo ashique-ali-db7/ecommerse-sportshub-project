@@ -80,7 +80,7 @@ producthelpers.getSingleProductDetails(req.query).then((response)=>{
 });
 
 /* GET checkout. */
-router.get('/checkout', function(req, res, next) {
+router.get('/checkout',verifyLoginForLoginpage, function(req, res, next) {
   let user = req.session.user;
   res.render('users/checkout',{ admin:false,user,notheader:true});
 });
@@ -101,7 +101,7 @@ router.get('/register',verifyLogin, function(req, res) {
 });
 
 /* post user register. */
-router.post('/register', function(req, res) {
+router.post('/register',verifyLogin, function(req, res) {
   req.session.phonenumber = req.body.phonenumber;
   if(req.body.password == req.body.confirmpassword){
   delete req.body.confirmpassword;

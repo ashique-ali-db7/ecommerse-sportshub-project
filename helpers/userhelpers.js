@@ -125,6 +125,27 @@ return new Promise(async(resolve,reject)=>{
 })
 
 
+    },
+    getAllUsers:()=>{
+        return new Promise(async(resolve,reject)=>{
+          let alluser = await db.get().collection(collections.USERS_DETAILS_COLLECTION).find().toArray();
+       resolve(alluser)
+        })
+    },
+    
+    blockUser:(phonenumber)=>{
+        return new Promise(async(resolve,reject)=>{
+          await db.get().collection(collections.USERS_DETAILS_COLLECTION).updateOne({phonenumber:phonenumber},{$set:{blocked:true}}).then((status)=>{
+              resolve();
+          })
+        })
+    },
+    unblockUser:(phonenumber)=>{
+        return new Promise(async(resolve,reject)=>{
+          await db.get().collection(collections.USERS_DETAILS_COLLECTION).updateOne({phonenumber:phonenumber},{$set:{blocked:false}}).then((status)=>{
+              resolve();
+          })
+        })
     }
 
 
