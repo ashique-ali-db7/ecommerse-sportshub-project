@@ -906,6 +906,9 @@ $(document).ready(function() {
     $('#producttable').DataTable();
 } );
 
+$(document).ready(function() {
+    $('#usertable').DataTable();
+} );
 
 //modal
  function updateproductdetails(){
@@ -954,7 +957,7 @@ $("#addproducts").validate({
         },
         productname:{
             required:true,
-            maxlength:20
+           
         },
         brand:{
             required:true,
@@ -1070,7 +1073,7 @@ $("#brandvalidationform").validate({
             },
             productname:{
                 required:true,
-                maxlength:20
+              
             },
             brand:{
                 required:true,

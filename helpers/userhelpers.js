@@ -39,21 +39,27 @@ return new Promise(async(resolve,reject)=>{
 let response = {};
 
 let user =await db.get().collection(collections.USERS_DETAILS_COLLECTION).findOne({emailaddress:data.emailaddress});
-console.log(user)
+
 if(user){
-    bcryptjs.compare(data.password,user.password).then((status)=>{
+    if(user.blocked){
+response.blocked = true;
+resolve(response);
+    }else{
+        bcryptjs.compare(data.password,user.password).then((status)=>{
         
-if(status){
-    console.log(status)
-    
-    response.user = user;
-    response.exist = true;
-    resolve(response)
-}else{
-    response.exist = false;
-    resolve(response);
-}
-    })
+            if(status){
+                console.log(status)
+                
+                response.user = user;
+                response.exist = true;
+                resolve(response)
+            }else{
+                response.exist = false;
+                resolve(response);
+            }
+                })
+    }
+
 }else{
     response.exist = false;
     resolve(response);
@@ -74,8 +80,14 @@ resolve(user);
             let response = {}
             let user = await db.get().collection(collections.USERS_DETAILS_COLLECTION).findOne({phonenumber:phonenumber});
             if(user){
-                response.exist = true;
-                resolve(response);
+                if(user.blocked){
+response.blocked = true;
+resolve(response);
+                }else{
+                    response.exist = true;
+                    resolve(response);
+                }
+             
             }else{
                 response.exist = false;
                 resolve(response);
@@ -145,6 +157,14 @@ return new Promise(async(resolve,reject)=>{
           await db.get().collection(collections.USERS_DETAILS_COLLECTION).updateOne({phonenumber:phonenumber},{$set:{blocked:false}}).then((status)=>{
               resolve();
           })
+        })
+    },
+
+    blockedOrNot:(phonenumber)=>{
+        return new Promise(async(resolve,reject)=>{
+         let response = {}
+      let user = await db.get().collection(collections.USERS_DETAILS_COLLECTION).findOne({phonenumber:phonenumber});
+resolve(user);
         })
     }
 

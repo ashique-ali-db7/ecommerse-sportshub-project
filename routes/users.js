@@ -21,7 +21,7 @@ var confirmPasswordError = "";
 var emailphonenumberExistError = "";
 var loginError = "";
 var phonenumberExistError = "";
-var signupotp = "";
+var blockedError = "";
 
 
 // verify login middleware
@@ -34,18 +34,44 @@ var signupotp = "";
     }
   }
 
+const blockCheck = (req,res,next)=>{
+  if(req.session.user){
+     
+    userhelpers.blockedOrNot(req.session.user.phonenumber).then((response)=>{
+       if(response.blocked == true){
 
+         req.session.user = null;
+        res.redirect('/');
+       }else{
+        next();
+       }
+     })
+   
+   }else{
+     next();
+   }
+}
 
  const verifyLoginForLoginpage = (req,res,next)=>{
    if(req.session.user){
-    next();
+     
+    userhelpers.blockedOrNot(req.session.user.phonenumber).then((response)=>{
+       if(response.blocked == true){
+
+         req.session.user = null;
+        res.redirect('/');
+       }else{
+        next();
+       }
+     })
+   
    }else{
      res.redirect('/userlogin')
    }
  }
 
 /* GET users listing. loginverification not required*/
-router.get('/', function(req, res, next) {
+router.get('/',blockCheck, function(req, res, next) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
 let user = req.session.user;
 
@@ -54,7 +80,7 @@ let user = req.session.user;
 
 
 /* GET clothings view. loginverification not required*/
-router.get('/clothings', function(req, res, next) {
+router.get('/clothings',blockCheck, function(req, res, next) {
   let user = req.session.user;
   producthelpers.getProduct().then((products)=>{
     
@@ -70,7 +96,7 @@ router.get('/shopping-cart',verifyLoginForLoginpage, function(req, res, next) {
 
 
 /* GET single product view. loginverification not required*/
-router.get('/product', function(req, res) {
+router.get('/product',blockCheck, function(req, res) {
   let user = req.session.user;
 producthelpers.getSingleProductDetails(req.query).then((response)=>{
   res.render('users/product',{ admin:false,response,user});
@@ -205,7 +231,8 @@ router.get('/userlogin', function(req, res) {
   if(req.session.user){
     res.redirect('/')
   }else{
-    res.render('users/userlogin',{ admin:false,loginError,notheader:true});
+    res.render('users/userlogin',{ admin:false,loginError,notheader:true,blockedError});
+    blockedError = "";
     loginError = "";
   }
 
@@ -217,16 +244,25 @@ router.get('/userlogin', function(req, res) {
 router.post('/userlogin', function(req, res) {
   console.log(req.body);
   userhelpers.checkLogin(req.body).then((response)=>{
-    if(response.exist){
-      req.session.user = response.user;
-      req.session.user.loggedIn = true;
-
-
-res.redirect('/');
-    }else{
-      loginError = "Invalid user name or password";
-      res.redirect('/userlogin');
+    if(response?.blocked){
+      blockedError = "you are blocked";
+res.redirect('/userlogin');
     }
+    else{
+
+      if(response.exist){
+        req.session.user = response.user;
+        req.session.user.loggedIn = true;
+  
+  
+  res.redirect('/');
+      }else{
+        loginError = "Invalid user name or password";
+        res.redirect('/userlogin');
+      }
+
+    }
+  
   })
   
 });
@@ -239,7 +275,8 @@ router.get('/phonenumberpage',(req,res)=>{
   if(req.session.user){
     res.redirect('/')
   }else{
-    res.render('users/phonenumberpage',{admin:false,phonenumberExistError,notheader:true});
+    res.render('users/phonenumberpage',{admin:false,phonenumberExistError,notheader:true,blockedError});
+    blockedError = "";
   }
 
 
@@ -256,22 +293,32 @@ router.post('/phonenumberpage',(req,res)=>{
 phoneNumber = req.session.phonenumber.toString();
 
 userhelpers.phoneNumberChecking(phoneNumber).then((response)=>{
-   if(response.exist){
-     client.verify
-     .services(serviceId)
-     .verifications.create({
-       to:`+91${req.session.phonenumber}`,
-       channel:"sms"
-     })
-     .then((resp)=>{
-    
-      res.render('users/otplogin',{admin:false,phoneNumber,notheader:true})
-     });
-   }else{
-     phonenumberExistError = "Enterd phone number does not exist";
-    res.redirect('/phonenumberpage')
+  if(response?.blocked){
+    blockedError = "you are blocked";
+    res.redirect('/phonenumberpage');
 
-   }
+
+  }else{
+
+    if(response.exist){
+      client.verify
+      .services(serviceId)
+      .verifications.create({
+        to:`+91${req.session.phonenumber}`,
+        channel:"sms"
+      })
+      .then((resp)=>{
+     
+       res.render('users/otplogin',{admin:false,phoneNumber,notheader:true})
+      });
+    }else{
+      phonenumberExistError = "Enterd phone number does not exist";
+     res.redirect('/phonenumberpage');
+ 
+    }
+
+  }
+  
 })
 
 
@@ -338,8 +385,9 @@ router.get('/loginresend',verifyLogin,(req,res)=>{
 //  get forgote password
 router.get('/loginidentify',verifyLogin,(req,res)=>{
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  res.render('users/loginidentify',{admin:false,notheader:true,phonenumberExistError})
+  res.render('users/loginidentify',{admin:false,notheader:true,phonenumberExistError,blockedError})
   phonenumberExistError = "";
+  blockedError="";
 });
 
 //  post forgotten password
@@ -349,23 +397,39 @@ router.post('/loginidentify',(req,res)=>{
   phoneNumber = phoneNumber.toString();
   
   userhelpers.phoneNumberChecking(phoneNumber).then((response)=>{
-    if(response.exist){
-      client.verify
-      .services(serviceId)
-      .verifications.create({
-        to:`+91${req.body.number}`,
-        channel:"sms"
-      })
-      .then((resp)=>{
-        // console.log(resp);
-        // res.status(200).json({resp});
-        res.render('users/otploginforpassword',{admin:false,phoneNumber,notheader:true})
-      });
+    if(response?.blocked){
+      blockedError = "you are blocked";
+      res.redirect('/loginidentify');
+
     }else{
-      phonenumberExistError = "Entered phone number does not exist";
-      res.redirect('/loginidentify')
-  
+
+
+      if(response.exist){
+        client.verify
+        .services(serviceId)
+        .verifications.create({
+          to:`+91${req.body.number}`,
+          channel:"sms"
+        })
+        .then((resp)=>{
+          // console.log(resp);
+          // res.status(200).json({resp});
+          res.render('users/otploginforpassword',{admin:false,phoneNumber,notheader:true})
+        });
+      }else{
+        phonenumberExistError = "Entered phone number does not exist";
+        res.redirect('/loginidentify')
+    
+      }
+
     }
+
+     
+
+
+
+    
+  
   })
   
 });
