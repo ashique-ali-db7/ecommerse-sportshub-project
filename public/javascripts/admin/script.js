@@ -20,80 +20,319 @@ $.ajax({
 
 }
 
-// preview add image
-function viewMainImageToAdd(event) {
+// // preview add image
+// function viewMainImageToAdd(event) {
    
   
-    document.getElementById('imageview1').src = URL.createObjectURL(event.target.files[0])
-    let file = event.target.files[0].name
-    let extension = file.split('.').pop()
-    if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
+//     document.getElementById('imageview1').src = URL.createObjectURL(event.target.files[0])
+//     let file = event.target.files[0].name
+//     let extension = file.split('.').pop()
+//     if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
 
-        $('#imageview1').show()
-        $('#sub').show()
-        $('#errMsg').hide()
+//         $('#imageview1').show()
+//         $('#sub').show()
+//         $('#errMsg').hide()
 
-    }
-    else {
-        $('#sub').hide()
-        $('#errMsg').show()
-    }
-}
+//     }
+//     else {
+//         $('#sub').hide()
+//         $('#errMsg').show()
+//     }
+// }
 
 
-function viewSecondImageToAdd(event) {
+// function viewSecondImageToAdd(event) {
    
-    document.getElementById('imageview2').src = URL.createObjectURL(event.target.files[0])
-    let file = event.target.files[0].name
-    let extension = file.split('.').pop()
-    if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
-        $('#imageview2').show()
-        $('#sub').show()
-        $('#errMsg').hide()
+//     document.getElementById('imageview2').src = URL.createObjectURL(event.target.files[0])
+//     let file = event.target.files[0].name
+//     let extension = file.split('.').pop()
+//     if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
+//         $('#imageview2').show()
+//         $('#sub').show()
+//         $('#errMsg').hide()
 
-    }
-    else {
-        $('#sub').hide()
-        $('#errMsg').show()
-    }
-}
+//     }
+//     else {
+//         $('#sub').hide()
+//         $('#errMsg').show()
+//     }
+// }
 
 
-function viewThirdImageToAdd(event) {
+// function viewThirdImageToAdd(event) {
     
-    document.getElementById('imageview3').src = URL.createObjectURL(event.target.files[0])
-    let file = event.target.files[0].name
-    let extension = file.split('.').pop()
-    if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
-        $('#imageview3').show()
-        $('#sub').show()
-        $('#errMsg').hide()
+//     document.getElementById('imageview3').src = URL.createObjectURL(event.target.files[0])
+//     let file = event.target.files[0].name
+//     let extension = file.split('.').pop()
+//     if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
+//         $('#imageview3').show()
+//         $('#sub').show()
+//         $('#errMsg').hide()
 
-    }
-    else {
-        $('#sub').hide()
-        $('#errMsg').show()
-    }
-}
+//     }
+//     else {
+//         $('#sub').hide()
+//         $('#errMsg').show()
+//     }
+// }
 
 
 
-function viewFourthImageToAdd(event) {
+// function viewFourthImageToAdd(event) {
    
-    document.getElementById('imageview4').src = URL.createObjectURL(event.target.files[0])
-    let file = event.target.files[0].name
-    let extension = file.split('.').pop()
-    if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
-        $('#imageview4').show()
-        $('#sub').show()
-        $('#errMsg').hide()
+//     document.getElementById('imageview4').src = URL.createObjectURL(event.target.files[0])
+//     let file = event.target.files[0].name
+//     let extension = file.split('.').pop()
+//     if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
+//         $('#imageview4').show()
+//         $('#sub').show()
+//         $('#errMsg').hide()
 
-    }
-    else {
-        $('#sub').hide()
-        $('#errMsg').show()
+//     }
+//     else {
+//         $('#sub').hide()
+//         $('#errMsg').show()
+//     }
+// }
+
+
+
+
+// preview crop validate add image
+
+function fileValidation1() {
+    const imagebox = document.getElementById('image-box')
+    const crop_btn = document.getElementById('crop-btn')
+    var fileInput = document.getElementById('file1');
+
+var filePath = fileInput.value;
+
+// Allowing file type
+var allowedExtensions = 
+        /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+  
+if (!allowedExtensions.exec(filePath)) {
+    alert('Invalid file type');
+    fileInput.value = '';
+    return false;
+} else {
+        //Image preview
+        const img_data = fileInput.files[0]
+        const url = URL.createObjectURL(img_data)
+        imagebox.innerHTML = `<img src="${url}" id="image" style="width:100%">`
+        const image = document.getElementById('image')
+        document.getElementById('image-box').style.display = 'block'
+        document.getElementById('crop-btn').style.display = 'block'
+        document.getElementById('confirm-btn').style.display = 'none'
+
+        const cropper = new Cropper(image, {
+            autoCropArea: 1,
+            viewMode: 1,
+            scalable: false,
+            zoomable: false,
+            movable: false,
+            aspectRatio: 16 / 19,
+            //  preview: '.preview',
+            minCropBoxWidth: 180,
+            minCropBoxHeight: 240,
+        })
+        crop_btn.addEventListener('click', () => {
+            cropper.getCroppedCanvas().toBlob((blob) => {
+                let fileInputElement = document.getElementById('file1');
+                let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
+                let container = new DataTransfer();
+
+                container.items.add(file);
+                const img = container.files[0]
+                var url = URL.createObjectURL(img)
+                fileInputElement.files = container.files;
+                document.getElementById('imgview1').src = url
+                document.getElementById('image-box').style.display = 'none'
+                document.getElementById('crop-btn').style.display = 'none'
+                document.getElementById('confirm-btn').style.display = 'block'
+            });
+        });
     }
 }
+
+
+
+function fileValidation2() {
+    const imagebox = document.getElementById('image-box')
+    const crop_btn = document.getElementById('crop-btn')
+    var fileInput = document.getElementById('file2');
+
+var filePath = fileInput.value;
+
+// Allowing file type
+var allowedExtensions = 
+        /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+  
+if (!allowedExtensions.exec(filePath)) {
+    alert('Invalid file type');
+    fileInput.value = '';
+    return false;
+} else {
+        //Image preview
+        const img_data = fileInput.files[0]
+        const url = URL.createObjectURL(img_data)
+        imagebox.innerHTML = `<img src="${url}" id="image" style="width:100%">`
+        const image = document.getElementById('image')
+        document.getElementById('image-box').style.display = 'block'
+        document.getElementById('crop-btn').style.display = 'block'
+        document.getElementById('confirm-btn').style.display = 'none'
+
+        const cropper = new Cropper(image, {
+            autoCropArea: 1,
+            viewMode: 1,
+            scalable: false,
+            zoomable: false,
+            movable: false,
+            aspectRatio: 16 / 19,
+            //  preview: '.preview',
+            minCropBoxWidth: 180,
+            minCropBoxHeight: 240,
+        })
+       
+        crop_btn.addEventListener('click', () => {
+            cropper.getCroppedCanvas().toBlob((blob) => {
+                let fileInputElement = document.getElementById('file2');
+                let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
+                let container = new DataTransfer();
+            
+                container.items.add(file);
+                const img = container.files[0]
+                var url = URL.createObjectURL(img)
+                fileInputElement.files = container.files;
+                document.getElementById('imgview2').src = url
+                document.getElementById('image-box').style.display = 'none'
+                document.getElementById('crop-btn').style.display = 'none'
+                document.getElementById('confirm-btn').style.display = 'block'
+            });
+        });
+    }
+}
+
+
+
+
+
+
+
+function fileValidation3() {
+    const imagebox = document.getElementById('image-box')
+    const crop_btn = document.getElementById('crop-btn')
+    var fileInput = document.getElementById('file3');
+
+var filePath = fileInput.value;
+
+// Allowing file type
+var allowedExtensions = 
+        /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+  
+if (!allowedExtensions.exec(filePath)) {
+    alert('Invalid file type');
+    fileInput.value = '';
+    return false;
+} else {
+        //Image preview
+        const img_data = fileInput.files[0]
+        const url = URL.createObjectURL(img_data)
+        imagebox.innerHTML = `<img src="${url}" id="image" style="width:100%">`
+        const image = document.getElementById('image')
+        document.getElementById('image-box').style.display = 'block'
+        document.getElementById('crop-btn').style.display = 'block'
+        document.getElementById('confirm-btn').style.display = 'none'
+
+        const cropper = new Cropper(image, {
+            autoCropArea: 1,
+            viewMode: 1,
+            scalable: false,
+            zoomable: false,
+            movable: false,
+            aspectRatio: 16 / 19,
+            //  preview: '.preview',
+            minCropBoxWidth: 180,
+            minCropBoxHeight: 240,
+        })
+        crop_btn.addEventListener('click', () => {
+            cropper.getCroppedCanvas().toBlob((blob) => {
+                let fileInputElement = document.getElementById('file3');
+                let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
+                let container = new DataTransfer();
+
+                container.items.add(file);
+                const img = container.files[0]
+                var url = URL.createObjectURL(img)
+                fileInputElement.files = container.files;
+                document.getElementById('imgview3').src = url
+                document.getElementById('image-box').style.display = 'none'
+                document.getElementById('crop-btn').style.display = 'none'
+                document.getElementById('confirm-btn').style.display = 'block'
+            });
+        });
+    }
+}
+
+
+
+
+
+function fileValidation4() {
+    const imagebox = document.getElementById('image-box')
+    const crop_btn = document.getElementById('crop-btn')
+    var fileInput = document.getElementById('file4');
+
+var filePath = fileInput.value;
+
+// Allowing file type
+var allowedExtensions = 
+        /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+  
+if (!allowedExtensions.exec(filePath)) {
+    alert('Invalid file type');
+    fileInput.value = '';
+    return false;
+} else {
+        //Image preview
+        const img_data = fileInput.files[0]
+        const url = URL.createObjectURL(img_data)
+        imagebox.innerHTML = `<img src="${url}" id="image" style="width:100%">`
+        const image = document.getElementById('image')
+        document.getElementById('image-box').style.display = 'block'
+        document.getElementById('crop-btn').style.display = 'block'
+        document.getElementById('confirm-btn').style.display = 'none'
+
+        const cropper = new Cropper(image, {
+            autoCropArea: 1,
+            viewMode: 1,
+            scalable: false,
+            zoomable: false,
+            movable: false,
+            aspectRatio: 16 / 19,
+            //  preview: '.preview',
+            minCropBoxWidth: 180,
+            minCropBoxHeight: 240,
+        })
+        crop_btn.addEventListener('click', () => {
+            cropper.getCroppedCanvas().toBlob((blob) => {
+                let fileInputElement = document.getElementById('file4');
+                let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
+                let container = new DataTransfer();
+
+                container.items.add(file);
+                const img = container.files[0]
+                var url = URL.createObjectURL(img)
+                fileInputElement.files = container.files;
+                document.getElementById('imgview4').src = url
+                document.getElementById('image-box').style.display = 'none'
+                document.getElementById('crop-btn').style.display = 'none'
+                document.getElementById('confirm-btn').style.display = 'block'
+            });
+        });
+    }
+}
+
 
 
 
@@ -102,83 +341,220 @@ function viewFourthImageToAdd(event) {
 
 
 
-function viewMainImage(event) {
+// function viewMainImage(event) {
 
-    var fileInput = 
-    document.getElementById('image1');
+//     var fileInput = 
+//     document.getElementById('image1');
   
-var filePath = fileInput.value;
+// var filePath = fileInput.value;
 
-// Allowing file type
-var allowedExtensions = 
-        /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+// // Allowing file type
+// var allowedExtensions = 
+//         /(\.jpg|\.jpeg|\.png|\.gif)$/i;
   
-if (!allowedExtensions.exec(filePath)) {
-    alert('Invalid file type');
-    fileInput.value = '';
-    return false;
-} 
+// if (!allowedExtensions.exec(filePath)) {
+//     alert('Invalid file type');
+//     fileInput.value = '';
+//     return false;
+// } 
    
-    document.getElementById('editimageview1').classList.add("editimage");
-    document.getElementById('imageview1').src = URL.createObjectURL(event.target.files[0])
-    let file = event.target.files[0].name
-    let extension = file.split('.').pop()
-    if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
+//     document.getElementById('editimageview1').classList.add("editimage");
+//     document.getElementById('imageview1').src = URL.createObjectURL(event.target.files[0])
+//     let file = event.target.files[0].name
+//     let extension = file.split('.').pop()
+//     if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
 
-        $('#imageview1').show()
-        $('#sub').show()
-        $('#errMsg').hide()
+//         $('#imageview1').show()
+//         $('#sub').show()
+//         $('#errMsg').hide()
 
-    }
-    else {
-        $('#sub').hide()
-        $('#errMsg').show()
-    }
-}
-
-
-function viewSecondImage(event) {
+//     }
+//     else {
+//         $('#sub').hide()
+//         $('#errMsg').show()
+//     }
+// }
 
 
-    var fileInput = 
-    document.getElementById('image2');
+// function viewSecondImage(event) {
+
+
+//     var fileInput = 
+//     document.getElementById('image2');
   
-var filePath = fileInput.value;
+// var filePath = fileInput.value;
 
-// Allowing file type
-var allowedExtensions = 
-        /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+// // Allowing file type
+// var allowedExtensions = 
+//         /(\.jpg|\.jpeg|\.png|\.gif)$/i;
   
-if (!allowedExtensions.exec(filePath)) {
-    alert('Invalid file type');
-    fileInput.value = '';
-    return false;
-} 
+// if (!allowedExtensions.exec(filePath)) {
+//     alert('Invalid file type');
+//     fileInput.value = '';
+//     return false;
+// } 
 
 
     
+//     document.getElementById('editimageview2').classList.add("editimage");
+//     document.getElementById('imageview2').src = URL.createObjectURL(event.target.files[0])
+//     let file = event.target.files[0].name
+//     let extension = file.split('.').pop()
+//     if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
+//         $('#imageview2').show()
+//         $('#sub').show()
+//         $('#errMsg').hide()
+
+//     }
+//     else {
+//         $('#sub').hide()
+//         $('#errMsg').show()
+//     }
+// }
+
+
+// function viewThirdImage(event) {
+
+//     var fileInput = 
+//     document.getElementById('image3');
+  
+// var filePath = fileInput.value;
+
+// // Allowing file type
+// var allowedExtensions = 
+//         /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+  
+// if (!allowedExtensions.exec(filePath)) {
+//     alert('Invalid file type');
+//     fileInput.value = '';
+//     return false;
+// } 
+
+
+
+
+//     document.getElementById('editimageview3').classList.add("editimage");
+//     document.getElementById('imageview3').src = URL.createObjectURL(event.target.files[0])
+//     let file = event.target.files[0].name
+//     let extension = file.split('.').pop()
+//     if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
+//         $('#imageview3').show()
+//         $('#sub').show()
+//         $('#errMsg').hide()
+
+//     }
+//     else {
+//         $('#sub').hide()
+//         $('#errMsg').show()
+//     }
+// }
+
+
+
+// function viewFourthImage(event) {
+
+//     var fileInput = 
+//     document.getElementById('image4');
+  
+// var filePath = fileInput.value;
+
+// // Allowing file type
+// var allowedExtensions = 
+//         /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+  
+// if (!allowedExtensions.exec(filePath)) {
+//     alert('Invalid file type');
+//     fileInput.value = '';
+//     return false;
+// } 
+
+
+
+
+//     document.getElementById('editimageview4').classList.add("editimage");
+//     document.getElementById('imageview4').src = URL.createObjectURL(event.target.files[0])
+//     let file = event.target.files[0].name
+//     let extension = file.split('.').pop()
+//     if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
+//         $('#imageview4').show()
+//         $('#sub').show()
+//         $('#errMsg').hide()
+
+//     }
+//     else {
+//         $('#sub').hide()
+//         $('#errMsg').show()
+//     }
+// }
+
+
+
+function fileValidationedit1() {
+  
+    const imagebox = document.getElementById('image-box')
+    const crop_btn = document.getElementById('crop-btn')
+    var fileInput = document.getElementById('file1');
+
+var filePath = fileInput.value;
+
+// Allowing file type
+var allowedExtensions = 
+        /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+  
+if (!allowedExtensions.exec(filePath)) {
+    alert('Invalid file type');
+    fileInput.value = '';
+    return false;
+} else {
+        //Image preview
+        document.getElementById('editimageview1').classList.add("editimage");
+        const img_data = fileInput.files[0]
+        const url = URL.createObjectURL(img_data)
+        imagebox.innerHTML = `<img src="${url}" id="image" style="width:100%">`
+        const image = document.getElementById('image')
+        document.getElementById('image-box').style.display = 'block'
+        document.getElementById('crop-btn').style.display = 'block'
+        document.getElementById('confirm-btn').style.display = 'none'
+
+        const cropper = new Cropper(image, {
+            autoCropArea: 1,
+            viewMode: 1,
+            scalable: false,
+            zoomable: false,
+            movable: false,
+            aspectRatio: 16 / 19,
+            //  preview: '.preview',
+            minCropBoxWidth: 180,
+            minCropBoxHeight: 240,
+        })
+        crop_btn.addEventListener('click', () => {
+            cropper.getCroppedCanvas().toBlob((blob) => {
+                let fileInputElement = document.getElementById('file1');
+                let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
+                let container = new DataTransfer();
+
+                container.items.add(file);
+                const img = container.files[0]
+                var url = URL.createObjectURL(img)
+                fileInputElement.files = container.files;
+                document.getElementById('imgview1').src = url
+                document.getElementById('image-box').style.display = 'none'
+                document.getElementById('crop-btn').style.display = 'none'
+                document.getElementById('confirm-btn').style.display = 'block'
+            });
+        });
+    }
+}
+
+
+
+function fileValidationedit2() {
+  
     document.getElementById('editimageview2').classList.add("editimage");
-    document.getElementById('imageview2').src = URL.createObjectURL(event.target.files[0])
-    let file = event.target.files[0].name
-    let extension = file.split('.').pop()
-    if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
-        $('#imageview2').show()
-        $('#sub').show()
-        $('#errMsg').hide()
+    const imagebox = document.getElementById('image-box')
+    const crop_btn = document.getElementById('crop-btn')
+    var fileInput = document.getElementById('file2');
 
-    }
-    else {
-        $('#sub').hide()
-        $('#errMsg').show()
-    }
-}
-
-
-function viewThirdImage(event) {
-
-    var fileInput = 
-    document.getElementById('image3');
-  
 var filePath = fileInput.value;
 
 // Allowing file type
@@ -189,34 +565,59 @@ if (!allowedExtensions.exec(filePath)) {
     alert('Invalid file type');
     fileInput.value = '';
     return false;
-} 
+} else {
+        //Image preview
+        const img_data = fileInput.files[0]
+        const url = URL.createObjectURL(img_data)
+        imagebox.innerHTML = `<img src="${url}" id="image" style="width:100%">`
+        const image = document.getElementById('image')
+        document.getElementById('image-box').style.display = 'block'
+        document.getElementById('crop-btn').style.display = 'block'
+        document.getElementById('confirm-btn').style.display = 'none'
+
+        const cropper = new Cropper(image, {
+            autoCropArea: 1,
+            viewMode: 1,
+            scalable: false,
+            zoomable: false,
+            movable: false,
+            aspectRatio: 16 / 19,
+            //  preview: '.preview',
+            minCropBoxWidth: 180,
+            minCropBoxHeight: 240,
+        })
+       
+        crop_btn.addEventListener('click', () => {
+            cropper.getCroppedCanvas().toBlob((blob) => {
+                let fileInputElement = document.getElementById('file2');
+                let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
+                let container = new DataTransfer();
+            
+                container.items.add(file);
+                const img = container.files[0]
+                var url = URL.createObjectURL(img)
+                fileInputElement.files = container.files;
+                document.getElementById('imgview2').src = url
+                document.getElementById('image-box').style.display = 'none'
+                document.getElementById('crop-btn').style.display = 'none'
+                document.getElementById('confirm-btn').style.display = 'block'
+            });
+        });
+    }
+}
 
 
 
 
+
+
+
+function fileValidationedit3() {
     document.getElementById('editimageview3').classList.add("editimage");
-    document.getElementById('imageview3').src = URL.createObjectURL(event.target.files[0])
-    let file = event.target.files[0].name
-    let extension = file.split('.').pop()
-    if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
-        $('#imageview3').show()
-        $('#sub').show()
-        $('#errMsg').hide()
+    const imagebox = document.getElementById('image-box')
+    const crop_btn = document.getElementById('crop-btn')
+    var fileInput = document.getElementById('file3');
 
-    }
-    else {
-        $('#sub').hide()
-        $('#errMsg').show()
-    }
-}
-
-
-
-function viewFourthImage(event) {
-
-    var fileInput = 
-    document.getElementById('image4');
-  
 var filePath = fileInput.value;
 
 // Allowing file type
@@ -227,26 +628,124 @@ if (!allowedExtensions.exec(filePath)) {
     alert('Invalid file type');
     fileInput.value = '';
     return false;
-} 
+} else {
+        //Image preview
+        const img_data = fileInput.files[0]
+        const url = URL.createObjectURL(img_data)
+        imagebox.innerHTML = `<img src="${url}" id="image" style="width:100%">`
+        const image = document.getElementById('image')
+        document.getElementById('image-box').style.display = 'block'
+        document.getElementById('crop-btn').style.display = 'block'
+        document.getElementById('confirm-btn').style.display = 'none'
 
+        const cropper = new Cropper(image, {
+            autoCropArea: 1,
+            viewMode: 1,
+            scalable: false,
+            zoomable: false,
+            movable: false,
+            aspectRatio: 16 / 19,
+            //  preview: '.preview',
+            minCropBoxWidth: 180,
+            minCropBoxHeight: 240,
+        })
+        crop_btn.addEventListener('click', () => {
+            cropper.getCroppedCanvas().toBlob((blob) => {
+                let fileInputElement = document.getElementById('file3');
+                let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
+                let container = new DataTransfer();
 
-
-
-    document.getElementById('editimageview4').classList.add("editimage");
-    document.getElementById('imageview4').src = URL.createObjectURL(event.target.files[0])
-    let file = event.target.files[0].name
-    let extension = file.split('.').pop()
-    if (extension == 'jpeg' || extension == 'png' || extension == 'jpg') {
-        $('#imageview4').show()
-        $('#sub').show()
-        $('#errMsg').hide()
-
-    }
-    else {
-        $('#sub').hide()
-        $('#errMsg').show()
+                container.items.add(file);
+                const img = container.files[0]
+                var url = URL.createObjectURL(img)
+                fileInputElement.files = container.files;
+                document.getElementById('imgview3').src = url
+                document.getElementById('image-box').style.display = 'none'
+                document.getElementById('crop-btn').style.display = 'none'
+                document.getElementById('confirm-btn').style.display = 'block'
+            });
+        });
     }
 }
+
+
+
+
+
+function fileValidationedit4() {
+    document.getElementById('editimageview4').classList.add("editimage");
+    const imagebox = document.getElementById('image-box')
+    const crop_btn = document.getElementById('crop-btn')
+    var fileInput = document.getElementById('file4');
+
+var filePath = fileInput.value;
+
+// Allowing file type
+var allowedExtensions = 
+        /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+  
+if (!allowedExtensions.exec(filePath)) {
+    alert('Invalid file type');
+    fileInput.value = '';
+    return false;
+} else {
+        //Image preview
+        const img_data = fileInput.files[0]
+        const url = URL.createObjectURL(img_data)
+        imagebox.innerHTML = `<img src="${url}" id="image" style="width:100%">`
+        const image = document.getElementById('image')
+        document.getElementById('image-box').style.display = 'block'
+        document.getElementById('crop-btn').style.display = 'block'
+        document.getElementById('confirm-btn').style.display = 'none'
+
+        const cropper = new Cropper(image, {
+            autoCropArea: 1,
+            viewMode: 1,
+            scalable: true,
+            zoomable: false,
+            movable: false,
+            aspectRatio: 16 / 19,
+            //  preview: '.preview',
+            minCropBoxWidth: 180,
+            minCropBoxHeight: 240,
+        })
+        crop_btn.addEventListener('click', () => {
+            cropper.getCroppedCanvas().toBlob((blob) => {
+                let fileInputElement = document.getElementById('file4');
+                let file = new File([blob], img_data.name, { type: "image/*", lastModified: new Date().getTime() });
+                let container = new DataTransfer();
+
+                container.items.add(file);
+                const img = container.files[0]
+                var url = URL.createObjectURL(img)
+                fileInputElement.files = container.files;
+                document.getElementById('imgview4').src = url
+                document.getElementById('image-box').style.display = 'none'
+                document.getElementById('crop-btn').style.display = 'none'
+                document.getElementById('confirm-btn').style.display = 'block'
+            });
+        });
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //brand logo
 function viewLogoImage(event) {
@@ -491,9 +990,7 @@ $("#brandvalidationform").validate({
 
 
 
-//sweet alert
+//crop
 
 
-
-   
 

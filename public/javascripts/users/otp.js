@@ -138,7 +138,7 @@ function otpregisterform(){
      var fifth = document.getElementById("fifth").value;
      var sixth= document.getElementById("sixth").value;
 
-     var otpnumber = first+second+third+fourth+fifth+sixth
+     var otpnumber = `${first}${second}${third}${fourth}${fifth}${sixth}`
      var phoneNumber = document.getElementById("phonnumber").value;
 
 
@@ -173,7 +173,7 @@ function otpformforpasswordchange(){
          var fifth = document.getElementById("fifth").value;
          var sixth= document.getElementById("sixth").value;
 
-         var otpnumber = first+second+third+fourth+fifth+sixth
+         var otpnumber = `${first}${second}${third}${fourth}${fifth}${sixth}`
          var phoneNumber = document.getElementById("phonnumber").value;
 
 

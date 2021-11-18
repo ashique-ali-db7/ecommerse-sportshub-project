@@ -169,7 +169,7 @@ router.get('/registerresend',verifyLogin,(req,res)=>{
 router.get("/registerotplogin",(req,res)=>{
  
   let phoneNumber = req.query.phonenumber;
-  let otpNumber = Number(req.query.otpnumber);
+  let otpNumber = req.query.otpnumber;
 typeof(otpNumber)
   client.verify
   .services(serviceId)
@@ -308,7 +308,7 @@ router.get('/loginresend',verifyLogin,(req,res)=>{
  router.get("/otplogin",(req,res)=>{
 
    let phoneNumber = req.query.phonenumber;
-   let otpNumber = Number(req.query.otpnumber);
+   let otpNumber = req.query.otpnumber;
  typeof(otpNumber)
    client.verify
    .services(serviceId)
@@ -343,6 +343,7 @@ router.get('/loginidentify',verifyLogin,(req,res)=>{
 
 //  post forgotten password
 router.post('/loginidentify',(req,res)=>{
+  req.session.phonenumber = req.body.number;
   let phoneNumber = req.body.number
   phoneNumber = phoneNumber.toString();
   
@@ -369,11 +370,44 @@ router.post('/loginidentify',(req,res)=>{
 });
 
 
+//password for resend
+router.get('/loginresendpassword',verifyLogin,(req,res)=>{
+  console.log("edamone")
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+ let phoneNumber = req.session.phonenumber
+
+
+ 
+      client.verify
+      .services(serviceId)
+      .verifications.create({
+        to:`+91${req.session.phonenumber}`,
+        channel:"sms"
+      })
+      .then((resp)=>{
+        // console.log(resp);
+        // res.status(200).json({resp});
+         res.render('users/otploginforpassword',{admin:false,phoneNumber,notheader:true})
+      });
+  
+
+
+
+
+
+})
+
+
+
+
+
+
+
 //get for password otp
 router.get("/otploginforpassword",(req,res)=>{
  
   let phoneNumber = req.query.phonenumber;
-  let otpNumber = Number(req.query.otpnumber);
+  let otpNumber = req.query.otpnumber;
 typeof(otpNumber)
   client.verify
   .services(serviceId)
