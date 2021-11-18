@@ -121,7 +121,7 @@ router.get('/brand-managment',verifyLogin,(req,res)=>{
   brandhelpers.getBrand().then((response)=>{
     let brandData = response;
     res.render('admin/brand-managment', { admin:true,brandExistError,brandData});
-  bannerExistError = "";
+  brandExistError = "";
   })
   
 });
@@ -165,6 +165,52 @@ router.get('/deletebrand',verifyLogin,(req,res)=>{
     res.redirect('/admin/brand-managment');
   })
 })
+
+
+// edit brand
+router.get('/editbrand',(req,res)=>{
+  brandhelpers.getSingleBrand(req.query).then((response)=>{
+  let singleBrand = response;
+  console.log(brandExistError);
+  res.render('admin/editbrand',{admin:true,singleBrand,brandExistError});
+  brandExistError="";
+  
+  })
+   
+  })
+  
+  
+  router.post('/editbrand',(req,res)=>{
+   
+    let id = req.query.id;
+  brandhelpers.updateBrand(req.body,id).then((response)=>{
+    if(response.exist){
+      brandExistError = "enterd brand already exist";
+res.redirect('/admin/editbrand')
+    }else{
+    let logo = req.files?.logo;
+
+    if(logo){
+      fs.unlink('./public/images/brand-images/'+id+'.png', function (err) {
+        if (err) throw err;
+        console.log('File deleted!');
+      });
+      logo.mv('./public/images/brand-images/'+id+'.png',(err,done)=>{
+        if(!err){
+          res.redirect('/admin/brand-managment')
+        }
+        else{
+          console.log(err);
+        }
+      })
+    }
+  }
+  })
+  
+  })
+
+
+
 
 
 
@@ -445,6 +491,21 @@ router.get('/deleteproduct',verifyLogin,(req,res)=>{
     res.redirect('/admin/view-product');
   })
 })
+
+
+
+
+
+// user managment
+
+router.get('/usermanagment',(req,res)=>{
+  res.render('admin/user-managment',{admin:true});
+})
+
+
+
+
+
 
 
 

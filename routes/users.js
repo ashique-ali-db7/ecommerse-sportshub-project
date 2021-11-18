@@ -8,9 +8,9 @@ var categoryhelpers = require('../helpers/categoryhelpers');
 var userhelpers = require('../helpers/userhelpers');
 const session = require('express-session');
 
-const serviceId = "VAc457a650e0ab09a6060cd944236cc2fd";
-const accountId = "AC31e88f489ff280f19d02450fc8528448";
-const authToken = "73538af34ff0ac4b3656cdd4a65c8ece";
+const serviceId = process.env.serviceId;
+const accountId = process.env.accountId;
+const authToken = process.env.authToken;
 
 const client = require("twilio")(accountId,authToken)
 
@@ -181,6 +181,7 @@ typeof(otpNumber)
     if(resp.valid){
  let user = req.session.tempararysignup;
  userhelpers.addUser(user).then((response)=>{
+   console.log(response)
 req.session.user = response;
 req.session.user.loggedIn = true;
 let valid = true;

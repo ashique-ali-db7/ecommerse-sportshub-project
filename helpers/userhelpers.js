@@ -115,9 +115,12 @@ resolve(user);
     },
 
     addUser:(data)=>{
+        data.blocked = false;
 return new Promise(async(resolve,reject)=>{
     data.password = await bcryptjs.hash(data.password,10)
-  let user  = await db.get().collection(collections.USERS_DETAILS_COLLECTION).insertOne(data);
+   await db.get().collection(collections.USERS_DETAILS_COLLECTION).insertOne(data);
+  let user = db.get().collection(collections.USERS_DETAILS_COLLECTION).findOne({phonenumber:data.phonenumber})
+
    resolve(user);
 })
 

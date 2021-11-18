@@ -1,6 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+require('dotenv').config();
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var hbs = require('express-handlebars');
@@ -10,8 +11,11 @@ var session = require('express-session');
 
 var app = express();
 var fileUpload = require('express-fileupload')
-var db = require('./config/connection')
-
+var db = require('./config/connection');
+const serviceId = process.env.serviceId;
+const accountId = process.env.accountId;
+const authToken = process.env.authToken;
+const client = require("twilio")(accountId,authToken)
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');

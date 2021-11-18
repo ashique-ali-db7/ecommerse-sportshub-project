@@ -3,6 +3,7 @@ var db = require('../config/connection');
 var collections = require('../config/collection');
 
 var objectId = require('mongodb').ObjectId;
+const { response } = require('express');
 
 module.exports={
 
@@ -51,7 +52,34 @@ resolve(response);
         })
     },
   
- 
+    getSingleBrand:(data)=>{
+   
+        return new Promise(async(resolve,reject)=>{
+         let singleBrand =  await db.get().collection(collections.BRAND_DETAILS_COLLECTION).findOne({_id:objectId(data.id)});
+         resolve(singleBrand);
+        })
+    },
+
+    updateBrand:(data,id)=>{
+        console.log(data);
+return new Promise(async(resolve,reject)=>{
+   let response={};
+let brandNameCheck = await db.get().collection(collections.BRAND_DETAILS_COLLECTION).findOne({brandName:data.brandName})
+if(brandNameCheck){
+
+response.exist = true;
+resolve(response)
+
+}else{
+    await db.get().collection(collections.BRAND_DETAILS_COLLECTION).updateOne({_id:objectId(id)},{$set:data}).then((status)=>{
+        response.exist = false;
+        resolve(response);
+    })
+}
+   
+})
+
+    }
 
 
 }
