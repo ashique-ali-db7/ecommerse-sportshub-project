@@ -1,6 +1,6 @@
-<div class="container">
+<div class="container col-7">
 
-<div class=" me-auto ms-auto mt-5" style="width: 40%;">
+<div class=" me-auto ms-auto" style="width: 95%;">
     <h1>EDIT PRODUCT</h1>
     <form action="/admin/edit-product?productid={{data.productid}}&id={{data._id}}" onsubmit="return onsubmitForm(this)"  class="mt-5" method="post" id="editproduct" enctype="multipart/form-data">
 {{!--        
@@ -11,14 +11,14 @@
           <input name="productid" value="{{data.productid}}" type="text" class="form-control" >
          
         </div> --}}
+<div class="row">
 
-
-        <div class="mb-3">
+        <div class="mb-5 col-lg-6">
           <label for="" class="form-label">Product Name</label>
           <input name="productname" value="{{data.productname}}" type="text" class="form-control" >
          
         </div>
-         <div class="mb-3">
+         <div class="mb-5 col-lg-6">
             <label for="" class="form-label">Brand</label><br>
         
             <select name="brand" id="brand" style="width: 100%;height: 40px;">
@@ -30,11 +30,11 @@
          
         </div>
 
-        <div class="mb-3">
+        <div class="mb-5 col-lg-6">
             <label for="" class="form-label">Select category</label><br>
         
             <select name="category" id="categorychange" style="width: 100%;height: 40px;" onchange="formCategory()">
-              <option selected="">select</option>
+              <option selected="true" disabled="disabled">{{data.category}}</option>    
               {{#each categoryData}}
               <option>{{this.category}}</option>
               {{/each}}
@@ -43,50 +43,59 @@
  
         </div>
 
-        <div class="mb-3">
+        <div class="mb-5 col-lg-6">
             <label for="" class="form-label">Select sub category</label><br>
-        
+          
             <select name="subcategory" id="formsubcategory" style="width: 100%;height: 40px;">
             
-            
+             <option selected="true" disabled="disabled">{{data.subcategory}}</option> 
   
             </select>
          
         </div> 
 
-       
+         <div class="mb-5 col-lg-6">
+            <label for="" class="form-label">Landing rice</label>
+            <input type="text" name="landingprice" value="{{data.price}}" class="form-control" >
+           
+          </div>
 
 
-        <div class="mb-3">
-            <label for="" class="form-label" >Small quantity</label>
-            <input type="text" name="smallquantity" value="{{data.smallquantity}}" style="width: 30%;" class="ms-4 mt-3">
-        </div>
-
-        <div class="mb-3">
-            <label for="" class="form-label" >Medium quantity</label>
-            <input type="text" name="mediumquantity" value="{{data.mediumquantity}}" style="width: 30%;"class="ms-1">
-        </div>
-
-        <div class="mb-3">
-            <label for="" class="form-label" >Large quantity</label>
-            <input type="text" name="largequantity" value="{{data.largequantity}}" style="width: 30%;"class="ms-4">
-        </div>
-
-
-        <div class="mb-3">
+ <div class="mb-5 col-lg-6">
             <label for="" class="form-label">Price</label>
             <input type="text" name="price" value="{{data.price}}" class="form-control" >
            
           </div>
 
+       
 
-          <div class="mb-3">
+
+        <div class="mb-3 col-lg-4" >
+            <label for="" class="form-label" >Small quantity</label>
+            <input type="text" name="smallquantity" value="{{data.smallquantity}}" style="width: 30%;" class="ms-4 mt-3">
+        </div>
+
+        <div class="mb-3 col-lg-4" style="margin-top: 2.2%;">
+            <label for="" class="form-label" >Medium quantity</label>
+            <input type="text" name="mediumquantity" value="{{data.mediumquantity}}" style="width: 30%;"class="ms-1">
+        </div>
+
+        <div class="mb-3 col-lg-4" style="margin-top: 2.2%;">
+            <label for="" class="form-label" >Large quantity</label>
+            <input type="text" name="largequantity" value="{{data.largequantity}}" style="width: 30%;"class="ms-4">
+        </div>
+
+
+       
+
+
+          <div class="mb-3 col-lg-4 mt-4" >
             <label for="" class="form-label">Description</label><br>
-           <textarea name="description" id=""  cols="50" rows="5">{{data.description}}</textarea>
+           <textarea name="description" id=""  cols="40" rows="5">{{data.description}}</textarea>
            
           </div>
 
-          <div class="mb-3" id="img-preview">
+          {{!-- <div class="mb-3" id="img-preview">
             <label for="" class="form-label">Image1</label><br>
             <input type="file" id="image1" name="image1" accept="image/*" onchange="viewMainImage(event)">
             <img src="" alt="" class="mt-4" style="width: 15rem;height:17rem;display:none" id="imageview1"><br>
@@ -124,7 +133,63 @@
             <input type="file" id="image4" name="image4" accept="image/*" onchange="viewFourthImage(event)">
              <img src="" alt="" class="mt-4" style="width: 15rem;height:17rem;display:none" id="imageview4"><br>
              <img style="width:15rem;height:17rem" src="/images/product-images/{{data._id}}4.png" id="editimageview4" alt="">
-          </div>
+          </div> --}}
+
+
+
+{{!-- crop --}}
+
+       <div class="col-lg-6">
+                        <div id="image-box" style="width: 500px; height: 500px; display: none;"></div>
+                        <button class="btn btn-primary mt-3" type="button" style="display: none;"
+                            id="crop-btn">Crop</button>
+                    </div>
+          
+
+
+
+
+
+
+<div class="mb-3" style="width: 45%;">
+                        <label for="">IMAGE 1</label>
+                        <img src="" alt="" style="width: 100px; height:auto" id="imgview1">
+                                <img style="width: 100px; height:auto" src="/images/product-images/{{data._id}}1.png" id="editimageview1" alt="">
+                        <input type="file" name="image1" id="file1" class="form-control"
+                            onchange="return fileValidationedit1()">
+                    </div>
+
+
+
+
+
+                    <div class="mb-3 "style="width: 45%;">
+                        <label for="">IMAGE 2</label>
+                        <img src="" alt="" style="width: 100px; height:auto" id="imgview2">
+                   <img style="width: 100px; height:auto" src="/images/product-images/{{data._id}}2.png" id="editimageview2" alt="">
+                        <input type="file" name="image2" id="file2" class="form-control"
+                            onchange="return fileValidationedit2()">
+                    </div>
+
+
+                    <div class="mb-3 "style="width: 45%;">
+                        <label for="">IMAGE 3</label>
+                        <img src="" alt="" style="width: 100px; height:auto" id="imgview3">
+                     <img style="width: 100px; height:auto" src="/images/product-images/{{data._id}}3.png" id="editimageview3" alt="">
+                        <input type="file" name="image3" id="file3" class="form-control"
+                            onchange="return fileValidationedit3()">
+                    </div>
+
+
+                    <div class="mb-3 "style="width: 45%;">
+                        <label for="">IMAGE 4</label>
+                        <img src="" alt="" style="width: 100px; height:auto" id="imgview4">
+                     <img style="width: 100px; height:auto" src="/images/product-images/{{data._id}}3.png" id="editimageview4" alt="">
+                        <input type="file" name="image4" id="file4" class="form-control"
+                            onchange="return fileValidationedit4()">
+                    </div>
+
+         </div>
 
 
 
@@ -132,10 +197,10 @@
          
 
 
-
+</div>
        
 
-        <button type="submit"  class="btn btn-primary mt-1" style="width: 100%;">Submit</button>
+        <button id="confirm-btn" type="submit" style="width: 50%;margin-left:25%" class="btn btn-primary mt-5">Edit Product</button><br>
 
       </form>
     </div>
