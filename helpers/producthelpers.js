@@ -3,6 +3,7 @@ var db = require('../config/connection');
 var collections = require('../config/collection');
 
 var objectId = require('mongodb').ObjectId;
+const { response } = require('express');
 module.exports = {
     addProduct:(data)=>{
 
@@ -76,6 +77,69 @@ await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION)
           .deleteOne({_id:objectId(data.id)}).then((data)=>{
               resolve(data);
           })
+      })
+  },
+
+
+  addToCart:(proId,size,userId)=>{
+      let proObj = {}
+      if(size === "smallquantity"){
+       
+        proObj.item = objectId(proId),
+        proObj.smallquantity = 1,
+        proObj.size = "smallquantity"
+      }
+
+      if(size === "mediumquantity"){
+        proObj.item = objectId(proId),
+        proObj.mediumquantity = 1,
+        proObj.size = "mediumquantity"
+      }
+
+      if(size === "largequantity"){
+     
+            proObj.item = objectId(proId),
+            proObj.largequantity = 1,
+            proObj.size = "largequantity"
+        
+      }
+     
+return new Promise(async(resolve,reject)=>{
+    let userCart = await db.get().collection(collections.CART_DETAILS_COLLECTION).findOne({user:objectId(userId)})
+
+   if(userCart){
+db.get().collection(collections.CART_DETAILS_COLLECTION)
+.updateOne({user:objectId(userId)},{$push:{products:proObj}})
+   }else{
+       let cartObj = {
+           user:objectId(userId),
+           products:[proObj]
+       }
+       db.get().collection(collections.CART_DETAILS_COLLECTION).insertOne(cartObj).then((response)=>{
+           resolve();
+       })
+   }
+
+})
+  },
+
+
+
+
+  getCartProducts:(userId)=>{
+      return new Promise(async(resolve,reject)=>{
+     
+let cartItems =await db.get().collection(collections.CART_DETAILS_COLLECTION)
+.aggregate([
+    {
+        $match:{user:objectId(userId)}
+    },
+
+
+]).toArray()
+
+
+
       })
   }
 

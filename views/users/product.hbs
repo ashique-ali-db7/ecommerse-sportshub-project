@@ -212,7 +212,7 @@
                                     </div>
                                     {{else}}
                                    <div class="sc-item">
-                                        <input type="radio" onclick="checksize('small')" id="sm-size">
+                                        <input type="radio" onclick="checksize('smallquantity')" id="sm-size">
                                         <label for="sm-size">s</label>
                                     </div>
                                     {{/if}}
@@ -226,7 +226,7 @@
                                     </div>
                                     {{else}}
                                      <div class="sc-item">
-                                        <input type="radio" onclick="checksize('medium')" id="md-size">
+                                        <input type="radio" onclick="checksize('mediumquantity')" id="md-size">
                                         <label for="md-size">m</label>
                                     </div>
                                     {{/if}}
@@ -244,7 +244,7 @@
                                     </div>
                                     {{else}}
                                     <div class="sc-item">
-                                        <input type="radio" onclick="checksize('large')" id="lg-size">
+                                        <input type="radio" onclick="checksize('largequantity')" id="lg-size">
                                         <label for="lg-size">l</label>
                                     </div>
                                     {{/if}}
@@ -272,7 +272,7 @@
                                     
                                 </div> --}}
 
-                                 <button onclick="addtocartproduct('{{response._id}}')" class="primary-btn pd-cart"><i class="fas fa-shopping-cart mr-3"></i>Add To Cart</button>
+                                 <button style="border: none;" onclick="addtocartproduct('{{response._id}}')" class="primary-btn pd-cart mb-4"><i class="fas fa-shopping-cart mr-3"></i>Add To Cart</button>
                                  <a href="#" class="primary-btn pd-cart " style="width: 32%;"><i class="fas fa-fire mr-3"></i>Buy Now</a>
 
                                 

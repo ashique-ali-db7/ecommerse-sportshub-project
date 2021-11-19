@@ -330,6 +330,7 @@ function outofstock(){
 
 var sizeOfProduct;
 function checksize(size){ 
+    document.getElementById('selectsize').classList.add('selectsize');
     document.getElementById('outofstock').classList.add('selectsize');
      sizeOfProduct = size;
 
@@ -338,7 +339,7 @@ function checksize(size){
 
 
 function addtocartproduct(productid){
-
+    document.getElementById('selectsize').classList.add('selectsize');
 if(sizeOfProduct){
   
     $.ajax({
