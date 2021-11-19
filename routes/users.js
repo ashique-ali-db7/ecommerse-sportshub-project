@@ -89,8 +89,10 @@ router.get('/clothings',blockCheck, function(req, res, next) {
 });
 
 /* GET shopping cart. */
-router.get('/shopping-cart',verifyLoginForLoginpage, function(req, res, next) {
+router.get('/shopping-cart',verifyLoginForLoginpage, async(req, res, next) =>{
   let user = req.session.user;
+  let userId = req.session.user._id;
+ let products = await producthelpers.getCartProducts(userId)
   res.render('users/shopping-cart',{ admin:false,user,notheader:true,cartcss:true});
 });
 
@@ -546,6 +548,9 @@ router.get('/addtocartproduct',(req,res)=>{
   if(req.session.user){
     let productSize = req.query.size;
     let productId = req.query.productid;
+    let userId = req.session.user._id
+   
+    producthelpers.addToCart(productId,productSize,userId)
   
   }else{
 response.sessionrequired = true;
