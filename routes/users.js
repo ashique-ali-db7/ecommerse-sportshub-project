@@ -98,8 +98,21 @@ router.get('/shopping-cart',verifyLoginForLoginpage, function(req, res, next) {
 /* GET single product view. loginverification not required*/
 router.get('/product',blockCheck, function(req, res) {
   let user = req.session.user;
+  let quantity = {};
 producthelpers.getSingleProductDetails(req.query).then((response)=>{
-  res.render('users/product',{ admin:false,response,user});
+  if(response.smallquantity == 0){
+quantity.smalloutofstock = true;
+  }
+  if(response.mediumquantity == 0){
+    quantity.mediumoutofstock = true;
+      }
+      if(response.largequantity == 0){
+        quantity.largeoutofstock = true;
+          }
+
+  
+ 
+  res.render('users/product',{ admin:false,response,user,quantity});
 })
   
   
@@ -526,7 +539,20 @@ router.post('/passwordchange',(req,res)=>{
 
 
 
+//get addtocart
 
+router.get('/addtocartproduct',(req,res)=>{
+  let response = {}
+  if(req.session.user){
+    let productSize = req.query.size;
+    let productId = req.query.productid;
+  
+  }else{
+response.sessionrequired = true;
+res.json(response);
+  }
+
+})
 
 
 
