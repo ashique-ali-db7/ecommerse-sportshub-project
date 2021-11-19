@@ -200,32 +200,79 @@
                                     </div>
                                 </div> --}}
                                 <div class="pd-size-choose">
-                                    <div class="sc-item">
-                                        <input type="radio" id="sm-size">
+                                    <p style="color:red" class="selectsize" id="selectsize">please select a size</p>
+                                    <p style="color:red" class="selectsize" id="outofstock">Out of stock</p>
+      
+                                 {{!-- small --}}
+
+                                    {{#if quantity.smalloutofstock}}      
+                                     <div class="sc-item">
+                                         <input type="radio" onclick="outofstock()"  id="sm-size"> 
+                                        <label for="sm-size"  style="color: grey;">s</label>
+                                    </div>
+                                    {{else}}
+                                   <div class="sc-item">
+                                        <input type="radio" onclick="checksize('small')" id="sm-size">
                                         <label for="sm-size">s</label>
                                     </div>
-                                    <div class="sc-item">
-                                        <input type="radio" id="md-size">
+                                    {{/if}}
+
+
+                                   {{!-- medium --}}
+                                     {{#if quantity.mediumoutofstock}}      
+                                     <div class="sc-item">
+                                        <input type="radio" onclick="outofstock()"  id="sm-size">
+                                        <label for="sm-size"  style="color: grey;">m</label>
+                                    </div>
+                                    {{else}}
+                                     <div class="sc-item">
+                                        <input type="radio" onclick="checksize('medium')" id="md-size">
                                         <label for="md-size">m</label>
                                     </div>
+                                    {{/if}}
+
+                                
+                                  
+
+                                    
+                                    {{!-- large --}}
+                                 
+                                   {{#if quantity.largeoutofstock}}      
+                                     <div class="sc-item">
+                                        <input type="radio" onclick="outofstock()"  id="sm-size">
+                                        <label for="sm-size"  style="color: grey;">l</label>
+                                    </div>
+                                    {{else}}
                                     <div class="sc-item">
-                                        <input type="radio" id="lg-size">
+                                        <input type="radio" onclick="checksize('large')" id="lg-size">
                                         <label for="lg-size">l</label>
                                     </div>
-                                    <div class="sc-item">
+                                    {{/if}}
+
+
+
+
+                                  
+
+
+
+
+
+                                    {{!-- xs --}}
+                                    {{!-- <div class="sc-item">
                                         <input type="radio" id="xl-size">
                                         <label for="xl-size">xs</label>
-                                    </div>
+                                    </div> --}}
                                 </div>
-                                <div class="quantity">
+                                {{!-- <div class="quantity">
                                     <div class="pro-qty">
                                         <input type="text" value="1">
                                     </div>
                                    
                                     
-                                </div>
+                                </div> --}}
 
-                                 <a onclick="" class="primary-btn pd-cart"><i class="fas fa-shopping-cart mr-3"></i>Add To Cart</a>
+                                 <button onclick="addtocartproduct('{{response._id}}')" class="primary-btn pd-cart"><i class="fas fa-shopping-cart mr-3"></i>Add To Cart</button>
                                  <a href="#" class="primary-btn pd-cart " style="width: 32%;"><i class="fas fa-fire mr-3"></i>Buy Now</a>
 
                                 

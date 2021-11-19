@@ -318,3 +318,46 @@ $("#userlogin").validate({
 
 
 
+//add to cart
+
+
+function outofstock(){
+    document.getElementById('outofstock').classList.remove('selectsize');
+}
+
+
+
+
+var sizeOfProduct;
+function checksize(size){ 
+    document.getElementById('outofstock').classList.add('selectsize');
+     sizeOfProduct = size;
+
+}
+
+
+
+function addtocartproduct(productid){
+
+if(sizeOfProduct){
+  
+    $.ajax({
+        url:'/addtocartproduct?productid='+productid+'&size='+sizeOfProduct,
+        method:'get',
+         success:(response)=>{
+             if(response){
+                 window.location.replace("/userlogin");
+            }
+       // else{
+        //         document.getElementById("error").classList.remove("otperror");
+        //     }
+         }
+    })
+
+
+
+}else{
+    document.getElementById('selectsize').classList.remove('selectsize');
+}
+
+}
