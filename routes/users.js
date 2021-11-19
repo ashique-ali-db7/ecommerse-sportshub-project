@@ -91,7 +91,7 @@ router.get('/clothings',blockCheck, function(req, res, next) {
 /* GET shopping cart. */
 router.get('/shopping-cart',verifyLoginForLoginpage, function(req, res, next) {
   let user = req.session.user;
-  res.render('users/shopping-cart',{ admin:false,user,notheader:true});
+  res.render('users/shopping-cart',{ admin:false,user,notheader:true,cartcss:true});
 });
 
 
