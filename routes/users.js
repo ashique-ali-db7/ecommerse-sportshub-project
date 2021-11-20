@@ -103,7 +103,7 @@ router.get('/product',blockCheck, function(req, res) {
   let quantity = {};
 producthelpers.getSingleProductDetails(req.query).then((response)=>{
 
-
+console.log(response.instock[2].quantity);
   if(response.instock[0].quantity == 0){
 quantity.smalloutofstock = true;
   }
@@ -546,13 +546,22 @@ router.post('/passwordchange',(req,res)=>{
 //get addtocart
 
 router.get('/addtocartproduct',(req,res)=>{
+
   let response = {}
   if(req.session.user){
     let productSize = req.query.size;
     let productId = req.query.productid;
     let userId = req.session.user._id
    
-    producthelpers.addToCart(productId,productSize,userId)
+    producthelpers.addToCart(productId,productSize,userId).then((result)=>{
+      if(result.added){
+        response.added = true;
+res.json(response);
+      }else if(result.exist){
+        response.exist = true;
+        res.json(response);
+      }
+    })
   
   }else{
 response.sessionrequired = true;

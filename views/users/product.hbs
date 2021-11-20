@@ -222,8 +222,8 @@
                                    {{!-- medium --}}
                                      {{#if quantity.mediumoutofstock}}      
                                     <div class="sc-item">
-                                        <input type="radio" onclick="outofstock()" id="lg-size">
-                                        <label for="lg-size" style="color: rgb(182, 179, 179);">m</label>
+                                        <input type="radio" onclick="outofstock()" id="md-size">
+                                        <label for="md-size" style="color: rgb(182, 179, 179);">m</label>
                                     </div>
                                     {{else}}
                                      <div class="sc-item">
@@ -245,8 +245,8 @@
                                     </div>
                                     {{else}}
                                    <div class="sc-item">
-                                        <input type="radio" onclick="checksize('l')" id="sm-size">
-                                        <label for="sm-size">l</label>
+                                        <input type="radio" onclick="checksize('l')" id="lg-size">
+                                        <label for="lg-size">l</label>
                                     </div>
                                     {{/if}}
 
@@ -272,6 +272,8 @@
                                    
                                     
                                 </div> --}}
+                                 <p class="text-primary selectsize" style="font-size: 1.5rem;" id="existincart">Product already exist in cart</p>
+                                <p class="text-success selectsize" style="font-size: 1.5rem;" id="addedcart">Added to cart</p>
 
                                  <button style="border: none;" onclick="addtocartproduct('{{response._id}}')" class="primary-btn pd-cart mb-4"><i class="fas fa-shopping-cart mr-3"></i>Add To Cart</button>
                                  <a href="#" class="primary-btn pd-cart " style="width: 32%;"><i class="fas fa-fire mr-3"></i>Buy Now</a>
