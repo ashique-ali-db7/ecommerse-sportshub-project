@@ -97,13 +97,14 @@ await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION)
 
 return new Promise(async(resolve,reject)=>{
  let stockArray =   await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).findOne({_id:objectId(id)},{instock:1})
-console.log(stockArray);
+
  
 })
   },
 
 
   addToCart:(proId,size,userId)=>{
+   
       let proObj = {}
     
       
@@ -116,31 +117,70 @@ console.log(stockArray);
 
       if(size === "m"){
         proObj.item = objectId(proId),
-        proObj.mediumquantity = 1,
+        proObj.quantity = 1,
         proObj.size = "m"
       }
 
       if(size === "l"){
      
             proObj.item = objectId(proId),
-            proObj.largequantity = 1,
+            proObj.quantity = 1,
             proObj.size = "l"
         
       }
      
 return new Promise(async(resolve,reject)=>{
-    let userCart = await db.get().collection(collections.CART_DETAILS_COLLECTION).findOne({user:objectId(userId)})
 
+let response = {};
+
+
+    let userCart = await db.get().collection(collections.CART_DETAILS_COLLECTION).findOne({user:objectId(userId)});
+  
    if(userCart){
-db.get().collection(collections.CART_DETAILS_COLLECTION)
-.updateOne({user:objectId(userId)},{$push:{products:proObj}})
-   }else{
+    
+   let userProductExist = await db.get().collection(collections.CART_DETAILS_COLLECTION).aggregate([
+       {$match:{user:objectId(userId)}},
+       {$unwind:"$products"},
+       {$match:{"products.item":objectId(proId),"products.size":size}},
+    ]).toArray();
+    console.log(userProductExist);
+if(userProductExist.length>0){
+    response.exist = true;
+    resolve(response);
+   
+}else{
+
+    db.get().collection(collections.CART_DETAILS_COLLECTION)
+    .updateOne({user:objectId(userId)},{$push:{products:proObj}})
+    response.added = true;
+    resolve(response);
+
+ 
+
+  
+}
+
+ 
+   
+  
+  
+       
+     
+     
+}
+     
+
+   
+   
+   
+   else{
        let cartObj = {
            user:objectId(userId),
            products:[proObj]
        }
        db.get().collection(collections.CART_DETAILS_COLLECTION).insertOne(cartObj).then((response)=>{
-           resolve();
+           response.added = true;
+           resolve(response);
        })
    }
 
