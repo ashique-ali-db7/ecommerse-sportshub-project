@@ -207,12 +207,13 @@
 
                                     {{#if quantity.smalloutofstock}}      
                                      <div class="sc-item">
+                                         
                                          <input type="radio" onclick="outofstock()"  id="sm-size"> 
                                         <label for="sm-size"  style="color: grey;">s</label>
                                     </div>
                                     {{else}}
                                    <div class="sc-item">
-                                        <input type="radio" onclick="checksize('smallquantity')" id="sm-size">
+                                        <input type="radio" onclick="checksize('s')" id="sm-size">
                                         <label for="sm-size">s</label>
                                     </div>
                                     {{/if}}
@@ -220,13 +221,13 @@
 
                                    {{!-- medium --}}
                                      {{#if quantity.mediumoutofstock}}      
-                                     <div class="sc-item">
-                                        <input type="radio" onclick="outofstock()"  id="sm-size">
-                                        <label for="sm-size"  style="color: grey;">m</label>
+                                    <div class="sc-item">
+                                        <input type="radio" onclick="outofstock()" id="lg-size">
+                                        <label for="lg-size" style="color: rgb(182, 179, 179);">m</label>
                                     </div>
                                     {{else}}
                                      <div class="sc-item">
-                                        <input type="radio" onclick="checksize('mediumquantity')" id="md-size">
+                                        <input type="radio" onclick="checksize('m')" id="md-size">
                                         <label for="md-size">m</label>
                                     </div>
                                     {{/if}}
@@ -238,14 +239,14 @@
                                     {{!-- large --}}
                                  
                                    {{#if quantity.largeoutofstock}}      
-                                     <div class="sc-item">
-                                        <input type="radio" onclick="outofstock()"  id="sm-size">
-                                        <label for="sm-size"  style="color: grey;">l</label>
+                                   <div class="sc-item">
+                                        <input type="radio" onclick="outofstock()" id="lg-size">
+                                        <label for="lg-size" style="color: rgb(182, 179, 179);">l</label>
                                     </div>
                                     {{else}}
-                                    <div class="sc-item">
-                                        <input type="radio" onclick="checksize('largequantity')" id="lg-size">
-                                        <label for="lg-size">l</label>
+                                   <div class="sc-item">
+                                        <input type="radio" onclick="checksize('l')" id="sm-size">
+                                        <label for="sm-size">l</label>
                                     </div>
                                     {{/if}}
 

@@ -102,13 +102,15 @@ router.get('/product',blockCheck, function(req, res) {
   let user = req.session.user;
   let quantity = {};
 producthelpers.getSingleProductDetails(req.query).then((response)=>{
-  if(response.smallquantity == 0){
+
+
+  if(response.instock[0].quantity == 0){
 quantity.smalloutofstock = true;
   }
-  if(response.mediumquantity == 0){
+  if(response.instock[1].quantity == 0){
     quantity.mediumoutofstock = true;
       }
-      if(response.largequantity == 0){
+      if(response.instock[2].quantity == 0){
         quantity.largeoutofstock = true;
           }
 

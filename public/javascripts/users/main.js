@@ -322,7 +322,15 @@ $("#userlogin").validate({
 
 
 function outofstock(){
+  
     document.getElementById('outofstock').classList.remove('selectsize');
+     sizeOfProduct = "";
+}
+
+
+function checking(){
+    alert("kooi")
+
 }
 
 
