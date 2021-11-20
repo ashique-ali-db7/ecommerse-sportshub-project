@@ -303,15 +303,22 @@ res.redirect('/admin/add-product')
 // Get edit product
 router.get('/edit-product',verifyLogin,(req,res)=>{
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  console.log(req.query);
+ 
+  let id = req.query.id;
+ 
   categoryhelpers.getCategory().then((categoryData)=>{
     brandhelpers.getBrand().then((brandData)=>{
 
       producthelpers.getSingleProductDetailsForEdit(req.query).then((response)=>{
         let data = response;
-       
+    let smallquantity = data.instock[0].quantity;
+    let mediumquantity = data.instock[1].quantity;
+    let largequantity = data.instock[2].quantity;
+
+        res.render('admin/edit-product',{admin:true,data,categoryData,brandData,smallquantity,mediumquantity,largequantity});
+     
         
-        res.render('admin/edit-product',{admin:true,data,categoryData,brandData});
+       
       })
      
     })
