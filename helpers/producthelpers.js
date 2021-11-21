@@ -9,6 +9,8 @@ module.exports = {
 data.smallquantity = Number(data.smallquantity);
 data.mediumquantity = Number(data.mediumquantity);
 data.largequantity = Number(data.largequantity);
+data.price = Number(data.price);
+data.landingprice = Number(data.landingprice);
 
 
 
@@ -73,6 +75,8 @@ return new Promise(async(resolve,reject)=>{
     data.smallquantity = Number(data.smallquantity);
 data.mediumquantity = Number(data.mediumquantity);
 data.largequantity = Number(data.largequantity);
+data.price = Number(data.price);
+data.landingprice = Number(data.landingprice);
       return new Promise(async(resolve,reject)=>{
 
 

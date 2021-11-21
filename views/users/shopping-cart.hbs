@@ -32,12 +32,15 @@
                                                 <input type="text" value="{{this.quantity}}">
                                             </div>
                                         </div> --}}
-                                         <button class="qtybt mr-3" id="quantityminus" onclick="changeQuantity('{{this._id}}','{{this.productdetails._id}}','{{this.size}}',-1)">-</button>{{this.quantity}}<button class="qtybt ml-3" id="quantityplus" onclick="changeQuantity('{{this._id}}','{{this.productdetails._id}}','{{this.size}}',1)">+</button> 
+                                         <button class="qtybt mr-3" id="{{this.productdetails._id}}{{this.size}}-" onclick="changeQuantity('{{this._id}}','{{this.productdetails._id}}','{{this.size}}',-1)">-</button><span id="{{this.productdetails._id}}{{this.size}}">{{this.quantity}}</span> <button class="qtybt ml-3" id="{{this.productdetails._id}}{{this.size}}+" onclick="changeQuantity('{{this._id}}','{{this.productdetails._id}}','{{this.size}}',1)">+</button> 
                                     </td>
+                                   
                                     <td class="total-price first-row">60.00</td>
                                     <td class="close-td first-row"><button class="btn btn-danger">Remove</button></td>
                                 </tr>
+                              
                                 {{/each}}
+                               
                                 {{!-- <tr>
                                     <td class="cart-pic"><img src="img/cart-page/product-2.jpg" alt=""></td>
                                     <td class="cart-title">
@@ -75,6 +78,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
+                     
                             <div class="cart-buttons">
                                 <a href="#" class="primary-btn continue-shop">Continue shopping</a>
                                 <a href="#" class="primary-btn up-cart">Update cart</a>

@@ -5,6 +5,10 @@
     display: none;
 }
 .qtybt{
-    background-color: #ebe8e8;
-    border: none;
+    background-color: #fff;
+    border:1px solid #cecdcd;
+
+}
+.hidebut{
+    color: #cecdcd;
 }
