@@ -14,8 +14,6 @@
 // verifuacation
 
 
-
-
 (function ($) {
 
     /*------------------
@@ -392,10 +390,22 @@ if(sizeOfProduct){
 //change cart quantity
 
  function changeQuantity(cartId,proId,size,count){
+
+   let currentquantity= document.getElementById(proId+size).innerHTML;
+  
    
-
-
-     $.ajax({
+  if(count == -1 && currentquantity == 1){
+     document.getElementById(proId+size+"-").classList.add("hidebut");
+  
+  }
+  else if(count == 1 && currentquantity == 10){
+    document.getElementById(proId+size+"+").classList.add("hidebut");
+  }
+  
+  else{
+    document.getElementById(proId+size+"-").classList.remove("hidebut");
+    document.getElementById(proId+size+"+").classList.remove("hidebut");
+    $.ajax({
         url:'/change-product-quantity',
          data:{
              cart:cartId,
@@ -405,9 +415,18 @@ if(sizeOfProduct){
          },
          method:'post',
          success:(response)=>{
-          
+        if(response.updated) {
+ currentquantity = Number(currentquantity)
+ console.log( typeof(count)); 
+ 
+  document.getElementById(proId+size).innerHTML = currentquantity+count;
+
+           }
          }
      })
+  }
+
+  
 
 
 
