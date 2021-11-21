@@ -18,9 +18,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 offset-lg-3">
-                    <div class="login-form" >
-                        <h2>Login</h2>
-                        <form action="/userlogin" method="post" id="userlogin" >
+                    <div class="login-form " >
+                        
+                        <form action="/userlogin" method="post" id="userlogin"style="border:1px solid #e7ab3c;width:65%;height:75%" class="ml-auto mr-auto p-5" >
+                        <h3>Login</h3>
                         <p style="color: red;">{{loginError}}</p>
                         <p style="color: red;">{{blockedError}}</p>
                             <div class="group-input">
@@ -43,12 +44,13 @@
                             </div> --}}
                             <button type="submit" class="site-btn login-btn">Sign In</button>
                         </form>
-                        <div class="switch-login">
+                      <div class="switch-login">
                             <a href="/loginidentify" class="text-primary">Forgotten password?</a><br><br>
                           <p style="display:inline-block">don't have an account</p>  <a href="/register" class="text-primary">Create An Account</a><br>
                           <p style="display:inline-block">Login with mobile number</p>  <a href="/phonenumberpage" class="text-primary">click here</a>
                         </div>
                     </div>
+                      
                 </div>
             </div>
         </div>

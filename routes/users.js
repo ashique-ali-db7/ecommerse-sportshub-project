@@ -92,8 +92,8 @@ router.get('/clothings',blockCheck, function(req, res, next) {
 router.get('/shopping-cart',verifyLoginForLoginpage, async(req, res, next) =>{
   let user = req.session.user;
   let userId = req.session.user._id;
- let products = await producthelpers.getCartProducts(userId)
-  res.render('users/shopping-cart',{ admin:false,user,notheader:true,cartcss:true});
+  let cartItems = await producthelpers.getCartProducts(userId)
+  res.render('users/shopping-cart',{ admin:false,user,notheader:true,cartItems});
 });
 
 
