@@ -9,6 +9,8 @@
 
  'use strict';
 
+
+
 // verifuacation
 
 
@@ -338,6 +340,7 @@ function checking(){
 
 var sizeOfProduct;
 function checksize(size){ 
+    
     document.getElementById('selectsize').classList.add('selectsize');
     document.getElementById('outofstock').classList.add('selectsize');
      sizeOfProduct = size;
@@ -384,3 +387,29 @@ if(sizeOfProduct){
 }
 
 }
+
+
+//change cart quantity
+
+ function changeQuantity(cartId,proId,size,count){
+   
+
+
+     $.ajax({
+        url:'/change-product-quantity',
+         data:{
+             cart:cartId,
+             product:proId,
+             size:size,
+             count:count
+         },
+         method:'post',
+         success:(response)=>{
+          
+         }
+     })
+
+
+
+  
+ }

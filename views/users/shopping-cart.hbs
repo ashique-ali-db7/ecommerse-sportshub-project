@@ -18,20 +18,21 @@
                             <tbody>
                                 {{#each cartItems}}
                                 <tr>
-                                    {{#each productdetails}}
-                                    <td class="cart-pic first-row"><img src="/images/product-images/{{this._id}}1.png" style="width: 20%;height:auto" alt=""></td>
+                                  
+                                    <td class="cart-pic first-row"><img src="/images/product-images/{{this.productdetails._id}}1.png" style="width: 20%;height:auto" alt=""></td>
                                     <td class="cart-title first-row">
-                                        <h5>{{this.productname}}</h5>
+                                        <h5>{{this.productdetails.productname}}</h5>
                                     </td>
-                                    <td class="p-price first-row">{{this.price}}</td>
-                                    {{/each}}
-                                    <td>{{this.size}}</td>
+                                    <td class="p-price first-row">{{this.productdetails.price}}</td>
+                                 
+                                    <td class="first-row">{{this.size}}</td>
                                     <td class="qua-col first-row">
-                                        <div class="quantity">
+                                        {{!-- <div class="quantity">
                                             <div class="pro-qty">
                                                 <input type="text" value="{{this.quantity}}">
                                             </div>
-                                        </div>
+                                        </div> --}}
+                                         <button class="qtybt mr-3" id="quantityminus" onclick="changeQuantity('{{this._id}}','{{this.productdetails._id}}','{{this.size}}',-1)">-</button>{{this.quantity}}<button class="qtybt ml-3" id="quantityplus" onclick="changeQuantity('{{this._id}}','{{this.productdetails._id}}','{{this.size}}',1)">+</button> 
                                     </td>
                                     <td class="total-price first-row">60.00</td>
                                     <td class="close-td first-row"><button class="btn btn-danger">Remove</button></td>
