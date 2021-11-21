@@ -198,10 +198,26 @@ let cartItems =await db.get().collection(collections.CART_DETAILS_COLLECTION)
     {
         $match:{user:objectId(userId)}
     },
-
+    {
+        $unwind:"$products"
+    },
+    {
+        $project:{
+            item:"$products.item",
+            quantity:"$products.quantity",
+            size:'$products.size'
+        }
+    },
+    {
+        $lookup:{
+            from:collections.PRODUCTS_DETAILS_COLLECTION,
+            localField:'item',
+            foreignField:'_id',
+            as:'productdetails'    }
+    }
 
 ]).toArray()
-
+resolve(cartItems)
 
 
       })
