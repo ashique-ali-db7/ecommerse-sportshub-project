@@ -570,6 +570,12 @@ res.json(response);
 
 })
 
+// increase quantityof cart product
+ router.post('/change-product-quantity',(req,res)=>{
+   producthelpers.changeProductQuantity(req.body).then((response)=>{
+res.send(response);
+   })
+ })
 
 
 

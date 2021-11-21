@@ -214,12 +214,32 @@ let cartItems =await db.get().collection(collections.CART_DETAILS_COLLECTION)
             localField:'item',
             foreignField:'_id',
             as:'productdetails'    }
-    }
+    },
+    {
+        $project:{
+            item:1,quantity:1,size:1,productdetails:{$arrayElemAt:['$productdetails',0]}
+        }
+    }    
 
 ]).toArray()
 resolve(cartItems)
 
 
+      })
+  },
+
+  changeProductQuantity:(data)=>{
+   
+      data.count = Number(data.count);
+      return new Promise((resolve,reject)=>{
+db.get().collection(collections.CART_DETAILS_COLLECTION)
+.updateOne({$and:[{_id:objectId(data.cart),"products":{$elemMatch:{item:objectId(data.product),size:data.size}}}]},
+            {
+                $inc:{'products.$.quantity':data.count}
+            } 
+).then(()=>{
+    resolve();
+})
       })
   }
 
