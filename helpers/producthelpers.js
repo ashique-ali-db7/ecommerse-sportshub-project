@@ -242,10 +242,65 @@ db.get().collection(collections.CART_DETAILS_COLLECTION)
                 $inc:{'products.$.quantity':data.count}
             } 
 ).then(()=>{
-    resolve();
+    resolve({status:true});
 })
       })
-  }
+  },
+  deletecartitems:(data)=>{
+      console.log(data);
+      return new Promise(async(resolve,reject)=>{
+          await db.get().collection(collections.CART_DETAILS_COLLECTION)
+          .updateOne({_id:objectId(data.cartId)},{$pull:{products:{item:objectId(data.proId),size:data.size}}}).then((response)=>{
+             resolve();
+          })
+      })
+  },
+  getTotalAmount:(userId)=>{
+
+    return new Promise(async(resolve,reject)=>{
+     
+        let total =await db.get().collection(collections.CART_DETAILS_COLLECTION)
+        .aggregate([
+            {
+                $match:{user:objectId(userId)}
+            },
+            {
+                $unwind:"$products"
+            },
+            {
+                $project:{
+                    item:"$products.item",
+                    quantity:"$products.quantity",
+                    size:'$products.size'
+                }
+            },
+            {
+                $lookup:{
+                    from:collections.PRODUCTS_DETAILS_COLLECTION,
+                    localField:'item',
+                    foreignField:'_id',
+                    as:'productdetails'    }
+            },
+            {
+                $project:{
+                    item:1,quantity:1,size:1,productdetails:{$arrayElemAt:['$productdetails',0]}
+                }
+            },
+            {
+                $group:{
+                    _id:null,
+                    total:{$sum:{$multiply:['$quantity','$productdetails.price']}}
+                }
+            }    
+        
+        ]).toArray()
+       
+        resolve(total[0].total)
+        
+              })
+
+
+}
 
 
 }

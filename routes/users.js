@@ -92,8 +92,10 @@ router.get('/clothings',blockCheck, function(req, res, next) {
 router.get('/shopping-cart',verifyLoginForLoginpage, async(req, res, next) =>{
   let user = req.session.user;
   let userId = req.session.user._id;
-  let cartItems = await producthelpers.getCartProducts(userId)
-  res.render('users/shopping-cart',{ admin:false,user,notheader:true,cartItems});
+  let cartItems = await producthelpers.getCartProducts(userId);
+   let total =  await producthelpers.getTotalAmount(req.session.user._id);
+  
+  res.render('users/shopping-cart',{ admin:false,user,notheader:true,cartItems,total});
 });
 
 
@@ -572,10 +574,21 @@ res.json(response);
 
 // increase quantityof cart product
  router.post('/change-product-quantity',(req,res)=>{
-   producthelpers.changeProductQuantity(req.body).then(()=>{
-     let response = {};
-     response.updated = true;
-res.send(response);
+   producthelpers.changeProductQuantity(req.body).then(async(response)=>{
+    response.total =  await producthelpers.getTotalAmount(req.body.userId);
+    response.updated = true;
+    res.json(response);
+   
+     
+
+   })
+ });
+
+ //delete cart product
+ router.post('/deletecartproduct',(req,res)=>{
+  
+   producthelpers.deletecartitems(req.body).then((response)=>{
+    res.send("hi")
    })
  })
 

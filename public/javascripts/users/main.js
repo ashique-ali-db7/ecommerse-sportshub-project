@@ -11,6 +11,8 @@
 
 
 
+
+
 // verifuacation
 
 
@@ -389,7 +391,7 @@ if(sizeOfProduct){
 
 //change cart quantity
 
- function changeQuantity(cartId,proId,size,count){
+ function changeQuantity(cartId,proId,size,count,userId){
 
    let currentquantity= document.getElementById(proId+size).innerHTML;
   
@@ -411,24 +413,55 @@ if(sizeOfProduct){
              cart:cartId,
              product:proId,
              size:size,
-             count:count
+             count:count,
+             userId:userId
          },
          method:'post',
          success:(response)=>{
         if(response.updated) {
  currentquantity = Number(currentquantity)
- console.log( typeof(count)); 
+
  
   document.getElementById(proId+size).innerHTML = currentquantity+count;
-
+ document.getElementById("total").innerHTML = response.total;
            }
          }
      })
   }
 
   
+ }
+
+ function deletecartproduct(proId,cartId,size,productname){
+     
+    swal("Are you sure you want to remove "+productname+" from cart ?", {
+        buttons: true,
+      }).then((willdelete)=>{
+if(willdelete){
+    document.getElementById(proId+size+"remove").classList.add("selectsize")
+    $.ajax({
+        url:'/deletecartproduct',
+        data:{
+            proId:proId,
+            cartId:cartId,
+            size:size,
+          
+        },
+        method:'post',
+        success:(response)=>{
+   
+        }
+    })
+}else{
+
+}
+      })
+
+      
+
+      
 
 
 
-  
+
  }
