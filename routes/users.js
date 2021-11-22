@@ -94,6 +94,7 @@ router.get('/shopping-cart',verifyLoginForLoginpage, async(req, res, next) =>{
   let userId = req.session.user._id;
   let cartItems = await producthelpers.getCartProducts(userId);
    let total =  await producthelpers.getTotalAmount(req.session.user._id);
+  //  let subtotal = await producthelpers.getSubTotalAmount(req.session.user._id);
   
   res.render('users/shopping-cart',{ admin:false,user,notheader:true,cartItems,total});
 });
@@ -553,9 +554,10 @@ router.get('/addtocartproduct',(req,res)=>{
   if(req.session.user){
     let productSize = req.query.size;
     let productId = req.query.productid;
+    let subtotal = req.query.subtotal;
     let userId = req.session.user._id
    
-    producthelpers.addToCart(productId,productSize,userId).then((result)=>{
+    producthelpers.addToCart(productId,productSize,userId,subtotal).then((result)=>{
       if(result.added){
         response.added = true;
 res.json(response);

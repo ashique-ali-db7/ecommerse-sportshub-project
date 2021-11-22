@@ -107,7 +107,7 @@ return new Promise(async(resolve,reject)=>{
   },
 
 
-  addToCart:(proId,size,userId)=>{
+  addToCart:(proId,size,userId,subtotal)=>{
    
       let proObj = {}
     
@@ -116,20 +116,23 @@ return new Promise(async(resolve,reject)=>{
        
         proObj.item = objectId(proId),
         proObj.quantity = 1,
-        proObj.size = "s"
+        proObj.size = "s",
+        proObj.subtotal = Number(subtotal);
       }
 
       if(size === "m"){
         proObj.item = objectId(proId),
         proObj.quantity = 1,
-        proObj.size = "m"
+        proObj.size = "m",
+        proObj.subtotal = Number(subtotal);
       }
 
       if(size === "l"){
      
             proObj.item = objectId(proId),
             proObj.quantity = 1,
-            proObj.size = "l"
+            proObj.size = "l",
+            proObj.subtotal = Number(subtotal);
         
       }
      
@@ -209,7 +212,8 @@ let cartItems =await db.get().collection(collections.CART_DETAILS_COLLECTION)
         $project:{
             item:"$products.item",
             quantity:"$products.quantity",
-            size:'$products.size'
+            size:'$products.size',
+            subtotal:"$products.subtotal"
         }
     },
     {
@@ -221,11 +225,12 @@ let cartItems =await db.get().collection(collections.CART_DETAILS_COLLECTION)
     },
     {
         $project:{
-            item:1,quantity:1,size:1,productdetails:{$arrayElemAt:['$productdetails',0]}
+            item:1,quantity:1,size:1,subtotal:1,productdetails:{$arrayElemAt:['$productdetails',0]}
         }
     }    
 
 ]).toArray()
+
 resolve(cartItems)
 
 
@@ -233,19 +238,42 @@ resolve(cartItems)
   },
 
   changeProductQuantity:(data)=>{
-   
+   data.price = Number(data.price)
       data.count = Number(data.count);
       return new Promise((resolve,reject)=>{
-db.get().collection(collections.CART_DETAILS_COLLECTION)
-.updateOne({$and:[{_id:objectId(data.cart),"products":{$elemMatch:{item:objectId(data.product),size:data.size}}}]},
-            {
-                $inc:{'products.$.quantity':data.count}
-            } 
-).then(()=>{
-    resolve({status:true});
-})
+
+        if(data.count == -1){
+            db.get().collection(collections.CART_DETAILS_COLLECTION)
+            .updateOne({$and:[{_id:objectId(data.cart),"products":{$elemMatch:{item:objectId(data.product),size:data.size}}}]},
+                        {$inc:{'products.$.quantity':data.count,'products.$.subtotal':data.price * -1}} 
+            ).then(()=>{
+              
+                resolve({status:true});
+            })
+
+
+
+        }else{
+
+            db.get().collection(collections.CART_DETAILS_COLLECTION)
+            .updateOne({$and:[{_id:objectId(data.cart),"products":{$elemMatch:{item:objectId(data.product),size:data.size}}}]},
+                        {$inc:{'products.$.quantity':data.count,'products.$.subtotal':data.price}} 
+            ).then(()=>{
+              
+                resolve({status:true});
+            })
+
+
+
+        }
+
+
+
+
+
       })
   },
+ 
   deletecartitems:(data)=>{
       console.log(data);
       return new Promise(async(resolve,reject)=>{
@@ -294,13 +322,65 @@ db.get().collection(collections.CART_DETAILS_COLLECTION)
             }    
         
         ]).toArray()
-       
+       if(total[0]?.total){
         resolve(total[0].total)
+       }else{
+           resolve();
+       }
+       
         
               })
 
 
-}
+},
+// getSubTotalAmount:(userId)=>{
+
+//     return new Promise(async(resolve,reject)=>{
+     
+//         let subtotal =await db.get().collection(collections.CART_DETAILS_COLLECTION)
+//         .aggregate([
+//             {
+//                 $match:{user:objectId(userId)}
+//             },
+//             {
+//                 $unwind:"$products"
+//             },
+//             {
+//                 $project:{
+//                     item:"$products.item",
+//                     quantity:"$products.quantity",
+//                     size:'$products.size'
+//                 }
+//             },
+//             {
+//                 $lookup:{
+//                     from:collections.PRODUCTS_DETAILS_COLLECTION,
+//                     localField:'item',
+//                     foreignField:'_id',
+//                     as:'productdetails'    }
+//             },
+//             {
+//                 $project:{
+//                     item:1,quantity:1,size:1,productdetails:{$arrayElemAt:['$productdetails',0]}
+//                 }
+//             },
+//             {
+//                 $group:{
+//                     _id:{item:"$item",size:"$size"},
+//                     subtotal:{$sum:{$multiply:['$quantity','$productdetails.price']}}
+//                 }
+//             }    
+        
+//         ]).toArray()
+       
+//        resolve(subtotal);
+        
+//               })
+
+
+
+
+// }
 
 
 }
