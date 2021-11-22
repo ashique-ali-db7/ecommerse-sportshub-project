@@ -126,9 +126,12 @@ quantity.smalloutofstock = true;
 });
 
 /* GET checkout. */
-router.get('/checkout',verifyLoginForLoginpage, function(req, res, next) {
+router.get('/checkout',verifyLoginForLoginpage, async(req, res) =>{
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
   let user = req.session.user;
-  res.render('users/checkout',{ admin:false,user,notheader:true});
+     let defaultaddress =  await userhelpers.getdefaultaddress(req.session.user._id);
+      let otheraddress = await userhelpers.getotheraddress(req.session.user._id);
+  res.render('users/checkout',{ admin:false,user,notheader:true,defaultaddress,otheraddress});
 });
 
 
@@ -596,10 +599,26 @@ res.json(response);
 
 
 
+// checkout address
+// router.get('/checkout',verifyLoginForLoginpage,(req,res)=>{
+//   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+//   res.render('users/checkout');
+// })
 
 
 
-
+// address post
+router.post('/addaddress',verifyLoginForLoginpage,(req,res)=>{
+ 
+  userhelpers.addAddress(req.body,req.session.user._id).then((response)=>{
+    if(response.default){
+res.redirect('/checkout')
+    }
+   else if(response.success){
+      res.redirect('/checkout');
+    }
+  })
+})
 
 
 // get user logout
