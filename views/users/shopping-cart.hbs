@@ -19,7 +19,7 @@
                                 {{#each cartItems}}
                                 <tr id="{{this.productdetails._id}}{{this.size}}remove">
                                   
-                                    <td class="cart-pic first-row"><img src="/images/product-images/{{this.productdetails._id}}1.png" style="width: 20%;height:auto" alt=""></td>
+                                    <td class="cart-pic first-row"><img src="/images/product-images/{{this.productdetails._id}}1.png" style="width: 25%;height:auto" alt=""></td>
                                     <td class="cart-title first-row">
                                         <h5>{{this.productdetails.productname}}</h5>
                                     </td>
@@ -32,12 +32,13 @@
                                                 <input type="text" value="{{this.quantity}}">
                                             </div>
                                         </div> --}}
-                                         <button class="qtybt mr-3" id="{{this.productdetails._id}}{{this.size}}-" onclick="changeQuantity('{{this._id}}','{{this.productdetails._id}}','{{this.size}}',-1,'{{../user._id}}')">-</button>
+                                         <button class="qtybt mr-3" id="{{this.productdetails._id}}{{this.size}}-" onclick="changeQuantity('{{this._id}}','{{this.productdetails._id}}','{{this.size}}',-1,'{{../user._id}}',{{this.productdetails.price}})">-</button>
                                          <span id="{{this.productdetails._id}}{{this.size}}">{{this.quantity}}</span> 
-                                         <button class="qtybt ml-3" id="{{this.productdetails._id}}{{this.size}}+" onclick="changeQuantity('{{this._id}}','{{this.productdetails._id}}','{{this.size}}',1,'{{../user._id}}')">+</button> 
+                                         <button class="qtybt ml-3" id="{{this.productdetails._id}}{{this.size}}+" onclick="changeQuantity('{{this._id}}','{{this.productdetails._id}}','{{this.size}}',1,'{{../user._id}}',{{this.productdetails.price}})">+</button> 
                                     </td>
+                                
+                                    <td class="total-price first-row" id="{{this.productdetails._id}}{{this.size}}subtotal">{{this.subtotal}}</td>
                                    
-                                    <td class="total-price first-row">60.00</td>
                                     <td class="close-td first-row"><button class="btn btn-danger" onclick="deletecartproduct('{{this.productdetails._id}}','{{this._id}}','{{this.size}}','{{this.productdetails.productname}}')">Remove</button></td>
                                 </tr>
                               
