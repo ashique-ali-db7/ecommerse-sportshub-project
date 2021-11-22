@@ -3,6 +3,7 @@ var db = require('../config/connection');
 var collections = require('../config/collection');
 
 var bcryptjs = require('bcryptjs');
+var objectId = require('mongodb').ObjectId;
 const { response } = require('express');
 
 module.exports = {
@@ -165,6 +166,66 @@ return new Promise(async(resolve,reject)=>{
          let response = {}
       let user = await db.get().collection(collections.USERS_DETAILS_COLLECTION).findOne({phonenumber:phonenumber});
 resolve(user);
+        })
+    },
+
+    addAddress:(data,userId)=>{
+        return new Promise(async(resolve,reject)=>{
+          let response = {};
+          let _id = new objectId();
+          data._id = _id;
+     
+            if(data.defaultaddress){
+              
+let exist = await db.get().collection(collections.USERS_DETAILS_COLLECTION).findOne({$and:[{_id:objectId(userId),"address":{$elemMatch:{defaultaddress:"on"}}}]})
+if(exist){
+    response.default = true;
+    resolve(response)
+}else{
+    db.get().collection(collections.USERS_DETAILS_COLLECTION)
+    .updateOne({_id:objectId(userId)},{$push:{address:data}});
+    response.success = true
+    resolve(response);
+}
+            }else{
+                data.defaultaddress = "";
+                db.get().collection(collections.USERS_DETAILS_COLLECTION)
+                .updateOne({_id:objectId(userId)},{$push:{address:data}});
+                response.success = true
+                resolve(response);
+            }
+        
+        })
+    },
+
+
+    getdefaultaddress:(userId)=>{
+        return new Promise(async(resolve,reject)=>{
+           
+      let defaultaddress = await db.get().collection(collections.USERS_DETAILS_COLLECTION)
+  .aggregate([
+      {$match:{_id:objectId(userId)}},
+      {$unwind:"$address"},
+      {$match:{"address.defaultaddress":'on'}}
+  ]).toArray();
+  if(defaultaddress[0]?.address){
+    resolve(defaultaddress[0].address)
+  }else{
+      resolve();
+  }
+
+        })
+
+    },
+    getotheraddress:(userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let otheraddress = await db.get().collection(collections.USERS_DETAILS_COLLECTION)
+            .aggregate([
+                {$match:{_id:objectId(userId)}},
+                {$unwind:"$address"},
+                {$match:{"address.defaultaddress":""}}
+            ]).toArray();
+            resolve(otheraddress);
         })
     }
 
