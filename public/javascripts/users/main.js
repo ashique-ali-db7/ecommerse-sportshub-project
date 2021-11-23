@@ -13,6 +13,10 @@
 
 
 
+
+
+
+
 // verifuacation
 
 
@@ -350,7 +354,9 @@ function checksize(size){
 
 
 function addtocartproduct(productid,productprice){
-  
+ let cartcounts =  document.getElementById('cartcountvalue').innerHTML;
+
+ console.log(cartcounts);
     document.getElementById('selectsize').classList.add('selectsize');
 if(sizeOfProduct){
 
@@ -364,10 +370,13 @@ if(sizeOfProduct){
                  window.location.replace("/userlogin");
             }
              else if(response.added){
+                 cartcounts = Number(cartcounts);
+                document.getElementById('cartcountvalue').innerHTML = cartcounts+1;
                  document.getElementById("addedcart").classList.remove("selectsize")
                 setTimeout(function(){ 
                      document.getElementById("addedcart").classList.add("selectsize")
                  }, 3000);
+                 
               
              }
              else if(response.exist){
@@ -443,12 +452,19 @@ if(sizeOfProduct){
  }
 
  function deletecartproduct(proId,cartId,size,productname){
-     
+    let subtotal = document.getElementById(proId+size+"subtotal").innerHTML;
+    subtotal = Number(subtotal);
+   let total =  document.getElementById("total").innerHTML ;
+   total = Number(total);
+    
     swal("Are you sure you want to remove "+productname+" from cart ?", {
         buttons: true,
       }).then((willdelete)=>{
 if(willdelete){
     document.getElementById(proId+size+"remove").classList.add("selectsize")
+
+
+
     $.ajax({
         url:'/deletecartproduct',
         data:{
@@ -459,7 +475,7 @@ if(willdelete){
         },
         method:'post',
         success:(response)=>{
-   
+            document.getElementById("total").innerHTML  = total - subtotal;
         }
     })
 }else{
@@ -483,3 +499,73 @@ if(willdelete){
     $(":checkbox").prop('checked', false)
     $(e.target).prop('checked', true);
 });
+
+
+
+//edit default address
+function editdefaultaddress(defaultaddressid){
+    $.ajax({
+        url:'/editdefaultaddress?id='+defaultaddressid,
+        method:'get',
+        success:(response)=>{
+           
+            document.getElementById("name").value = response.name;
+            document.getElementById("housename").value = response.housename;
+            document.getElementById("street").value = response.street;
+            document.getElementById("district").value = response.district;
+            document.getElementById("state").value = response.state;
+            document.getElementById("pincode").value = response.pincode;
+            document.getElementById("mobilenumber").value = response.mobilenumber;
+            document.getElementById("_id").value = response._id;
+            
+        }
+
+    })
+}
+
+//edit other address
+
+function editotheraddress(otheraddressid){
+
+    $.ajax({
+        url:'/editotheraddress?id='+otheraddressid,
+        method:'get',
+        success:(response)=>{
+            document.getElementById("nameedit").value = response.name;
+            document.getElementById("housenameedit").value = response.housename;
+            document.getElementById("streetedit").value = response.street;
+            document.getElementById("districtedit").value = response.district;
+            document.getElementById("stateedit").value = response.state;
+            document.getElementById("pincodeedit").value = response.pincode;
+            document.getElementById("mobilenumberedit").value = response.mobilenumber;
+            document.getElementById("_idedit").value = response._id;
+        }
+    })
+}
+
+
+var placeOrderAddressId;
+var paymentMethodForOrder;
+
+function checkoutAddress(addressid){
+
+    placeOrderAddressId = addressid;
+
+}
+
+function paymentMethod(method){
+    paymentMethodForOrder = method ;
+}
+
+function placeOrder(userId){
+   console.log("cheeeee");
+$.ajax({
+   url:'/place-order?deliveryaddress='+placeOrderAddressId+"&paymentmethod="+paymentMethodForOrder+"&userId="+userId,
+   method:'get',
+   success:(response)=>{
+alert(response);
+   }
+
+
+})
+}
