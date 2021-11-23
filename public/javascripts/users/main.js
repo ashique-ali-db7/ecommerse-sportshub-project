@@ -475,3 +475,11 @@ if(willdelete){
 
 
  }
+
+
+// addresscheckbox
+
+ $(":checkbox").click(function(e) {
+    $(":checkbox").prop('checked', false)
+    $(e.target).prop('checked', true);
+});
