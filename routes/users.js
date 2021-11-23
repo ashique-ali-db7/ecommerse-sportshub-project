@@ -71,20 +71,22 @@ const blockCheck = (req,res,next)=>{
  }
 
 /* GET users listing. loginverification not required*/
-router.get('/',blockCheck, function(req, res, next) {
+router.get('/',blockCheck,async function(req, res, next) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
 let user = req.session.user;
+let cartcount =await producthelpers.getCartCount(req.session.user?._id);
 
-  res.render('users/home',{ admin:false,user});
+  res.render('users/home',{ admin:false,user,cartcount});
 });
 
 
 /* GET clothings view. loginverification not required*/
-router.get('/clothings',blockCheck, function(req, res, next) {
+router.get('/clothings',blockCheck,async function(req, res) {
   let user = req.session.user;
+  let cartcount =await producthelpers.getCartCount(req.session.user?._id);
   producthelpers.getProduct().then((products)=>{
-    
-    res.render('users/clothings', { admin:false,products,user});
+   
+    res.render('users/clothings', { admin:false,products,user,cartcount});
   })
 });
 
@@ -101,9 +103,10 @@ router.get('/shopping-cart',verifyLoginForLoginpage, async(req, res, next) =>{
 
 
 /* GET single product view. loginverification not required*/
-router.get('/product',blockCheck, function(req, res) {
+router.get('/product',blockCheck,async function(req, res) {
   let user = req.session.user;
   let quantity = {};
+  let cartcount =await producthelpers.getCartCount(req.session.user?._id);
 producthelpers.getSingleProductDetails(req.query).then((response)=>{
 
 console.log(response.instock[2].quantity);
@@ -119,7 +122,7 @@ quantity.smalloutofstock = true;
 
   
  
-  res.render('users/product',{ admin:false,response,user,quantity});
+  res.render('users/product',{ admin:false,response,user,quantity,cartcount});
 })
   
   
@@ -129,9 +132,12 @@ quantity.smalloutofstock = true;
 router.get('/checkout',verifyLoginForLoginpage, async(req, res) =>{
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
   let user = req.session.user;
+  let userId  = req.session.user?._id;
      let defaultaddress =  await userhelpers.getdefaultaddress(req.session.user._id);
       let otheraddress = await userhelpers.getotheraddress(req.session.user._id);
-  res.render('users/checkout',{ admin:false,user,notheader:true,defaultaddress,otheraddress});
+      let total =  await producthelpers.getTotalAmount(req.session.user._id);
+      let cartItems = await producthelpers.getCartProducts(userId);
+  res.render('users/checkout',{ admin:false,user,notheader:true,defaultaddress,otheraddress,total,cartItems,userId});
 });
 
 
@@ -619,6 +625,56 @@ res.redirect('/checkout')
     }
   })
 })
+
+//edit default address
+
+router.get('/editdefaultaddress',async(req,res)=>{
+ 
+  let defaultaddress =  await userhelpers.getdefaultaddress(req.session.user._id);
+  res.send(defaultaddress);
+});
+
+router.post('/defaultaddressedit',(req,res)=>{
+ userhelpers.editdefaultaddress(req.body,req.session.user._id).then(()=>{
+   res.redirect('/checkout');
+ })
+});
+
+//edit other one address
+router.get('/editotheraddress',async(req,res)=>{
+
+ 
+   userhelpers.editotheraddress(req.query.id,req.session.user._id).then((response)=>{
+res.send(response);
+   })
+});
+
+router.post('/otheraddressedit',(req,res)=>{
+ userhelpers.editAndUpdateOtherAddress(req.body,req.session.user._id).then(()=>{
+   res.redirect('/checkout');
+ })
+})
+
+
+// place order
+
+ router.get('/place-order',async(req,res)=>{
+
+   let deliveryaddressid = req.query.deliveryaddress;
+  let userId = req.query.userId;
+ 
+  let deliveryaddressAndMethod = await userhelpers.editotheraddress(deliveryaddressid,userId)
+
+  deliveryaddressAndMethod.paymentmethod = req.query.paymentmethod;
+
+  let products = await userhelpers.getCartProductList(userId);
+
+  let totalPrice =  await producthelpers.getTotalAmount(userId);
+
+ userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId)
+
+
+ })
 
 
 // get user logout

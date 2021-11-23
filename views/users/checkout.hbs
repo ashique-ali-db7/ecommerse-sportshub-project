@@ -23,40 +23,42 @@
 
 
                                     
-                     <button class="btn ml-3 text-primary" style="float: right;border:1px solid #bbb3b3" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalLoginForm">Add new</button>
-<h5 class="mb-2">DEFAULT ADDRESS</h5>
+                     <button class="btn ml-3 text-primary" style="float: right;border:1px solid #bbb3b3" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modaladdressForm">Add new</button>
+<h5 class="mb-2"><b>DEFAULT ADDRESS</b> </h5>
                                 <div class="card mt-5 mb-4">
   <div class="card-body">
       <div class="row">
 <div class="col-1">
- <input type="radio" style="width: 15px; margin:0%;position:relative; bottom:7%" name="input-name" value="{{defaultaddress._id}}">
+ <input type="radio" style="width: 15px; margin:0%;position:relative; bottom:7%" onclick="checkoutAddress('{{defaultaddress._id}}')" name="input-name" value="{{defaultaddress._id}}">
 </div>
 <div class="col-10">
  <h5  >{{defaultaddress.name}}</h5>
  <p class="mt-3" ><span>{{defaultaddress.housename}} </span><span>{{defaultaddress.street}} </span><span>{{defaultaddress.district}} </span> <span>{{defaultaddress.state}}</span></p>
  <p>pincode: {{defaultaddress.pincode}}</p>
  <p>mobile number: <span  style="font-size: 1.1rem;color:black">{{defaultaddress.mobilenumber}}</span></p>
-  <button style="background-color: #ffff;" >REMOVE</button>  <button style="background-color: #ffff;">EDIT</button>
+  {{!-- <button style="background-color: #ffff;" class="text-danger" >Remove</button>  --}}
+   <button class="text-primary" style="background-color: #ffff; width:12%" onclick="editdefaultaddress('{{defaultaddress._id}}')"  data-toggle="modal" data-target="#modaladdressFormEdit" >Edit</button>
  </div>
  </div>
   </div>
                                 </div>
 
 
-<h5 class="mb-2 mt-2">OTHER ADDRESS</h5>
-{{#each otheraddress}}
-    <div class="card">
-  <div class="card-body">
+                          <h5 class="mb-2 mt-2">
+                    <b> OTHER ADDRESS</b></h5>
+                  {{#each otheraddress}}
+             <div class="card">
+           <div class="card-body">
       <div class="row">
           <div class="col-1">
-    <input type="radio" style="width: 15px; margin:0%;position:relative; bottom:7%" name="input-name" value="{{this.address._id}}">
+    <input type="radio" style="width: 15px; margin:0%;position:relative; bottom:7%" name="input-name" onclick="checkoutAddress('{{this.address._id}}')" value="{{this.address._id}}">
     </div>
     <div class="col-10">
  <h5 >{{this.address.name}}</h5>
  <p class="mt-3" ><span>{{this.address.housename}} </span><span>{{this.address.street}} </span><span>{{this.address.district}} </span> <span>{{this.address.state}}</span></p>
  <p>pincode: {{this.address.pincode}}</p>
  <p>mobile number: <span  style="font-size: 1.1rem;color:black">{{this.address.mobilenumber}}</span></p>
- <button style="background-color: #ffff;" >REMOVE</button>  <button style="background-color: #ffff;">EDIT</button>
+ <button class="text-danger" style="background-color: #ffff;" >Remove</button>  <button class="text-primary" style="background-color: #ffff;" onclick="editotheraddress('{{this.address._id}}')"  data-toggle="modal" data-target="#modalotheraddressFormEdit"  >Edit</button>
  </div>
  </div>
   </div>
@@ -119,35 +121,36 @@
                         {{!-- <div class="checkout-content">
                             <input type="text" placeholder="Enter Your Coupon Code">
                         </div> --}}
-                        <div class="place-order">
+                        <div  class="place-order">
                         
                             <div class="order-total">
                                 <ul class="order-table">
-                                    <li>Product <span>Total</span></li>
-                                    <li class="fw-normal">Combination x 1 <span>$60.00</span></li>
-                                    <li class="fw-normal">Combination x 1 <span>$60.00</span></li>
-                                    <li class="fw-normal">Combination x 1 <span>$120.00</span></li>
-                                    <li class="fw-normal">Subtotal <span>$240.00</span></li>
-                                    <li class="total-price">Total <span>$240.00</span></li>
+                                    {{!-- <li>Product <span>Total</span></li> --}}
+                                    {{#each cartItems}}
+                                    <li class="fw-normal">{{this.productdetails.productname}} x {{this.quantity}} <span>{{this.subtotal}}</span></li>
+                                  
+                                    {{/each}}
+                                    {{!-- <li class="fw-normal">Subtotal <span>$240.00</span></li> --}}
+                                    <li class="total-price">Total <span>{{total}}</span></li>
                                 </ul>
                                 <div class="payment-check">
                                     <div class="pc-item">
                                         <label for="pc-check">
-                                            Cheque Payment
-                                            <input type="checkbox" id="pc-check">
+                                           Cash on delivery
+                                            <input type="checkbox" onclick="paymentMethod('cod')" value="cod" id="pc-check">
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
                                     <div class="pc-item">
                                         <label for="pc-paypal">
                                             Paypal
-                                            <input type="checkbox" id="pc-paypal">
+                                            <input type="checkbox" onclick="paymentMethod('paypal')" id="pc-paypal">
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
                                 </div>
                                 <div class="order-btn">
-                                    <button type="submit" class="site-btn place-btn">Place Order</button>
+                                    <button onclick="placeOrder('{{userId}}')" style="background-color: #e7ab3c;border:none" class="site-btn place-btn">Place Order</button>
                                 </div>
                             </div>
                         </div>
@@ -161,7 +164,7 @@
 
 
 {{!-- modal --}}
-<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div class="modal fade" id="modaladdressForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -175,42 +178,42 @@
           <form action="/addaddress" method="post">   
         <div class="md-form mb-4">
           
-          <input type="text" placeholder="name" id="defaultForm-email" name="name" value="" class="form-control validate">
+          <input type="text" placeholder="name"  name="name" value="" class="form-control validate">
          
         </div>
 
         <div class="md-form mb-4">
         
-          <input type="text" placeholder="house name" id="defaultForm-pass"  name="housename" value="" class="form-control validate">
+          <input type="text" placeholder="house name"   name="housename" value="" class="form-control validate">
        
         </div>
 
          <div class="md-form mb-4">
         
-          <input type="text" placeholder="street" id="defaultForm-pass" name="street" value="" class="form-control validate">
+          <input type="text" placeholder="street"  name="street" value="" class="form-control validate">
        
         </div>
          <div class="md-form mb-4">
         
-          <input type="text" placeholder="district" id="defaultForm-pass" name="district" value="" class="form-control validate">
-       
-        </div>
-
-         <div class="md-form mb-4">
-        
-          <input type="text" placeholder="state" id="defaultForm-pass" name="state" value="" class="form-control validate">
+          <input type="text" placeholder="district"  name="district" value="" class="form-control validate">
        
         </div>
 
          <div class="md-form mb-4">
         
-          <input type="text" placeholder="pincode" id="defaultForm-pass" name="pincode" value="" class="form-control validate">
+          <input type="text" placeholder="state"  name="state" value="" class="form-control validate">
+       
+        </div>
+
+         <div class="md-form mb-4">
+        
+          <input type="text" placeholder="pincode"  name="pincode" value="" class="form-control validate">
        
         </div>
  
          <div class="md-form mb-4">
         
-          <input type="text" placeholder="mobile number" id="defaultForm-pass" name="mobilenumber" value="" class="form-control validate">
+          <input type="text" placeholder="mobile number"  name="mobilenumber" value="" class="form-control validate">
      
         </div>
        
@@ -229,5 +232,152 @@
     
   </div>
 </div>
+
+
+
+{{!-- modal edit default address --}}
+<div class="modal fade" id="modaladdressFormEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Edit Default Address</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+          <form action="/defaultaddressedit" method="post">   
+        <div class="md-form mb-4">
+          
+          <input type="text" placeholder="name" id="name" name="name" value="" class="form-control validate">
+         
+        </div>
+
+        <div class="md-form mb-4">
+        
+          <input type="text" placeholder="house name" id="housename"  name="housename" value="" class="form-control validate">
+       
+        </div>
+
+         <div class="md-form mb-4">
+        
+          <input type="text" placeholder="street" id="street" name="street" value="" class="form-control validate">
+       
+        </div>
+         <div class="md-form mb-4">
+        
+          <input type="text" placeholder="district" id="district" name="district" value="" class="form-control validate">
+       
+        </div>
+
+         <div class="md-form mb-4">
+        
+          <input type="text" placeholder="state" id="state" name="state" value="" class="form-control validate">
+       
+        </div>
+
+         <div class="md-form mb-4">
+        
+          <input type="text" placeholder="pincode" id="pincode" name="pincode" value="" class="form-control validate">
+       
+        </div>
+        <input type="text" id="_id" name="_id" value="" style="display: none;">
+ 
+         <div class="md-form mb-4">
+        
+          <input type="text" placeholder="mobile number" id="mobilenumber" name="mobilenumber" value="" class="form-control validate">
+     
+        </div>
+       
+{{!-- <input type="checkbox" style="display:inline-block" name="defaultaddress"> <p style="display:inline-block">Default Address</p> --}}
+     
+    
+      
+      <div class="modal-footer d-flex justify-content-center">
+         
+        <button type="submit" class="btn btn-default" style="width: 100%; background-color:#e7ab3c">Add Address</button>
+        
+      </div>
+        </form>
+   </div>
+    </div>
+    
+  </div>
+</div>
+
+
+
+{{!-- modal edit other address --}}
+<div class="modal fade" id="modalotheraddressFormEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Edit Address</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+          <form action="/otheraddressedit" method="post">   
+        <div class="md-form mb-4">
+          
+          <input type="text" placeholder="name" id="nameedit" name="name" value="" class="form-control validate">
+         
+        </div>
+
+        <div class="md-form mb-4">
+        
+          <input type="text" placeholder="house name" id="housenameedit"  name="housename" value="" class="form-control validate">
+       
+        </div>
+
+         <div class="md-form mb-4">
+        
+          <input type="text" placeholder="street" id="streetedit" name="street" value="" class="form-control validate">
+       
+        </div>
+         <div class="md-form mb-4">
+        
+          <input type="text" placeholder="district" id="districtedit" name="district" value="" class="form-control validate">
+       
+        </div>
+
+         <div class="md-form mb-4">
+        
+          <input type="text" placeholder="state" id="stateedit" name="state" value="" class="form-control validate">
+       
+        </div>
+
+         <div class="md-form mb-4">
+        
+          <input type="text" placeholder="pincode" id="pincodeedit" name="pincode" value="" class="form-control validate">
+       
+        </div>
+        <input type="text" id="_idedit" name="_id" value="" style="display: none;">
+ 
+         <div class="md-form mb-4">
+        
+          <input type="text" placeholder="mobile number" id="mobilenumberedit" name="mobilenumber" value="" class="form-control validate">
+     
+        </div>
+       
+{{!-- <input type="checkbox" style="display:inline-block" name="defaultaddress"> <p style="display:inline-block">Default Address</p> --}}
+     
+    
+      
+      <div class="modal-footer d-flex justify-content-center">
+         
+        <button type="submit" class="btn btn-default" style="width: 100%; background-color:#e7ab3c">Add Address</button>
+        
+      </div>
+        </form>
+   </div>
+    </div>
+    
+  </div>
+</div>
+
 
 

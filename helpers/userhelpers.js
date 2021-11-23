@@ -227,7 +227,82 @@ if(exist){
             ]).toArray();
             resolve(otheraddress);
         })
+    },
+
+    editdefaultaddress:(data,userId)=>{
+  
+        return new Promise(async(resolve,reject)=>{
+
+       
+
+
+           await db.get().collection(collections.USERS_DETAILS_COLLECTION).updateOne({_id:objectId(userId),"address._id":objectId(data._id)},{$set:{"address.$.name":data.name,"address.$.housename":data.housename,"address.$.street":data.street,"address.$.district":data.district,"address.$.state":data.state,"address.$.pincode":data.pincode,"address.$.mobilenumber":data.mobilenumber}})
+          resolve();
+        })
+    },
+    editotheraddress:(otheraddressid,userId)=>{
+
+        return new Promise(async(resolve,reject)=>{
+let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_DETAILS_COLLECTION)
+.aggregate([
+    {$match:{_id:objectId(userId)}},
+    {$unwind:"$address"},
+    {$match:{"address._id":objectId(otheraddressid)}}
+]).toArray();
+
+ resolve(getSingleOtherAddressForEdit[0].address)
+        })
+
+    },
+
+    editAndUpdateOtherAddress:(data,userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection(collections.USERS_DETAILS_COLLECTION).updateOne({_id:objectId(userId),"address._id":objectId(data._id)},{$set:{"address.$.name":data.name,"address.$.housename":data.housename,"address.$.street":data.street,"address.$.district":data.district,"address.$.state":data.state,"address.$.pincode":data.pincode,"address.$.mobilenumber":data.mobilenumber}});
+            resolve();
+        })
+
+    },
+    
+
+     getCartProductList:(userId)=>{
+     
+       
+         return new Promise(async(resolve,reject)=>{
+
+        let cart = await db.get().collection(collections.CART_DETAILS_COLLECTION).findOne({user:objectId(userId)})
+        resolve(cart.products);
+         })
+     },
+
+
+     placeOrder:(orderdetails,products,total,userId)=>{
+        
+       return new Promise(async(resolve,reject)=>{
+     let status = orderdetails.paymentmethod === 'cod'?'placed':'pending';
+
+     let orderObj = {
+         deliveryDetails:{
+            name: orderdetails.name,
+            housename: orderdetails.housename,
+            street: orderdetails.street,
+            district: orderdetails.district,
+            state: orderdetails.state,
+            pincode: orderdetails.pincode,
+            mobilenumber: orderdetails.mobilenumber
+         },
+         userId:objectId(userId),
+         paymentmethod:orderdetails.paymentmethod,
+         products:products,
+         status:status,
+         total:total,
+         date:new Date()
+     }
+
+     db.get().collection(collections.ORDER_DETAILS_COLLECTION).insertOne(orderObj)
+       })
     }
+
+
 
 
 }
