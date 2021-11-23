@@ -17,6 +17,8 @@
 
 
 
+
+
 // verifuacation
 
 
@@ -558,7 +560,7 @@ function paymentMethod(method){
 }
 
 function placeOrder(userId){
-   console.log("cheeeee");
+ 
 $.ajax({
    url:'/place-order?deliveryaddress='+placeOrderAddressId+"&paymentmethod="+paymentMethodForOrder+"&userId="+userId,
    method:'get',
@@ -569,3 +571,34 @@ alert(response);
 
 })
 }
+//delete other address
+function deleteotheraddress(addressId){
+
+
+    swal("Are you sure you want to remove this address ?", {
+        buttons: true,
+      }).then((willdelete)=>{
+if(willdelete){
+    document.getElementById(addressId).classList.add("selectsize")
+
+
+
+    $.ajax({
+        url:'/deleteotheraddress?addressid='+addressId,
+        method:'get',
+        success:(response)=>{
+    
+        }
+    })
+}else{
+
+}
+      })
+
+
+    
+
+}
+
+
+

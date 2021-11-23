@@ -47,7 +47,7 @@
                           <h5 class="mb-2 mt-2">
                     <b> OTHER ADDRESS</b></h5>
                   {{#each otheraddress}}
-             <div class="card">
+             <div id='{{this.address._id}}' class="card">
            <div class="card-body">
       <div class="row">
           <div class="col-1">
@@ -58,7 +58,7 @@
  <p class="mt-3" ><span>{{this.address.housename}} </span><span>{{this.address.street}} </span><span>{{this.address.district}} </span> <span>{{this.address.state}}</span></p>
  <p>pincode: {{this.address.pincode}}</p>
  <p>mobile number: <span  style="font-size: 1.1rem;color:black">{{this.address.mobilenumber}}</span></p>
- <button class="text-danger" style="background-color: #ffff;" >Remove</button>  <button class="text-primary" style="background-color: #ffff;" onclick="editotheraddress('{{this.address._id}}')"  data-toggle="modal" data-target="#modalotheraddressFormEdit"  >Edit</button>
+ <button class="text-danger" style="background-color: #ffff;" onclick="deleteotheraddress('{{this.address._id}}')" >Remove</button>  <button class="text-primary" style="background-color: #ffff;" onclick="editotheraddress('{{this.address._id}}')"  data-toggle="modal" data-target="#modalotheraddressFormEdit"  >Edit</button>
  </div>
  </div>
   </div>

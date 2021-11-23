@@ -677,6 +677,12 @@ router.post('/otheraddressedit',(req,res)=>{
  })
 
 
+ //deleteotheraddress
+ router.get('/deleteotheraddress',(req,res)=>{
+  let addressId = req.query.addressid;
+userhelpers.deleteOtheraddress(addressId,req.session.user._id)
+ })
+
 // get user logout
 router.get('/userlogout',(req,res)=>{
   
