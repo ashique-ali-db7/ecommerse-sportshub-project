@@ -564,6 +564,27 @@ router.post('/adminlogin',(req,res)=>{
    }
   
  })
+}),
+
+// get order managment
+router.get('/ordermanagment',(req,res)=>{
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+  userhelpers.getOrderDetails().then((response)=>{
+    let allOrders = response;
+  
+    res.render('admin/order-managment',{admin:true,allOrders})
+  })
+ 
+});
+
+// change order status
+router.get('/changeorderstatus',(req,res)=>{
+  let orderid = req.query.orderid;
+  let orderstatus = req.query.orderstatus;
+ 
+   userhelpers.changeOrderStatus(orderid,orderstatus).then(()=>{
+     res.json({status:true})
+   })
 })
 
 
