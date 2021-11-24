@@ -322,6 +322,49 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
            resolve();
         })
 
+    },
+    getorderedproditdetils:(orderid)=>{
+
+        return new Promise(async(resolve,reject)=>{
+
+     let vieworderproductdetails =  await db.get().collection(collections.ORDER_DETAILS_COLLECTION)
+     .aggregate([
+         {
+             $match:{_id:objectId(orderid)}
+         },
+         {
+             $unwind:'$products'
+         },
+         {
+             $project:{
+                 item:"$products.item",
+                 quantity:"$products.quantity",
+                 size:"$products.size",
+                 subtotal:"$products.subtotal"
+             }
+            },
+             {
+             $lookup:{
+                 from:collections.PRODUCTS_DETAILS_COLLECTION,
+                 localField:'item',
+                 foreignField:'_id',
+                 as:'productdetail'
+             
+                     }
+             },
+             {
+                 $project:{
+                     item:1,quantity:1,size:1,subtotal:1,productdetail:{$arrayElemAt:['$productdetail',0]}
+                 }
+             }
+     ]).toArray();
+ 
+     resolve(vieworderproductdetails);
+
+        })
+
+       
+        
     }
 
 

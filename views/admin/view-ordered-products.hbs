@@ -1,0 +1,24 @@
+<div class="card me-auto ms-auto mb-3" style="width: 50%;">
+  <div class="card-body">
+      <div class="row">
+          {{#each response}}
+          <div class="col-3">
+
+<img style="" src="/images/product-images/{{this.item}}3.png" alt="">
+          </div>
+          <div class="col-9">
+           <p>product id:<span>{{this.item}}</span></p>
+           <p>product name:<span>{{this.productdetail.productname}}</span></p>
+           <p>product category:<span>{{this.productdetail.category}}</span></p>
+           <p>product subcategory:<span>{{this.productdetail.subcategory}}</span></p>
+           <p>product brand:<span>{{this.productdetail.brand}}</span></p>
+          
+           <p>product size:<span>{{this.size}}</span></p>
+           <p>product size:<span>{{this.quantity}}</span></p>
+           <hr>
+          </div>
+          {{/each}}
+      </div>
+    
+  </div>
+</div>

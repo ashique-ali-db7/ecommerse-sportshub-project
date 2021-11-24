@@ -1142,7 +1142,7 @@ $("#brandvalidationform").validate({
 //order status changing
 
 function orderstatus(orderid,orderstatus){
-document.getElementById('dropdownMenuButton1').innerHTML = orderstatus;
+document.getElementById(orderid).innerHTML = orderstatus;
 
     $.ajax({
 

@@ -6,8 +6,9 @@
       <th scope="col">User Id</th>
       <th scope="col">Ordered address</th>
       <th scope="col">Payment method</th>
-      
+   
       <th scope="col">Total Amount</th>
+     <th scope="col">view prodcts</th>
       <th scope="col">Status</th>
     </tr>
   </thead>
@@ -18,7 +19,9 @@
       <td>{{this.userId}}</td>
       <td>{{this.deliveryDetails.housename}}</td>
       <td>{{this.paymentmethod}}</td>
+     
       <td>{{this.total}}</td>
+      <td><a href="/admin/orderproductsview?orderid={{this._id}}" class="btn btn-primary">products</a></td>
       <td>
            {{!-- <select name="orders" id="ordersttt" style=""  onchange="orderstatus('{{this._id}}')">
             
@@ -35,7 +38,7 @@
             </select> --}}
 
 <div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="{{this._id}}" data-bs-toggle="dropdown" aria-expanded="false">
    {{this.status}}
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
