@@ -313,7 +313,7 @@ $("#userlogin").validate({
         },
         password:{
             required:true,
-            minlength:8
+           
         }
        
        
@@ -327,6 +327,138 @@ $("#userlogin").validate({
 });
 
 
+
+$("#modaladdaddress").validate({
+    rules:{
+        name:{
+            required:true,
+            
+        },
+        housename:{
+            required:true,
+           
+        },
+        street:{
+            required:true,
+           
+        },
+        district:{
+            required:true,
+           
+        },
+        state:{
+            required:true,
+           
+        },
+        pincode:{
+            required:true,
+            minlength:6,
+            maxlength:6
+        },
+        mobilenumber:{
+            required:true,
+            minlength:10,
+            maxlength:10
+        }
+
+
+       
+       
+       
+        
+    }
+   
+  
+});
+
+
+$("#editdefaddress").validate({
+    rules:{
+        name:{
+            required:true,
+            
+        },
+        housename:{
+            required:true,
+           
+        },
+        street:{
+            required:true,
+           
+        },
+        district:{
+            required:true,
+           
+        },
+        state:{
+            required:true,
+           
+        },
+        pincode:{
+            required:true,
+           minlength:6,
+           maxlength:6
+        },
+        mobilenumber:{
+            required:true,
+            minlength:10,
+            maxlength:10
+        }
+
+
+       
+       
+       
+        
+    }
+   
+  
+});
+
+
+
+$("#editothaddress").validate({
+    rules:{
+        name:{
+            required:true,
+            
+        },
+        housename:{
+            required:true,
+           
+        },
+        street:{
+            required:true,
+           
+        },
+        district:{
+            required:true,
+           
+        },
+        state:{
+            required:true,
+           
+        },
+        pincode:{
+            required:true,
+           minlength:6,
+           maxlength:6
+        },
+        mobilenumber:{
+            required:true,
+            minlength:10,
+            maxlength:10
+        }
+
+
+       
+       
+       
+        
+    }
+   
+  
+});
 
 //add to cart
 
@@ -460,14 +592,15 @@ if(sizeOfProduct){
     subtotal = Number(subtotal);
    let total =  document.getElementById("total").innerHTML ;
    total = Number(total);
+
+
     
     swal("Are you sure you want to remove "+productname+" from cart ?", {
         buttons: true,
       }).then((willdelete)=>{
 if(willdelete){
     document.getElementById(proId+size+"remove").classList.add("selectsize")
-
-
+ 
 
     $.ajax({
         url:'/deletecartproduct',

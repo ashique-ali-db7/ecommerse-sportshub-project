@@ -569,11 +569,19 @@ router.post('/adminlogin',(req,res)=>{
 // get order managment
 router.get('/ordermanagment',(req,res)=>{
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+if(req.session.admin){
   userhelpers.getOrderDetails().then((response)=>{
     let allOrders = response;
   
     res.render('admin/order-managment',{admin:true,allOrders})
   })
+}else{
+  res.redirect('/admin/adminlogin');
+
+}
+
+
+ 
  
 });
 
@@ -581,10 +589,22 @@ router.get('/ordermanagment',(req,res)=>{
 router.get('/changeorderstatus',(req,res)=>{
   let orderid = req.query.orderid;
   let orderstatus = req.query.orderstatus;
+
+  userhelpers.changeOrderStatus(orderid,orderstatus).then(()=>{
+    res.json({orderstatus:orderstatus})
+  })
+
+   
+})
+
+//view orderd products
+router.get('/orderproductsview',(req,res)=>{
+  let orderid =   req.query.orderid;
+ userhelpers.getorderedproditdetils(orderid).then((response)=>{
+  res.render('admin/view-ordered-products',{admin:true,response});
+ })
+
  
-   userhelpers.changeOrderStatus(orderid,orderstatus).then(()=>{
-     res.json({status:true})
-   })
 })
 
 
