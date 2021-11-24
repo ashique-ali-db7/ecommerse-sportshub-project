@@ -1,5 +1,8 @@
+
+
 function formCategory(){
     var x = document.getElementById("categorychange").value;
+  
 $.ajax({
     url:'/admin/select-category-for-form?category='+x,
     method:'get',
@@ -910,6 +913,10 @@ $(document).ready(function() {
     $('#usertable').DataTable();
 } );
 
+$(document).ready(function() {
+    $('#ordermange').DataTable();
+} );
+
 //modal
  function updateproductdetails(){
      console.log("monnee")
@@ -1132,7 +1139,25 @@ $("#brandvalidationform").validate({
 
 
 
-//crop
+//order status changing
+
+function orderstatus(orderid,orderstatus){
+document.getElementById('dropdownMenuButton1').innerHTML = orderstatus;
+
+    $.ajax({
+
+     url:'/admin/changeorderstatus?orderid='+orderid+'&orderstatus='+orderstatus,
+     method:'get',
+     success:(response)=>{
+  if(response){
+
+  }
+     }
+
+    })
+}
+
+
 
 
 

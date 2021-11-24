@@ -1,0 +1,53 @@
+<h2>Order managment</h2>
+<table class="table" id="ordermange">
+  <thead>
+    <tr>
+      <th scope="col">Order date</th>
+      <th scope="col">User Id</th>
+      <th scope="col">Ordered address</th>
+      <th scope="col">Payment method</th>
+      
+      <th scope="col">Total Amount</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+      {{#each allOrders}}
+    <tr>
+      <th scope="row">{{this.date}}</th>
+      <td>{{this.userId}}</td>
+      <td>{{this.deliveryDetails.housename}}</td>
+      <td>{{this.paymentmethod}}</td>
+      <td>{{this.total}}</td>
+      <td>
+           {{!-- <select name="orders" id="ordersttt" style=""  onchange="orderstatus('{{this._id}}')">
+            
+              <option selected="true" disabled="disabled">{{this.status}}</option> 
+              
+              <option value="Placed">Placed</option>
+               <option value="pending">Pending</option>
+              
+            
+               <option value="delivered">delivered</option>
+
+              <option value="cancel">Cancel</option>
+  
+            </select> --}}
+
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+   {{this.status}}
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li><button class="dropdown-item" onclick="orderstatus('{{this._id}}','placed')">Placed</button></li>
+    <li><button class="dropdown-item" onclick="orderstatus('{{this._id}}','pending')">Pending</button></li>
+    <li><button class="dropdown-item" onclick="orderstatus('{{this._id}}','delivered')">delivered</button></li>
+    <li><button class="dropdown-item"onclick="orderstatus('{{this._id}}','cancel')">Cancel</button></li>
+  </ul>
+</div>
+
+            </td>
+    </tr>
+   {{/each}}
+  </tbody>
+</table>

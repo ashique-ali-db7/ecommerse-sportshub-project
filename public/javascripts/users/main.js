@@ -19,6 +19,8 @@
 
 
 
+
+
 // verifuacation
 
 
@@ -546,8 +548,8 @@ function editotheraddress(otheraddressid){
 }
 
 
-var placeOrderAddressId;
-var paymentMethodForOrder;
+let placeOrderAddressId;
+let paymentMethodForOrder;
 
 function checkoutAddress(addressid){
 
@@ -560,16 +562,29 @@ function paymentMethod(method){
 }
 
 function placeOrder(userId){
- 
-$.ajax({
-   url:'/place-order?deliveryaddress='+placeOrderAddressId+"&paymentmethod="+paymentMethodForOrder+"&userId="+userId,
-   method:'get',
-   success:(response)=>{
-alert(response);
-   }
+if(typeof placeOrderAddressId === 'undefined' || typeof paymentMethodForOrder === 'undefined'){
+    document.getElementById("placeordervalidation").classList.remove("selectsize")
+    setTimeout(function(){ 
+         document.getElementById("placeordervalidation").classList.add("selectsize")
+     }, 5000);
+}else{
+
+    $.ajax({
+        url:'/place-order?deliveryaddress='+placeOrderAddressId+"&paymentmethod="+paymentMethodForOrder+"&userId="+userId,
+        method:'get',
+        success:(response)=>{
+     if(response){
+         console.log(response);
+location.replace('/ordersuccess');
+     }
+        }
+     
+     
+     })
 
 
-})
+}
+
 }
 //delete other address
 function deleteotheraddress(addressId){

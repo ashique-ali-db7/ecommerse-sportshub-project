@@ -22,6 +22,8 @@ var emailphonenumberExistError = "";
 var loginError = "";
 var phonenumberExistError = "";
 var blockedError = "";
+var cartItemsEmpty = "";
+var existDefaultAddress = "";
 
 
 // verify login middleware
@@ -98,7 +100,8 @@ router.get('/shopping-cart',verifyLoginForLoginpage, async(req, res, next) =>{
    let total =  await producthelpers.getTotalAmount(req.session.user._id);
   //  let subtotal = await producthelpers.getSubTotalAmount(req.session.user._id);
   
-  res.render('users/shopping-cart',{ admin:false,user,notheader:true,cartItems,total});
+  res.render('users/shopping-cart',{ admin:false,user,notheader:true,cartItems,total,cartItemsEmpty});
+  cartItemsEmpty = "";
 });
 
 
@@ -130,6 +133,7 @@ quantity.smalloutofstock = true;
 
 /* GET checkout. */
 router.get('/checkout',verifyLoginForLoginpage, async(req, res) =>{
+
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
   let user = req.session.user;
   let userId  = req.session.user?._id;
@@ -137,7 +141,14 @@ router.get('/checkout',verifyLoginForLoginpage, async(req, res) =>{
       let otheraddress = await userhelpers.getotheraddress(req.session.user._id);
       let total =  await producthelpers.getTotalAmount(req.session.user._id);
       let cartItems = await producthelpers.getCartProducts(userId);
-  res.render('users/checkout',{ admin:false,user,notheader:true,defaultaddress,otheraddress,total,cartItems,userId});
+      if(cartItems.length>=1){
+        res.render('users/checkout',{ admin:false,user,notheader:true,defaultaddress,otheraddress,total,cartItems,userId,existDefaultAddress});
+        existDefaultAddress = "";
+      }else{
+        cartItemsEmpty = "Cart is empty so you can't go to checkout"
+        res.redirect('/shopping-cart')
+      }
+ 
 });
 
 
@@ -618,6 +629,7 @@ router.post('/addaddress',verifyLoginForLoginpage,(req,res)=>{
  
   userhelpers.addAddress(req.body,req.session.user._id).then((response)=>{
     if(response.default){
+      existDefaultAddress = "Default address already exist only you can edit it"
 res.redirect('/checkout')
     }
    else if(response.success){
@@ -671,7 +683,9 @@ router.post('/otheraddressedit',(req,res)=>{
 
   let totalPrice =  await producthelpers.getTotalAmount(userId);
 
- userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId)
+ userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId).then(()=>{
+   res.json({status:true})
+ })
 
 
  })
@@ -680,8 +694,18 @@ router.post('/otheraddressedit',(req,res)=>{
  //deleteotheraddress
  router.get('/deleteotheraddress',(req,res)=>{
   let addressId = req.query.addressid;
-userhelpers.deleteOtheraddress(addressId,req.session.user._id)
- })
+userhelpers.deleteOtheraddress(addressId,req.session.user._id).then(()=>{
+  res.json({status:true})
+})
+ });
+
+
+//  order success get
+router.get('/ordersuccess',verifyLoginForLoginpage,(req,res)=>{
+  let user = req.session.user;
+  console.log(user);
+  res.render('users/ordersuccess',{user,admin:false,user,notheader:true})
+})
 
 // get user logout
 router.get('/userlogout',(req,res)=>{

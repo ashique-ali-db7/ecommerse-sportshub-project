@@ -299,13 +299,29 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
      }
 
      db.get().collection(collections.ORDER_DETAILS_COLLECTION).insertOne(orderObj).then((response)=>{
-         db.get().collection(collections.CART_DETAILS_COLLECTION).remove({user:objectId(userId)})
+          db.get().collection(collections.CART_DETAILS_COLLECTION).remove({user:objectId(userId)})
          resolve();
      })
        })
     },
     deleteOtheraddress:(addressId,userId)=>{
         db.get().collection(collections.USERS_DETAILS_COLLECTION).update({_id:objectId(userId)},{$pull:{"address":{_id:objectId(addressId)}}})
+    },
+
+    getOrderDetails:()=>{
+        
+        return new Promise(async(resolve,reject)=>{
+           let allOrders = await db.get().collection(collections.ORDER_DETAILS_COLLECTION).find().toArray();
+           resolve(allOrders);
+        })
+    },
+    changeOrderStatus:(orderid,orderstatus)=>{
+
+        return new Promise(async(resolve,reject)=>{
+           await db.get().collection(collections.ORDER_DETAILS_COLLECTION).updateOne({_id:objectId(orderid)},{$set:{status:orderstatus}})
+           resolve();
+        })
+
     }
 
 
