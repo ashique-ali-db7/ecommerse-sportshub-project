@@ -3,22 +3,24 @@
     <!-- Hero Section Begin -->
     <section class="hero-section">
         <div class="hero-items owl-carousel">
-            <div class="single-hero-items set-bg" data-setbg="images/users/hero-1.jpg">
+            <div class="single-hero-items set-bg" data-setbg="images/users/{{bannerOne._id}}.jpg">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-5">
                             {{!-- <span>Bag,kids</span> --}}
-                            <h1 style="color: #fff;">Black friday</h1>
-                            <p style="color: #fff;">The 2021 Black Friday deals event is just three days away, and we're already seeing loads of huge Black Friday sales dropping from all the major retailers - including Amazon, Best Buy, and Target. We've searched high and low to bring you today's best Black Friday deals happening right now.</p>
+                        
+
+                            <h1 style="color: rgb(10, 9, 9);">{{bannerOne.bannerOneHeading}}</h1>
+                            <p style="color: rgb(44, 42, 42);">{{bannerOne.bannerOneDescription}}</p>
                             <a href="/clothings" class="primary-btn">Shop Now</a>
                         </div>
                     </div>
-                    <div class="off-card">
+                    {{!-- <div class="off-card">
                         <h2>Sale <span>50%</span></h2>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
-            <div class="single-hero-items set-bg" data-setbg="images/users/hero-2.jpg">
+            <div class="single-hero-items set-bg" data-setbg="/images/banner-images/{{bannerOne._id}}.jpg">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-5">
@@ -28,9 +30,9 @@
                             <a href="#" class="primary-btn">Shop Now</a>
                         </div>
                     </div>
-                    <div class="off-card">
+                    {{!-- <div class="off-card">
                         <h2>Sale <span>50%</span></h2>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

@@ -1136,7 +1136,123 @@ $("#brandvalidationform").validate({
       
     });
     
+    $("#bannerone").validate({
+        rules:{
+           
+            banner1heading:{
+                required:true,
+               maxlength:20
+            },
+            banner1description:{
+                required:true,
+               
+            },
+            banner1image:{
+                required:true,
 
+            }
+
+          
+            
+        }
+       
+      
+    });
+
+
+    $("#bannertwo").validate({
+        rules:{
+           
+            banner2heading:{
+                required:true,
+               maxlength:20
+            },
+            banner2description:{
+                required:true,
+               
+            },
+            banner2image:{
+                required:true,
+                
+            }
+
+          
+            
+        }
+       
+      
+    });
+
+// banner validation
+
+    function BannerOneFileValidation() {
+        var fileInput = 
+            document.getElementById('banner1image');
+          
+        var filePath = fileInput.value;
+      
+        // Allowing file type
+        var allowedExtensions = 
+                /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+          
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Invalid file type');
+            fileInput.value = '';
+            return false;
+        } 
+        else 
+        {
+          
+            // Image preview 
+            if (fileInput.files && fileInput.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(
+                        'imagePreviewBannerOne').innerHTML = 
+                        '<img style="width:120px;height:120px" src="' + e.target.result
+                        + '"/>';
+                };
+                  
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+    }
+
+
+
+
+    function BannerTwoFileValidation() {
+        var fileInput = 
+            document.getElementById('banner2image');
+          
+        var filePath = fileInput.value;
+      
+        // Allowing file type
+        var allowedExtensions = 
+                /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+          
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Invalid file type');
+            fileInput.value = '';
+            return false;
+        } 
+        else 
+        {
+          
+            // Image preview 
+            if (fileInput.files && fileInput.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(
+                        'imagePreviewBannerTwo').innerHTML = 
+                        '<img style="width:120px;height:120px" src="' + e.target.result
+                        + '"/>';
+                };
+                  
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+    }
 
 
 //order status changing
