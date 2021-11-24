@@ -1,0 +1,83 @@
+
+<div class="row">
+    <div class="col-6">
+<div class="card">
+  <div class="card-header">
+     <h5 class="card-title">First main banner</h5>
+  </div>
+  <div class="card-body">
+  
+<form action="/admin/firstmainbanner" id="bannerone" method="post" enctype="multipart/form-data">
+    <label for="">Heading</label><br>
+    <input type="text" name="banner1heading" id=""><br>
+     <label for="">Description</label><br>
+    <textarea name="banner1description" id="" cols="40" rows="5"></textarea><br>
+     <label for="">Banner image</label><br>
+     <input type="file" name="banner1image" id="banner1image" onchange="return BannerOneFileValidation()" > <div id="imagePreviewBannerOne" class="mt-2"></div><br>
+       <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+  </div>
+</div>
+</div>
+
+
+  <div class="col-6">
+<div class="card">
+  <div class="card-header">
+     <h5 class="card-title">Second main banner</h5>
+  </div>
+  <div class="card-body">
+  
+<form action="/admin/secondmainbanner" id="bannertwo" method="post" enctype="multipart/form-data">
+    <label for="">Heading</label><br>
+    <input type="text" name="banner2heading" id=""><br>
+     <label for="">Description</label><br>
+    <textarea name="banner2description" id="" cols="40" rows="5"></textarea><br>
+     <label for="">Banner image</label><br>
+     <input type="file" name="banner2image" id="banner2image" onchange="return BannerTwoFileValidation()"><div id="imagePreviewBannerTwo" class="mt-2"></div><br>
+     <button type="submit" class="btn btn-primary mt-2">Submit</button>
+</form>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="card mt-5">
+    <div class="row">
+  <div class="card-body col-4">
+   <h6>Category banner one</h6>
+<form action="">
+       <select name="" id="">
+         <option value=""></option>
+     </select><br>
+     <input type="file"><br>
+    <button type="submit">Submit</button>
+</form>
+  </div>
+  <div class="card-body col-4">
+    <h6>Category banner two</h6>
+
+     <form action="">
+       <select name="" id="">
+         <option value=""></option>
+     </select><br>
+     <input type="file"><br>
+     <button type="submit">Submit</button>
+</form>
+
+  </div>
+   <div class="card-body col-4">
+     <h6>Category banner three</h6>
+
+
+     <form action="">
+       <select name="" id="">
+         <option value=""></option>
+     </select><br>
+     <input type="file"><br>
+     <button type="submit">Submit</button>
+</form>
+
+  </div>
+  </div>
+</div>

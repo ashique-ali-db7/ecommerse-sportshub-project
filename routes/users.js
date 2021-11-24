@@ -77,20 +77,33 @@ router.get('/',blockCheck,async function(req, res, next) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
 let user = req.session.user;
 let cartcount =await producthelpers.getCartCount(req.session.user?._id);
+let allCategory = await categoryhelpers.getCategory();
+let bannerOne = await categoryhelpers.getBannerOne();
 
-  res.render('users/home',{ admin:false,user,cartcount});
+  res.render('users/home',{ admin:false,user,cartcount,allCategory,bannerOne});
 });
 
 
 /* GET clothings view. loginverification not required*/
-router.get('/clothings',blockCheck,async function(req, res) {
-  let user = req.session.user;
-  let cartcount =await producthelpers.getCartCount(req.session.user?._id);
-  producthelpers.getProduct().then((products)=>{
+// router.get('/clothings',blockCheck,async function(req, res) {
+//   let user = req.session.user;
+//   let cartcount =await producthelpers.getCartCount(req.session.user?._id);
+//   producthelpers.getProduct().then((products)=>{
    
-    res.render('users/clothings', { admin:false,products,user,cartcount});
-  })
-});
+//     res.render('users/clothings', { admin:false,products,user,cartcount});
+//   })
+// });
+
+// get all product based on category category
+router.get('/shopcategory',blockCheck,async(req,res)=>{
+  let user = req.session.user;
+    let categoryname =  req.query.categoryname;
+    let products =   await  producthelpers.allCategoryProducts(categoryname)
+    let cartcount =await producthelpers.getCartCount(req.session.user?._id);
+    let allCategory = await categoryhelpers.getCategory();
+  
+    res.render('users/clothings', { admin:false,products,user,cartcount,allCategory});
+})
 
 /* GET shopping cart. */
 router.get('/shopping-cart',verifyLoginForLoginpage, async(req, res, next) =>{
@@ -110,6 +123,7 @@ router.get('/product',blockCheck,async function(req, res) {
   let user = req.session.user;
   let quantity = {};
   let cartcount =await producthelpers.getCartCount(req.session.user?._id);
+  let allCategory = await categoryhelpers.getCategory();
 producthelpers.getSingleProductDetails(req.query).then((response)=>{
 
 console.log(response.instock[2].quantity);
@@ -125,7 +139,7 @@ quantity.smalloutofstock = true;
 
   
  
-  res.render('users/product',{ admin:false,response,user,quantity,cartcount});
+  res.render('users/product',{ admin:false,response,user,quantity,cartcount,allCategory});
 })
   
   

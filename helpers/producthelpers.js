@@ -395,6 +395,15 @@ getCartCount:(userId)=>{
          resolve(count);
     })
 
+},
+
+allCategoryProducts:(categoryname)=>{
+    return new Promise(async(resolve,reject)=>{
+
+   let allSingleCategoryProduct =   await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:categoryname}).toArray();
+   resolve(allSingleCategoryProduct);
+
+    })
 }
 
 

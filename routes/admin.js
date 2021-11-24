@@ -605,9 +605,98 @@ router.get('/orderproductsview',(req,res)=>{
  })
 
  
+});
+
+router.get('/bannermanagment',(req,res)=>{
+  res.render('admin/bannermanagment',{admin:true})
 })
 
 
+// post main banner 1
+router.post('/firstmainbanner',(req,res)=>{
+  console.log(req.body);
+  let banner1image = req.files?.banner1image;
+
+  categoryhelpers.addBannerone(req.body).then((response)=>{
+    let id =response.id;
+if(response.exist){
+  if(banner1image){
+    fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
+      if (err) throw err;
+      console.log('File deleted!');
+    });
+    banner1image.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
+      if(!err){
+        res.redirect('/admin/bannermanagment')
+      }
+      else{
+        console.log(err);
+      }
+    })
+  }
+}else{
+  
+
+  banner1image.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
+    if(!err){
+       res.redirect('/admin/bannermanagment');
+    }
+    else{
+      console.log(err);
+    }
+  })
+
+}
+  
+
+
+  })
+
+ 
+})
+
+// post banner 2
+router.post('/secondmainbanner',(req,res)=>{
+  console.log(req.body);
+  let banner2image = req.files?.banner2image;
+
+  categoryhelpers.addBannertwo(req.body).then((response)=>{
+    let id =response.id;
+if(response.exist){
+  if(banner2image){
+    fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
+      if (err) throw err;
+      console.log('File deleted!');
+    });
+    banner2image.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
+      if(!err){
+        res.redirect('/admin/bannermanagment')
+      }
+      else{
+        console.log(err);
+      }
+    })
+  }
+}else{
+  
+
+  banner2image.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
+    if(!err){
+       res.redirect('/admin/bannermanagment');
+    }
+    else{
+      console.log(err);
+    }
+  })
+
+}
+  
+
+
+  })
+
+ 
+})
 /* GET admin logout. */
 router.get('/adminlogout', function(req, res, next) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
