@@ -6,7 +6,10 @@
      <h5 class="card-title">First main banner</h5>
   </div>
   <div class="card-body">
-  
+
+  <p>Current banner</p>
+  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropbannerOne">Show</button>
+
 <form action="/admin/firstmainbanner" id="bannerone" method="post" enctype="multipart/form-data">
     <label for="">Heading</label><br>
     <input type="text" name="banner1heading" id=""><br>
@@ -27,6 +30,10 @@
      <h5 class="card-title">Second main banner</h5>
   </div>
   <div class="card-body">
+
+
+      <p>Current banner</p>
+  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropbannerTwo">Show</button>
   
 <form action="/admin/secondmainbanner" id="bannertwo" method="post" enctype="multipart/form-data">
     <label for="">Heading</label><br>
@@ -41,6 +48,56 @@
 </div>
 </div>
 </div>
+
+
+
+
+{{!-- modal banner One--}}
+
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdropbannerOne" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Current banner</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <img style="width:100%;height:auto"  src="/images/banner-images/{{bannerOne._id}}.png" alt="">
+        <p class="mt-2">Heading:<span>{{bannerOne.bannerOneHeading}}</span></p>
+        <p>Banner description:<span>{{bannerOne.bannerOneDescription}}</span></p>
+      </div>
+    
+    </div>
+  </div>
+</div>
+
+
+{{!-- modal banner Two--}}
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdropbannerTwo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Current banner</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <img style="width:100%;height:auto"  src="/images/banner-images/{{bannerTwo._id}}.png" alt="">
+        <p class="mt-2">Heading:<span>{{bannerTwo.bannerTwoHeading}}</span></p>
+        <p>Banner description:<span>{{bannerTwo.bannerTwoDescription}}</span></p>
+      </div>
+    
+    </div>
+  </div>
+</div>
+
+
+
 
 {{!-- crop --}}
 
@@ -111,6 +168,41 @@
     <button id="confirm-btn" class="btn btn-primary mt-2" type="submit">Submit</button>
 </form>
 
+  </div>
+  </div>
+</div>
+
+
+<div class="card" style="">
+  <div class="row">
+    <div class="col-6">
+  <div class="card-body">
+   <P>Subcategory wise products want to show in home page</P>
+   <form action="/admin/homepageproductsone" method="post" enctype="multipart/form-data">
+        <select name="category" id="">
+         {{#each categoryData}}
+         <option>{{this.category}}</option>
+         {{/each}}
+     </select><br>
+      <label for="">Product banner image</label><br>
+     <input type="file" name="productbanner1image" id="productbanner1image" onchange="return productBannerOneFileValidation()" > <div id="imagePreviewproductBannerOne" class="mt-2"></div><br>
+     <button type="submit"  class="btn btn-primary mt-2">submit</button>
+   </form>
+  </div>
+</div>
+<div class="col-6">
+   <div class="card-body">
+   <P>Subcategory wise products want to show in home page</P>
+   <form action="/admin/homepageproductstwo" method="post" enctype="multipart/form-data">
+        <select name="category" id="">
+         {{#each categoryData}}
+         <option>{{this.category}}</option>
+         {{/each}}
+     </select><br>
+     <input type="file" name="productbanner2image" id="productbanner2image" onchange="return productBannerTwoFileValidation()" > <div id="imagePreviewproductBannerTwo" class="mt-2"></div><br>
+     <button type="submit" class="btn btn-primary mt-2">submit</button>
+   </form>
+  </div>
   </div>
   </div>
 </div>

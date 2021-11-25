@@ -216,6 +216,64 @@ await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
         let categoryBannerThree =    await  db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"three"});
         resolve(categoryBannerThree);
         })
+    },
+    allSubCategories:(categoryname)=>{
+        return new Promise(async(resolve,reject)=>{
+            let subcategories = await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION).aggregate([
+                {$match:{category:categoryname}},
+                {$unwind:"$subcategory"},
+               
+                
+            ]).toArray();
+            resolve(subcategories);
+        })
+    },
+    homepageproductsone:(category)=>{
+        return new Promise(async(resolve,reject)=>{
+            let categoryhomeproductsone = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({homeproducts:"one"});
+            if(categoryhomeproductsone){
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({homeproducts:"one"},{$set:{category:category}});
+                response.id = categoryhomeproductsone._id;
+                response.exist = true;
+                resolve(response);
+               
+            }else{
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({homeproducts:"one",category:category}).then((response)=>{
+                    response.id = response.insertedId;
+                    response.exist = false;
+                    resolve(response);
+                })
+            }
+        })
+    },
+    homepageproductstwo:(category)=>{
+        return new Promise(async(resolve,reject)=>{
+            let categoryhomeproductstwo = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({homeproducts:"two"});
+            if(categoryhomeproductstwo){
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({homeproducts:"two"},{$set:{category:category}});
+                response.id = categoryhomeproductstwo._id;
+                response.exist = true;
+                resolve(response);
+            }else{
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({homeproducts:"two",category:category}).then((response)=>{
+                    response.id = response.insertedId;
+                    response.exist = false;
+                    resolve(response);
+                })
+            }
+        })
+    },
+    categoryProductOneForHome:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let productcategoryOne = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({homeproducts:"one"});
+            resolve(productcategoryOne);
+        })
+    },
+    categoryProductTwoForHome:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let productcategoryTwo = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({homeproducts:"two"});
+            resolve(productcategoryTwo);
+        })
     }
    
 

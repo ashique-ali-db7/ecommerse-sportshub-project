@@ -404,6 +404,22 @@ allCategoryProducts:(categoryname)=>{
    resolve(allSingleCategoryProduct);
 
     })
+},
+
+
+categoryProductOneForHomeProducts:(category)=>{
+    return new Promise(async(resolve,reject)=>{
+      let homeProductsOne = await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:category}).toArray();
+      resolve(homeProductsOne);
+    })
+   
+},
+
+categoryProductTwoForHomeProducts:(category)=>{
+    return new Promise(async(resolve,reject)=>{
+        let homeProductsTwo = await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:category}).toArray();
+        resolve(homeProductsTwo);
+      })
 }
 
 
