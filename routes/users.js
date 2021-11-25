@@ -84,8 +84,21 @@ let categorybannerOne = await categoryhelpers.getCategoryBannerOne();
 let categorybannerTwo = await categoryhelpers.getCategoryBannerTwo();
 let categorybannerThree = await categoryhelpers.getCategoryBannerThree();
 
+let productOneForHomecategory = await categoryhelpers.categoryProductOneForHome();
+let productOneForHomecategorysubcategory = await categoryhelpers.allSubCategories(productOneForHomecategory.category);
+let productOneForHomecategoryProducts = await producthelpers.categoryProductOneForHomeProducts(productOneForHomecategory.category);
 
-  res.render('users/home',{ admin:false,user,cartcount,allCategory,bannerOne,bannerTwo,categorybannerOne,categorybannerTwo,categorybannerThree});
+
+let productTwoForHomecategory = await categoryhelpers.categoryProductTwoForHome();
+let productTwoForHomecategorysubcategory = await categoryhelpers.allSubCategories(productTwoForHomecategory.category);
+let productTwoForHomecategoryProducts = await producthelpers.categoryProductTwoForHomeProducts(productTwoForHomecategory.category);
+
+
+
+
+
+
+  res.render('users/home',{ admin:false,user,cartcount,allCategory,bannerOne,bannerTwo,categorybannerOne,categorybannerTwo,categorybannerThree,productOneForHomecategoryProducts,productTwoForHomecategoryProducts,productOneForHomecategory,productTwoForHomecategory});
 });
 
 
@@ -103,11 +116,14 @@ let categorybannerThree = await categoryhelpers.getCategoryBannerThree();
 router.get('/shopcategory',blockCheck,async(req,res)=>{
   let user = req.session.user;
     let categoryname =  req.query.categoryname;
-    let products =   await  producthelpers.allCategoryProducts(categoryname)
+    let products =   await  producthelpers.allCategoryProducts(categoryname);
+    let allsubcategories =await categoryhelpers.allSubCategories(categoryname);
     let cartcount =await producthelpers.getCartCount(req.session.user?._id);
     let allCategory = await categoryhelpers.getCategory();
+    let allBrands  =  await brandhelpers.getBrand();
   
-    res.render('users/clothings', { admin:false,products,user,cartcount,allCategory});
+  
+    res.render('users/clothings', { admin:false,products,user,cartcount,allCategory,allBrands,allsubcategories});
 })
 
 /* GET shopping cart. */

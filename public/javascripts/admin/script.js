@@ -1444,6 +1444,77 @@ document.getElementById(orderid).innerHTML = orderstatus;
     })
 }
 
+//product banner validation
+
+function productBannerOneFileValidation() {
+    var fileInput = 
+        document.getElementById('productbanner1image');
+      
+    var filePath = fileInput.value;
+  
+    // Allowing file type
+    var allowedExtensions = 
+            /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+      
+    if (!allowedExtensions.exec(filePath)) {
+        alert('Invalid file type');
+        fileInput.value = '';
+        return false;
+    } 
+    else 
+    {
+      
+        // Image preview 
+        if (fileInput.files && fileInput.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById(
+                    'imagePreviewproductBannerOne').innerHTML = 
+                    '<img style="width:120px;height:120px" src="' + e.target.result
+                    + '"/>';
+            };
+              
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    }
+}
+
+
+
+function productBannerTwoFileValidation() {
+    var fileInput = 
+        document.getElementById('productbanner2image');
+      
+    var filePath = fileInput.value;
+  
+    // Allowing file type
+    var allowedExtensions = 
+            /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+      
+    if (!allowedExtensions.exec(filePath)) {
+        alert('Invalid file type');
+        fileInput.value = '';
+        return false;
+    } 
+    else 
+    {
+      
+        // Image preview 
+        if (fileInput.files && fileInput.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById(
+                    'imagePreviewproductBannerTwo').innerHTML = 
+                    '<img style="width:120px;height:120px" src="' + e.target.result
+                    + '"/>';
+            };
+              
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    }
+}
+
+
 
 
 

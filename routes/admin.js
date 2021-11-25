@@ -610,7 +610,9 @@ router.get('/orderproductsview',(req,res)=>{
 router.get('/bannermanagment',async(req,res)=>{
   if(req.session.admin){
     let categoryData =await categoryhelpers.getCategory();
-    res.render('admin/bannermanagment',{admin:true,categoryData});
+    let bannerOne = await categoryhelpers.getBannerOne();
+let bannerTwo = await categoryhelpers.getBannerTwo();
+    res.render('admin/bannermanagment',{admin:true,categoryData,bannerOne,bannerTwo});
   }else{
     res.redirect('/admin/adminlogin');
   }
@@ -814,6 +816,84 @@ router.post('/categorybannerthree',(req,res)=>{
     }
   })
 });
+
+// Post home page first category products 
+router.post('/homepageproductsone',(req,res)=>{
+  let category = req.body.category;
+  let productBannerOneImage = req.files?.productbanner1image;
+  categoryhelpers.homepageproductsone(category).then((response)=>{
+let id = response.id;
+
+if(response.exist){
+
+  if(productBannerOneImage){
+    fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
+      if (err) throw err;
+      console.log('File deleted!');
+    });
+    productBannerOneImage.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
+      if(!err){
+        res.redirect('/admin/bannermanagment')
+      }
+      else{
+        console.log(err);
+      }
+    })
+  }
+
+}else{
+  productBannerOneImage.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
+    if(!err){
+       res.redirect('/admin/bannermanagment');
+    }
+    else{
+      console.log(err);
+    }
+  })
+}
+
+  
+  })
+})
+
+// Post home page second category products 
+router.post('/homepageproductstwo',(req,res)=>{
+  let category = req.body.category;
+  let productBannerTwoImage = req.files?.productbanner2image;
+  categoryhelpers.homepageproductstwo(category).then((response)=>{
+    let id = response.id;
+
+    if(response.exist){
+
+      if(productBannerTwoImage){
+        fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
+          if (err) throw err;
+          console.log('File deleted!');
+        });
+        productBannerTwoImage.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
+          if(!err){
+            res.redirect('/admin/bannermanagment')
+          }
+          else{
+            console.log(err);
+          }
+        })
+      }
+    
+    }else{
+      productBannerTwoImage.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
+        if(!err){
+           res.redirect('/admin/bannermanagment');
+        }
+        else{
+          console.log(err);
+        }
+      })
+    }
+
+   
+  })
+})
 
 /* GET admin logout. */
 router.get('/adminlogout', function(req, res, next) {
