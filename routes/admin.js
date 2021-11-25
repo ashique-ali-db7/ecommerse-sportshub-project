@@ -607,8 +607,14 @@ router.get('/orderproductsview',(req,res)=>{
  
 });
 
-router.get('/bannermanagment',(req,res)=>{
-  res.render('admin/bannermanagment',{admin:true})
+router.get('/bannermanagment',async(req,res)=>{
+  if(req.session.admin){
+    let categoryData =await categoryhelpers.getCategory();
+    res.render('admin/bannermanagment',{admin:true,categoryData});
+  }else{
+    res.redirect('/admin/adminlogin');
+  }
+
 })
 
 
@@ -657,7 +663,7 @@ if(response.exist){
 
 // post banner 2
 router.post('/secondmainbanner',(req,res)=>{
-  console.log(req.body);
+  
   let banner2image = req.files?.banner2image;
 
   categoryhelpers.addBannertwo(req.body).then((response)=>{
@@ -697,6 +703,118 @@ if(response.exist){
 
  
 })
+
+// post category banner one
+router.post('/categorybannerone',(req,res)=>{
+  let category = req.body.subbannercategoryone;
+  let categorybanner1image = req.files?.categorybannerimage1;
+  categoryhelpers.categoryBannerOne(category).then((response)=>{
+    let id = response.id;
+    if(response.exist){
+
+      if(categorybanner1image){
+        fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
+          if (err) throw err;
+          console.log('File deleted!');
+        });
+        categorybanner1image.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
+          if(!err){
+            res.redirect('/admin/bannermanagment')
+          }
+          else{
+            console.log(err);
+          }
+        })
+      }
+
+    }else{
+      categorybanner1image.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
+        if(!err){
+           res.redirect('/admin/bannermanagment');
+        }
+        else{
+          console.log(err);
+        }
+      })
+    }
+  })
+});
+
+//post category banner 2
+
+router.post('/categorybannertwo',(req,res)=>{
+  let category = req.body.subbannercategorytwo;
+  let categorybanner2image = req.files?.categorybannerimage2;
+  categoryhelpers.categoryBannerTwo(category).then((response)=>{
+    let id = response.id;
+    if(response.exist){
+
+      if(categorybanner2image){
+        fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
+          if (err) throw err;
+          console.log('File deleted!');
+        });
+        categorybanner2image.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
+          if(!err){
+            res.redirect('/admin/bannermanagment')
+          }
+          else{
+            console.log(err);
+          }
+        })
+      }
+
+    }else{
+      categorybanner2image.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
+        if(!err){
+           res.redirect('/admin/bannermanagment');
+        }
+        else{
+          console.log(err);
+        }
+      })
+    }
+  })
+})
+
+
+// post category banner three
+router.post('/categorybannerthree',(req,res)=>{
+  console.log("edaaaa");
+  let category = req.body.subbannercategorythree;
+  let categorybanner3image = req.files?.categorybannerimage3;
+  categoryhelpers.categoryBannerThree(category).then((response)=>{
+    let id = response.id;
+    if(response.exist){
+
+      if(categorybanner3image){
+        fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
+          if (err) throw err;
+          console.log('File deleted!');
+        });
+        categorybanner3image.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
+          if(!err){
+            res.redirect('/admin/bannermanagment')
+          }
+          else{
+            console.log(err);
+          }
+        })
+      }
+
+    }else{
+      categorybanner3image.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
+        if(!err){
+           res.redirect('/admin/bannermanagment');
+        }
+        else{
+          console.log(err);
+        }
+      })
+    }
+  })
+});
+
 /* GET admin logout. */
 router.get('/adminlogout', function(req, res, next) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
