@@ -140,6 +140,82 @@ await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
             let bannerOne = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({banner:"one"});
             resolve(bannerOne);
         })
+    },
+    getBannerTwo:()=>{
+        return new Promise(async(resolve,reject)=>{
+
+            let bannerTwo = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({banner:"two"});
+            resolve(bannerTwo);
+        })
+    },
+    categoryBannerOne:(category)=>{
+        return new Promise(async(resolve,reject)=>{
+            let categoryBannerOnedata = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"one"});
+            if(categoryBannerOnedata){
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({categorybanner:"one"},{$set:{category:category}});
+                response.id = categoryBannerOnedata._id;
+                response.exist = true;
+                resolve(response);
+            }else{
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({categorybanner:"one",category:category}).then((response)=>{
+                    response.id = response.insertedId;
+                    response.exist = false;
+                    resolve(response);
+                })
+            }
+        })
+    },
+    categoryBannerTwo:(category)=>{
+        return new Promise(async(resolve,reject)=>{
+            let categoryBannerTwodata = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"two"});
+            if(categoryBannerTwodata){
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({categorybanner:"two"},{$set:{category:category}});
+                response.id = categoryBannerTwodata._id;
+                response.exist = true;
+                resolve(response);
+            }else{
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({categorybanner:"two",category:category}).then((response)=>{
+                    response.id = response.insertedId;
+                    response.exist = false;
+                    resolve(response);
+                })
+            }
+        })
+    },
+    categoryBannerThree:(category)=>{
+        return new Promise(async(resolve,reject)=>{
+            let categoryBannerThreedata = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"three"});
+            if(categoryBannerThreedata){
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({categorybanner:"three"},{$set:{category:category}});
+                response.id = categoryBannerThreedata._id;
+                response.exist = true;
+                resolve(response);
+            }else{
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({categorybanner:"three",category:category}).then((response)=>{
+                    response.id = response.insertedId;
+                    response.exist = false;
+                    resolve(response);
+                })
+            }
+        })
+    },
+    getCategoryBannerOne:()=>{
+        return new Promise(async(resolve,reject)=>{
+        let categoryBannerOne =    await  db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"one"});
+        resolve(categoryBannerOne);
+        })
+    },
+    getCategoryBannerTwo:()=>{
+        return new Promise(async(resolve,reject)=>{
+        let categoryBannerTwo =    await  db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"two"});
+        resolve(categoryBannerTwo);
+        })
+    },
+    getCategoryBannerThree:()=>{
+        return new Promise(async(resolve,reject)=>{
+        let categoryBannerThree =    await  db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"three"});
+        resolve(categoryBannerThree);
+        })
     }
    
 

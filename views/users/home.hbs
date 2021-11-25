@@ -3,16 +3,16 @@
     <!-- Hero Section Begin -->
     <section class="hero-section">
         <div class="hero-items owl-carousel">
-            <div class="single-hero-items set-bg" data-setbg="images/users/{{bannerOne._id}}.jpg">
+            <div class="single-hero-items set-bg" data-setbg="images/banner-images/{{bannerOne._id}}.png">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-5">
                             {{!-- <span>Bag,kids</span> --}}
                         
 
-                            <h1 style="color: rgb(10, 9, 9);">{{bannerOne.bannerOneHeading}}</h1>
-                            <p style="color: rgb(44, 42, 42);">{{bannerOne.bannerOneDescription}}</p>
-                            <a href="/clothings" class="primary-btn">Shop Now</a>
+                            <h1 >{{bannerOne.bannerOneHeading}}</h1>
+                            <p style="color: black;">{{bannerOne.bannerOneDescription}}</p>
+                            <a href="#" class="primary-btn">Shop Now</a>
                         </div>
                     </div>
                     {{!-- <div class="off-card">
@@ -20,13 +20,13 @@
                     </div> --}}
                 </div>
             </div>
-            <div class="single-hero-items set-bg" data-setbg="/images/banner-images/{{bannerOne._id}}.jpg">
+            <div class="single-hero-items set-bg" data-setbg="/images/banner-images/{{bannerTwo._id}}.png">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-5">
-                            <span>Bag,kids</span>
-                            <h1>Black friday</h1>
-                            <p>The 2021 Black Friday deals event is just three days away, and we're already seeing loads of huge Black Friday sales dropping from all the major retailers - including Amazon, Best Buy, and Target. We've searched high and low to bring you today's best Black Friday deals happening right now.</p>
+                            
+                            <h1>{{bannerTwo.bannerTwoHeading}}</h1>
+                            <p style="color: black;">{{bannerTwo.bannerTwoDescription}}</p>
                             <a href="#" class="primary-btn">Shop Now</a>
                         </div>
                     </div>
@@ -46,25 +46,25 @@
                 <div class="col-lg-4">
                  
                     <div class="single-banner">
-                        <img style="height: 300px;" src="images/users/banner-1.jpg" alt="">
+                        <img style="height: 300px;" src="/images/banner-images/{{categorybannerOne._id}}.png" alt="">
                         <div class="inner-text">
-                              <a href="/clothings" style="cursor: pointer;"><h4>Clothings</h4></a> 
+                              <a href="/shopcategory?categoryname={{categorybannerOne.category}}" style="cursor: pointer;"><h4>{{categorybannerOne.category}}</h4></a> 
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="single-banner">
-                        <img style="height: 300px;" src="images/users/banner-2.jpg" alt="">
+                        <img style="height: 300px;" src="/images/banner-images/{{categorybannerTwo._id}}.png" alt="">
                         <div class="inner-text">
-                            <a href="/clothings" style="cursor: pointer;"><h4>Accessories</h4></a> 
+                            <a href="/shopcategory?categoryname={{categorybannerTwo.category}}" style="cursor: pointer;"><h4>{{categorybannerTwo.category}}</h4></a> 
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="single-banner">
-                        <img style="height: 300px;" src="images/users/banner-3.jpg" alt="">
+                        <img style="height: 300px;" src="/images/banner-images/{{categorybannerThree._id}}.png" alt="">
                         <div class="inner-text">
-                            <a href="/clothings" style="cursor: pointer;"><h4>Shoes</h4></a> 
+                            <a href="/shopcategory?categoryname={{categorybannerThree.category}}" style="cursor: pointer;"><h4>{{categorybannerThree.category}}</h4></a> 
                         </div>
                     </div>
                 </div>

@@ -79,8 +79,13 @@ let user = req.session.user;
 let cartcount =await producthelpers.getCartCount(req.session.user?._id);
 let allCategory = await categoryhelpers.getCategory();
 let bannerOne = await categoryhelpers.getBannerOne();
+let bannerTwo = await categoryhelpers.getBannerTwo();
+let categorybannerOne = await categoryhelpers.getCategoryBannerOne();
+let categorybannerTwo = await categoryhelpers.getCategoryBannerTwo();
+let categorybannerThree = await categoryhelpers.getCategoryBannerThree();
 
-  res.render('users/home',{ admin:false,user,cartcount,allCategory,bannerOne});
+
+  res.render('users/home',{ admin:false,user,cartcount,allCategory,bannerOne,bannerTwo,categorybannerOne,categorybannerTwo,categorybannerThree});
 });
 
 
