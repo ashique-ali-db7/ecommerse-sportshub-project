@@ -177,14 +177,14 @@
   <div class="row">
     <div class="col-6">
   <div class="card-body">
-   <P>Subcategory wise products want to show in home page</P>
+   <P>Category wise products want to show in home page</P>
    <form action="/admin/homepageproductsone" method="post" enctype="multipart/form-data">
         <select name="category" id="">
          {{#each categoryData}}
          <option>{{this.category}}</option>
          {{/each}}
      </select><br>
-      <label for="">Product banner image</label><br>
+      <label class="mt-2" for="">Product banner image</label><br>
      <input type="file" name="productbanner1image" id="productbanner1image" onchange="return productBannerOneFileValidation()" > <div id="imagePreviewproductBannerOne" class="mt-2"></div><br>
      <button type="submit"  class="btn btn-primary mt-2">submit</button>
    </form>
@@ -192,13 +192,14 @@
 </div>
 <div class="col-6">
    <div class="card-body">
-   <P>Subcategory wise products want to show in home page</P>
+   <P>Category wise products want to show in home page</P>
    <form action="/admin/homepageproductstwo" method="post" enctype="multipart/form-data">
         <select name="category" id="">
          {{#each categoryData}}
          <option>{{this.category}}</option>
          {{/each}}
      </select><br>
+        <label class="mt-2" for="">Product banner image</label><br>
      <input type="file" name="productbanner2image" id="productbanner2image" onchange="return productBannerTwoFileValidation()" > <div id="imagePreviewproductBannerTwo" class="mt-2"></div><br>
      <button type="submit" class="btn btn-primary mt-2">submit</button>
    </form>

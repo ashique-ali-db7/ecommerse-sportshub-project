@@ -14,10 +14,22 @@
     </div>
     <!-- Breadcrumb Section Begin -->
 
+
+
  <section class="shopping-cart spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
+                    {{#if cartItemsEmpty}}
+<div class="card cartempty" style="border: none;">
+  <div class="card-body">
+<img src="/images/users/cartempty1.png" style="width:30%" alt="">
+<h3 class="mt-5">Hey,it feels so light!</h3>
+<p>There is nothing in your bag.Let's add some items</p>
+<a href="/" class="btn mt-3" style="border: 1px solid #e7ab3c;" href="">ADD ITEMS FROM SHOP</a>
+  </div>
+</div>
+                    {{else}}
                     <div class="cart-table">
                         <table>
                             <thead>
@@ -111,7 +123,7 @@
                             </div>
                         </div>
                         <div class="col-lg-4 offset-lg-4">
-                            <p style="color: red;">{{cartItemsEmpty}}</p>
+                           
                             <div class="proceed-checkout">
                                 <ul>
                                     {{!-- <li class="subtotal">Subtotal <span>$240.00</span></li> --}}
@@ -122,6 +134,7 @@
                             </div>
                         </div>
                     </div>
+                    {{/if}}
                 </div>
             </div>
         </div>

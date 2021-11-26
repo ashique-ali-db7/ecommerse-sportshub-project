@@ -5,6 +5,13 @@ var collections = require('../config/collection');
 var bcryptjs = require('bcryptjs');
 var objectId = require('mongodb').ObjectId;
 const { response } = require('express');
+const Razorpay = require('razorpay');
+var crypto = require('crypto');
+const { resolve } = require('path');
+var instance = new Razorpay({
+    key_id: process.env.key_id,
+    key_secret: process.env.key_secret,
+  });
 
 module.exports = {
 
@@ -270,7 +277,7 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
          return new Promise(async(resolve,reject)=>{
 
         let cart = await db.get().collection(collections.CART_DETAILS_COLLECTION).findOne({user:objectId(userId)})
-        resolve(cart.products);
+        resolve(cart?.products);
          })
      },
 
@@ -278,7 +285,9 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
      placeOrder:(orderdetails,products,total,userId)=>{
         
        return new Promise(async(resolve,reject)=>{
-     let status = orderdetails.paymentmethod === 'cod'?'placed':'pending';
+          
+           if(orderdetails.paymentmethod === 'cod'){
+     let status =  'placed';
 
      let orderObj = {
          deliveryDetails:{
@@ -297,13 +306,45 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
          total:total,
          date:new Date()
      }
-
+     
      db.get().collection(collections.ORDER_DETAILS_COLLECTION).insertOne(orderObj).then((response)=>{
-          db.get().collection(collections.CART_DETAILS_COLLECTION).remove({user:objectId(userId)})
-         resolve();
+       
+            db.get().collection(collections.CART_DETAILS_COLLECTION).remove({user:objectId(userId)})
+             let id = new objectId();
+        
+         resolve(id);
      })
+    }else if(orderdetails.paymentmethod === 'razorpay'){
+        let status = 'placed';
+
+     let orderObj = {
+         deliveryDetails:{
+            name: orderdetails.name,
+            housename: orderdetails.housename,
+            street: orderdetails.street,
+            district: orderdetails.district,
+            state: orderdetails.state,
+            pincode: orderdetails.pincode,
+            mobilenumber: orderdetails.mobilenumber
+         },
+         userId:objectId(userId),
+         paymentmethod:orderdetails.paymentmethod,
+         products:products,
+         status:status,
+         total:total,
+         date:new Date()
+     }
+     
+
+
+       
+        
+         resolve(orderObj);
+    }
        })
     },
+
+
     deleteOtheraddress:(addressId,userId)=>{
         db.get().collection(collections.USERS_DETAILS_COLLECTION).update({_id:objectId(userId)},{$pull:{"address":{_id:objectId(addressId)}}})
     },
@@ -365,8 +406,89 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
 
        
         
-    }
+    },
 
+    generateRazorpay:(orderid,totalPrice)=>{
+       
+        return new Promise(async(resolve,reject)=>{
+        var options = {
+            amount:totalPrice*100,
+            currency:"INR",
+            receipt:""+orderid
+        } ;
+        instance.orders.create(options,function(err,order){
+            if(err){
+                console.log(err);
+            }else{
+                console.log("New order:",order);
+                resolve(order) 
+            }
+          
+        })           
+        })
+    },
+
+    verifyPayment:(data)=>{
+        return new Promise(async(resolve,reject)=>{
+          let hmac = crypto.createHmac('sha256',process.env.key_secret)
+          hmac.update(data['payment[razorpay_order_id]']+'|'+data['payment[razorpay_payment_id]'])
+          hmac=hmac.digest('hex')
+          if(hmac==data['payment[razorpay_signature]']){
+              resolve()
+          }else{
+              reject()
+          }
+        })
+    },
+    changePaymentStatus:(orderId)=>{
+       
+         return new Promise(async(resolve,reject)=>{
+             db.get().collection(collections.ORDER_DETAILS_COLLECTION)
+             .updateOne({_id:objectId(orderId)},{$set:{status:'placed'}}).then(()=>{
+                 resolve();
+             })
+         })
+    },
+
+
+    deleteCartForPayment:(userId)=>{
+        return new Promise(async(resolve,reject)=>{
+
+            db.get().collection(collections.CART_DETAILS_COLLECTION).remove({user:objectId(userId)}).then(()=>{
+                resolve();
+            })
+        })
+    },
+
+
+    razorpayPlaceorder:(orderdetails)=>{
+    return new Promise(async(resolve,reject)=>{
+        db.get().collection(collections.ORDER_DETAILS_COLLECTION).insertOne(orderdetails).then((response)=>{
+       
+          
+        
+         resolve(response);
+     })
+    })
+    },
+    saveProfile:(data,userId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collections.USERS_DETAILS_COLLECTION).update({_id:objectId(userId)},{$set:{profile:data}}).then(async(response)=>{
+       var details =   await  db.get().collection(collections.USERS_DETAILS_COLLECTION).findOne({_id:objectId(userId)})
+              console.log("kjsf");
+              console.log(details);
+                resolve(details);
+            })
+        })
+    },
+//     profilexist:(userId)=>{
+//         return new Promise(async(resolve,reject)=>{
+
+//             let userprofile =await db.get().collection(collections.USERS_DETAILS_COLLECTION).findOne({_id:objectId(userId), 'profile' : { '$exists' : true }});
+//             resolve(userprofile)
+//     })
+// }
+    
 
 
 

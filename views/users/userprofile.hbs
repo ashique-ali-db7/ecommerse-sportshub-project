@@ -1,0 +1,164 @@
+<div class="container rounded bg-white  mb-3">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="100px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold">Edogaru</span><span class="text-black-50">edogaru@mail.com.my</span><span> </span></div>
+            <a  class="btn mt-2" style="width: 100%;background-color:#e7ab3c;border:1px solid #e7ab3c">Profile information</a>
+             <a  class="btn mt-2" style="width: 100%;background-color:#ffff;border:1px solid #e7ab3c">Manage Addresses</a>
+              <a  class="btn mt-2" style="width: 100%;background-color:#ffff;border:1px solid #e7ab3c">My orders</a>
+        </div>
+        <div class="col-md-8 border-right">
+            
+            <div class="p-3 py-5">
+                <div  class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right" >Profile</h4>
+                </div>
+
+                  {{#if profileExist}}
+                  <div class="card">
+  <div class="card-body" >
+      <div class="row ">
+          <div class="col-5">
+    <h5 >Full name</h5>
+   <h5 class="mt-4">Email</h5>
+       <h5 class="mt-4">Mobile Number</h5>
+    <h5 class="mt-4">Country</h5>
+      <h5 class="mt-4">State</h5>
+        </div>
+         <div class="col-6">
+             <h5>{{user.profile.fullname}}</h5>
+              <h5 class="mt-4">{{user.profile.email}}</h5>
+               <h5 class="mt-4">{{user.profile.mobilenumber}}</h5>
+                <h5 class="mt-4">{{user.profile.country}}</h5>
+                 <h5 class="mt-4">{{user.profile.state}}</h5>
+       
+       
+        
+       
+   
+   </div>
+      <div class="mt-5 text-center ml-1"><button class="btn  profile-button" style="background-color: #e7ab3c;" data-toggle="modal" data-target="#editprofile">Edit Profile</button></div>
+   </div>
+
+  </div>
+</div>
+
+
+{{!-- modal --}}
+<div class="modal fade" id="editprofile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Add New Address</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+          <form action="/profiledit" id="profleedit" method="post">   
+        <div class="md-form mb-4">
+          
+          <input type="text" placeholder="name"  name="fullname" value="{{user.profile.fullname}}" class="form-control validate">
+         
+        </div>
+
+        <div class="md-form mb-4">
+          
+          <input type="text" placeholder="email"  name="email" value="{{user.profile.email}}" class="form-control validate">
+         
+        </div>
+
+      
+ <div class="md-form mb-4">
+        
+          <input type="text" placeholder="mobile number"  name="mobilenumber" value="{{user.profile.mobilenumber}}" class="form-control validate">
+     
+        </div>
+       
+       <div class="md-form mb-4">
+        
+          <input type="text" placeholder="country"  name="country" value="{{user.profile.country}}" class="form-control validate">
+       
+        </div>
+       
+
+         <div class="md-form mb-4">
+        
+          <input type="text" placeholder="state"  name="state" value="{{user.profile.state}}" class="form-control validate">
+       
+        </div>
+
+        
+ 
+        
+       
+
+     
+    
+      
+      <div class="modal-footer d-flex justify-content-center">
+         
+        <button type="submit" class="btn btn-default" style="width: 100%; background-color:#e7ab3c">Edit Address</button>
+        
+      </div>
+        </form>
+   </div>
+    </div>
+    
+  </div>
+</div>
+
+                  {{else}}
+
+                <form action="/profile" method="post" id="profilsub">
+                <div class="row mt-2">
+                    <div class="col-md-6"><label class="labels">Full Name</label><input type="text" class="form-control" placeholder="full name" value="" name="fullname"></div>
+                                  <div class="col-md-6"><label class="labels">Email ID</label><input type="text" class="form-control" placeholder="enter email id" value="" name="email"></div>
+                </div>
+                <div class="row mt-3">
+                     <div class="col-md-6"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="enter phone number" value="" name="mobilenumber"></div>
+                    <div class="col-md-6"><label class="labels">Location</label><input type="text" class="form-control" placeholder="enter your location" value=""></div>
+
+                  
+               
+
+
+
+                  
+
+
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value="" name="country"></div>
+                    <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state" name="state"></div>
+                </div>
+                <div class="mt-5 text-center"><button class="btn  profile-button" style="background-color: #e7ab3c;" onclick="profileSubmission()">Save Profile</button></div>
+           </form>
+           {{/if}}
+
+
+
+
+           </div>
+
+
+        </div>
+        {{!-- <div class="col-md-4">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center experience"><span>Edit Experience</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Experience</span></div><br>
+                <div class="col-md-12"><label class="labels">Experience in Designing</label><input type="text" class="form-control" placeholder="experience" value=""></div> <br>
+                <div class="col-md-12"><label class="labels">Additional Details</label><input type="text" class="form-control" placeholder="additional details" value=""></div>
+            </div>
+        </div> --}}
+    </div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
