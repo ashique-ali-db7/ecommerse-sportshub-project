@@ -6,6 +6,7 @@ var producthelpers = require('../helpers/producthelpers');
 var brandhelpers = require('../helpers/brandhelpers');
 var categoryhelpers = require('../helpers/categoryhelpers');
 var userhelpers = require('../helpers/userhelpers');
+var objectId = require('mongodb').ObjectId;
 const session = require('express-session');
 
 const serviceId = process.env.serviceId;
@@ -133,9 +134,13 @@ router.get('/shopping-cart',verifyLoginForLoginpage, async(req, res, next) =>{
   let cartItems = await producthelpers.getCartProducts(userId);
    let total =  await producthelpers.getTotalAmount(req.session.user._id);
   //  let subtotal = await producthelpers.getSubTotalAmount(req.session.user._id);
-  
+  if(cartItems.length>=1){
+    cartItemsEmpty = false;
+  }else{
+    cartItemsEmpty = true;
+  }
   res.render('users/shopping-cart',{ admin:false,user,notheader:true,cartItems,total,cartItemsEmpty});
-  cartItemsEmpty = "";
+
 });
 
 
@@ -180,8 +185,8 @@ router.get('/checkout',verifyLoginForLoginpage, async(req, res) =>{
         res.render('users/checkout',{ admin:false,user,notheader:true,defaultaddress,otheraddress,total,cartItems,userId,existDefaultAddress});
         existDefaultAddress = "";
       }else{
-        cartItemsEmpty = "Cart is empty so you can't go to checkout"
-        res.redirect('/shopping-cart')
+       
+        res.redirect('/')
       }
  
 });
@@ -717,9 +722,25 @@ router.post('/otheraddressedit',(req,res)=>{
   let products = await userhelpers.getCartProductList(userId);
 
   let totalPrice =  await producthelpers.getTotalAmount(userId);
+  let onlinepaymentid = new objectId();
 
- userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId).then(()=>{
-   res.json({status:true})
+ userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId).then((response)=>{
+  req.session.razorpaydocument = response;
+
+ 
+   if(req.query?.paymentmethod === 'cod' ){
+    res.json({codsuccess:true})
+   }else{
+      userhelpers.generateRazorpay(onlinepaymentid,totalPrice).then((response)=>{
+        
+      
+       
+        res.json(response);
+      })
+       
+      
+   }
+  
  })
 
 
@@ -740,6 +761,60 @@ router.get('/ordersuccess',verifyLoginForLoginpage,(req,res)=>{
   let user = req.session.user;
   console.log(user);
   res.render('users/ordersuccess',{user,admin:false,user,notheader:true})
+})
+
+// post verify payment 
+router.post('/verify-payment',(req,res)=>{
+ userhelpers.verifyPayment(req.body).then(()=>{
+   userhelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
+     userhelpers.deleteCartForPayment(req.session.user._id).then(()=>{
+       userhelpers.razorpayPlaceorder(req.session.razorpaydocument).then((response)=>{
+        res.json({status:true})
+       })
+    
+     })
+    
+   }).catch(()=>{
+res.json({status:false,errMsg:''})
+   })
+ })
+})
+
+// get user profile
+
+router.get('/userprofile',verifyLoginForLoginpage,async(req,res)=>{
+  let user = req.session.user;
+  let cartcount =await producthelpers.getCartCount(req.session.user?._id);
+  let allCategory = await categoryhelpers.getCategory();
+  let profileExist
+  if(user.profile){
+    profileExist = true;
+  }
+ else{
+  profileExist = false;
+ }
+
+  res.render('users/userprofile',{admin:false,user,cartcount,allCategory,profileExist});
+});
+
+
+
+
+// post user profile
+router.post('/profile',(req,res)=>{
+  userhelpers.saveProfile(req.body,req.session.user._id).then((response)=>{
+    req.session.user = response;
+    res.redirect('/userprofile')
+  })
+});
+
+// Edit profile
+
+router.post('/profiledit',(req,res)=>{
+  userhelpers.saveProfile(req.body,req.session.user._id).then((response)=>{
+    req.session.user = response;
+    res.redirect('/userprofile')
+  })
 })
 
 // get user logout

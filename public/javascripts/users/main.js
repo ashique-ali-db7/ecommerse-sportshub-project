@@ -460,6 +460,49 @@ $("#editothaddress").validate({
   
 });
 
+
+
+
+
+
+$("#profleedit").validate({
+    rules:{
+        fullname:{
+            required:true,
+            
+        },
+        email:{
+            required:true,
+            email:true
+           
+        },
+        mobilenumber:{
+            required:true,
+            number:true,
+            minlength:10,
+            maxlength:10
+           
+        },
+        country:{
+            required:true,
+           
+        },
+        state:{
+            required:true,
+           
+        },
+       
+
+
+       
+       
+       
+        
+    }
+   
+  
+});
+
 //add to cart
 
 
@@ -613,6 +656,7 @@ if(willdelete){
         method:'post',
         success:(response)=>{
             document.getElementById("total").innerHTML  = total - subtotal;
+            location.reload();
         }
     })
 }else{
@@ -706,9 +750,12 @@ if(typeof placeOrderAddressId === 'undefined' || typeof paymentMethodForOrder ==
         url:'/place-order?deliveryaddress='+placeOrderAddressId+"&paymentmethod="+paymentMethodForOrder+"&userId="+userId,
         method:'get',
         success:(response)=>{
-     if(response){
-         console.log(response);
+     if(response.codsuccess){
+        
 location.replace('/ordersuccess');
+     }else{
+      
+         razorpayPayment(response);
      }
         }
      
@@ -719,6 +766,78 @@ location.replace('/ordersuccess');
 }
 
 }
+
+function razorpayPayment(order){
+
+    var options = {
+        "key": "rzp_test_Ft0y0XvToSOOXp", // Enter the Key ID generated from the Dashboard
+        "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Sports hub",
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response){
+          
+
+             verifyPayment(response,order);
+
+            
+        },
+        "prefill": {
+            "name": "Ashique Ali",
+            "email": "ashiquealikmvkd@gmail.com",
+            "contact": "9999999999"
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function (response){
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+});
+    rzp1.open();
+}
+
+function verifyPayment(payment,order){
+
+     $.ajax({
+         url:'/verify-payment',
+         data:{
+             payment,
+             order
+         },
+         method:'post',
+         success:(response)=>{
+             if(response.status){
+                location.replace('/ordersuccess');
+             }else{
+                swal({
+                    title: "Order failed try again",
+                  });
+             }
+         }
+     })
+}
+
+
+
+
+
+
+
+
+
 //delete other address
 function deleteotheraddress(addressId){
 
@@ -746,6 +865,13 @@ if(willdelete){
 
     
 
+}
+
+
+// profile submission
+function profileSubmission(){
+    document.getElementById('profilsub').submit();
+    location.reload(true)
 }
 
 

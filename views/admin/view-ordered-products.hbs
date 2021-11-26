@@ -1,7 +1,12 @@
-<div class="card me-auto ms-auto mb-3" style="width: 50%;">
+  <div class="row">
+  {{#each response}}
+<div class="col-6">
+<div class="card me-auto ms-auto mb-3" style="width: 100%;">
+
   <div class="card-body">
-      <div class="row">
-          {{#each response}}
+     
+        
+           <div class="row">
           <div class="col-3">
 
 <img style="" src="/images/product-images/{{this.item}}3.png" alt="">
@@ -15,10 +20,14 @@
           
            <p>product size:<span>{{this.size}}</span></p>
            <p>product quantity:<span>{{this.quantity}}</span></p>
-           <hr>
+        
           </div>
-          {{/each}}
-      </div>
+          </div>
+ 
+    
     
   </div>
-</div>
+  </div>
+  </div>
+           {{/each}}
+  </div>
