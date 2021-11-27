@@ -1,9 +1,11 @@
 <div class="container rounded bg-white  mb-3">
     <div class="row">
         <div class="col-md-3 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="100px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold">Edogaru</span><span class="text-black-50">edogaru@mail.com.my</span><span> </span></div>
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+              {{!-- <img class="rounded-circle mt-5" width="100px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"> --}}
+              <span class="font-weight-bold">{{user.profile.fullname}}</span><span class="text-black-50">{{user.profile.email}}</span><span> </span></div>
             <a  class="btn mt-2" style="width: 100%;background-color:#e7ab3c;border:1px solid #e7ab3c">Profile information</a>
-             <a  class="btn mt-2" style="width: 100%;background-color:#ffff;border:1px solid #e7ab3c">Manage Addresses</a>
+             <a href="/profileaddress" class="btn mt-2" style="width: 100%;background-color:#ffff;border:1px solid #e7ab3c">Manage Addresses</a>
               <a  class="btn mt-2" style="width: 100%;background-color:#ffff;border:1px solid #e7ab3c">My orders</a>
         </div>
         <div class="col-md-8 border-right">
@@ -132,7 +134,7 @@
                     <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value="" name="country"></div>
                     <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state" name="state"></div>
                 </div>
-                <div class="mt-5 text-center"><button class="btn  profile-button" style="background-color: #e7ab3c;" onclick="profileSubmission()">Save Profile</button></div>
+                <div class="mt-5 text-center"><button class="btn  profile-button" style="background-color: #e7ab3c;" type="submit">Save Profile</button></div>
            </form>
            {{/if}}
 

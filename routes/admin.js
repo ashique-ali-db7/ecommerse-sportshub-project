@@ -599,6 +599,7 @@ router.get('/changeorderstatus',(req,res)=>{
 
 //view orderd products
 router.get('/orderproductsview',(req,res)=>{
+
   let orderid =   req.query.orderid;
  userhelpers.getorderedproditdetils(orderid).then((response)=>{
   res.render('admin/view-ordered-products',{admin:true,response});
