@@ -503,6 +503,47 @@ $("#profleedit").validate({
   
 });
 
+
+
+
+$("#profilsub").validate({
+    rules:{
+        fullname:{
+            required:true,
+            
+        },
+        email:{
+            required:true,
+            email:true
+           
+        },
+        mobilenumber:{
+            required:true,
+            number:true,
+            minlength:10,
+            maxlength:10
+           
+        },
+        country:{
+            required:true,
+           
+        },
+        state:{
+            required:true,
+           
+        },
+       
+
+
+       
+       
+       
+        
+    }
+   
+  
+});
+
 //add to cart
 
 
@@ -704,6 +745,28 @@ function editdefaultaddress(defaultaddressid){
     })
 }
 
+
+function profileeditdefaultaddress(defaultaddressid){
+    $.ajax({
+        url:'/profileeditdefaultaddress?id='+defaultaddressid,
+        method:'get',
+        success:(response)=>{
+          
+            document.getElementById("name").value = response.name;
+            document.getElementById("housename").value = response.housename;
+            document.getElementById("street").value = response.street;
+            document.getElementById("district").value = response.district;
+            document.getElementById("state").value = response.state;
+            document.getElementById("pincode").value = response.pincode;
+            document.getElementById("mobilenumber").value = response.mobilenumber;
+            document.getElementById("_id").value = response._id;
+            
+        }
+
+    })
+}
+
+
 //edit other address
 
 function editotheraddress(otheraddressid){
@@ -869,10 +932,10 @@ if(willdelete){
 
 
 // profile submission
-function profileSubmission(){
-    document.getElementById('profilsub').submit();
-    location.reload(true)
-}
+// function profileSubmission(){
+//     document.getElementById('profilsub').submit();
+  
+// }
 
 
 

@@ -725,6 +725,7 @@ router.post('/otheraddressedit',(req,res)=>{
   let onlinepaymentid = new objectId();
 
  userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId).then((response)=>{
+ 
   req.session.razorpaydocument = response;
 
  
@@ -732,7 +733,6 @@ router.post('/otheraddressedit',(req,res)=>{
     res.json({codsuccess:true})
    }else{
       userhelpers.generateRazorpay(onlinepaymentid,totalPrice).then((response)=>{
-        
       
        
         res.json(response);
@@ -759,15 +759,17 @@ userhelpers.deleteOtheraddress(addressId,req.session.user._id).then(()=>{
 //  order success get
 router.get('/ordersuccess',verifyLoginForLoginpage,(req,res)=>{
   let user = req.session.user;
-  console.log(user);
+
   res.render('users/ordersuccess',{user,admin:false,user,notheader:true})
 })
 
 // post verify payment 
 router.post('/verify-payment',(req,res)=>{
+ 
  userhelpers.verifyPayment(req.body).then(()=>{
    userhelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
      userhelpers.deleteCartForPayment(req.session.user._id).then(()=>{
+    
        userhelpers.razorpayPlaceorder(req.session.razorpaydocument).then((response)=>{
         res.json({status:true})
        })
@@ -816,6 +818,56 @@ router.post('/profiledit',(req,res)=>{
     res.redirect('/userprofile')
   })
 })
+
+
+// get profile addresses
+router.get('/profileaddress',async(req,res)=>{
+  let user = req.session.user;
+  let cartcount =await producthelpers.getCartCount(req.session.user?._id);
+  let allCategory = await categoryhelpers.getCategory();
+  let defaultaddress =  await userhelpers.getdefaultaddress(req.session?.user._id);
+  let otheraddress = await userhelpers.getotheraddress(req.session.user._id);
+
+res.render('users/profileaddress',{admin:false,user,cartcount,allCategory,defaultaddress,otheraddress,existDefaultAddress});
+existDefaultAddress = ""
+});
+//profile address post
+router.post('/profileaddaddress',verifyLoginForLoginpage,(req,res)=>{
+ 
+  userhelpers.addAddress(req.body,req.session.user._id).then((response)=>{
+    if(response.default){
+      existDefaultAddress = "Default address already exist only you can edit it"
+res.redirect('/profileaddress')
+    }
+   else if(response.success){
+      res.redirect('/profileaddress');
+    }
+  })
+});
+
+// edit default profile address
+router.get('/profileeditdefaultaddress',async(req,res)=>{
+  
+  console.log("edamone");
+ 
+  let defaultaddress =  await userhelpers.getdefaultaddress(req.session.user._id);
+  res.send(defaultaddress);
+});
+
+router.post('/profiledefaultaddressedit',(req,res)=>{
+  userhelpers.editdefaultaddress(req.body,req.session.user._id).then(()=>{
+    res.redirect('/profileaddress');
+  })
+ });
+//  edit other one addres
+
+router.post('/profileotheraddressedit',(req,res)=>{
+  userhelpers.editAndUpdateOtherAddress(req.body,req.session.user._id).then(()=>{
+    res.redirect('/profileaddress');
+  })
+ })
+
+
 
 // get user logout
 router.get('/userlogout',(req,res)=>{

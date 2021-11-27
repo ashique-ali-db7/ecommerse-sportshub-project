@@ -312,28 +312,28 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
             db.get().collection(collections.CART_DETAILS_COLLECTION).remove({user:objectId(userId)})
              let id = new objectId();
         
-         resolve(id);
+         resolve("hi");
      })
     }else if(orderdetails.paymentmethod === 'razorpay'){
-        let status = 'placed';
+         let status = 'placed';
 
-     let orderObj = {
+      let orderObj = {
          deliveryDetails:{
-            name: orderdetails.name,
-            housename: orderdetails.housename,
-            street: orderdetails.street,
-            district: orderdetails.district,
-            state: orderdetails.state,
-            pincode: orderdetails.pincode,
-            mobilenumber: orderdetails.mobilenumber
-         },
-         userId:objectId(userId),
-         paymentmethod:orderdetails.paymentmethod,
-         products:products,
+             name: orderdetails.name,
+             housename: orderdetails.housename,
+             street: orderdetails.street,
+             district: orderdetails.district,
+             state: orderdetails.state,
+             pincode: orderdetails.pincode,
+             mobilenumber: orderdetails.mobilenumber
+      },
+          userId:objectId(userId),
+          paymentmethod:orderdetails.paymentmethod,
+          products:products,
          status:status,
-         total:total,
-         date:new Date()
-     }
+          total:total,
+          date:new Date()
+      }
      
 
 
@@ -376,31 +376,32 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
          {
              $unwind:'$products'
          },
-         {
-             $project:{
+          {
+              $project:{
                  item:"$products.item",
-                 quantity:"$products.quantity",
-                 size:"$products.size",
-                 subtotal:"$products.subtotal"
-             }
+                  quantity:"$products.quantity",
+                  size:"$products.size",
+                  subtotal:"$products.subtotal"
+              }
             },
-             {
-             $lookup:{
-                 from:collections.PRODUCTS_DETAILS_COLLECTION,
-                 localField:'item',
-                 foreignField:'_id',
-                 as:'productdetail'
+              {
+              $lookup:{
+                  from:collections.PRODUCTS_DETAILS_COLLECTION,
+                  localField:'item',
+                  foreignField:'_id',
+             as:'productdetail'
              
-                     }
-             },
-             {
-                 $project:{
-                     item:1,quantity:1,size:1,subtotal:1,productdetail:{$arrayElemAt:['$productdetail',0]}
-                 }
-             }
+                      }
+              },
+            //  {
+            //      $project:{
+            //          item:1,quantity:1,size:1,subtotal:1,productdetail:{$arrayElemAt:['$productdetail',0]}
+            //      }
+            //  }
      ]).toArray();
- 
-     resolve(vieworderproductdetails);
+ console.log("idh secenan");
+ console.log(vieworderproductdetails);
+    //  resolve(vieworderproductdetails);
 
         })
 
@@ -409,7 +410,7 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
     },
 
     generateRazorpay:(orderid,totalPrice)=>{
-       
+       ;
         return new Promise(async(resolve,reject)=>{
         var options = {
             amount:totalPrice*100,
@@ -418,8 +419,10 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
         } ;
         instance.orders.create(options,function(err,order){
             if(err){
+              
                 console.log(err);
             }else{
+              
                 console.log("New order:",order);
                 resolve(order) 
             }
@@ -462,6 +465,8 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
 
 
     razorpayPlaceorder:(orderdetails)=>{
+       
+       
     return new Promise(async(resolve,reject)=>{
         db.get().collection(collections.ORDER_DETAILS_COLLECTION).insertOne(orderdetails).then((response)=>{
        
