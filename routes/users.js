@@ -714,19 +714,34 @@ router.post('/otheraddressedit',(req,res)=>{
 
    let deliveryaddressid = req.query.deliveryaddress;
   let userId = req.query.userId;
+
+  req.session.deliveryaddressid = req.query.deliveryaddress;
+  req.session.userId = req.query.userId;
  
   let deliveryaddressAndMethod = await userhelpers.editotheraddress(deliveryaddressid,userId)
 
   deliveryaddressAndMethod.paymentmethod = req.query.paymentmethod;
 
+  req.session.paymentmethod = req.query.paymentmethod
+
+
+ 
+
   let products = await userhelpers.getCartProductList(userId);
+  
 
   let totalPrice =  await producthelpers.getTotalAmount(userId);
+
+
+
+
   let onlinepaymentid = new objectId();
 
- userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId).then((response)=>{
+  console.log("heubau");
+  console.log(req.session.products);
+
+ userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId).then(()=>{
  
-  req.session.razorpaydocument = response;
 
  
    if(req.query?.paymentmethod === 'cod' ){
@@ -764,19 +779,37 @@ router.get('/ordersuccess',verifyLoginForLoginpage,(req,res)=>{
 })
 
 // post verify payment 
-router.post('/verify-payment',(req,res)=>{
+router.post('/verify-payment',async(req,res)=>{
+
+
+  let deliveryaddressAndMethod = await userhelpers.editotheraddress(req.session.deliveryaddressid,req.session.userId)
+
+  deliveryaddressAndMethod.paymentmethod = req.session.paymentmethod;
+
+
+ 
+
+  let products = await userhelpers.getCartProductList(req.session.userId);
+  
+
+  let totalPrice =  await producthelpers.getTotalAmount(req.session.userId);
+
+
+
  
  userhelpers.verifyPayment(req.body).then(()=>{
-   userhelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
+  //  userhelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
      userhelpers.deleteCartForPayment(req.session.user._id).then(()=>{
     
-       userhelpers.razorpayPlaceorder(req.session.razorpaydocument).then((response)=>{
+       userhelpers.razorpayPlaceorder(deliveryaddressAndMethod,products,totalPrice,req.session.userId).then(()=>{
+     
         res.json({status:true})
        })
     
      })
     
-   }).catch(()=>{
+  //  })
+   .catch(()=>{
 res.json({status:false,errMsg:''})
    })
  })
