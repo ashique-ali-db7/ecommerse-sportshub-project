@@ -1428,21 +1428,21 @@ $("#brandvalidationform").validate({
 
 //order status changing
 
-function orderstatus(orderid,orderstatus){
-document.getElementById(orderid).innerHTML = orderstatus;
+// function orderstatus(orderid,orderstatus){
+// document.getElementById(orderid).innerHTML = orderstatus;
 
-    $.ajax({
+//     $.ajax({
 
-     url:'/admin/changeorderstatus?orderid='+orderid+'&orderstatus='+orderstatus,
-     method:'get',
-     success:(response)=>{
-  if(response){
+//      url:'/admin/changeorderstatus?orderid='+orderid+'&orderstatus='+orderstatus,
+//      method:'get',
+//      success:(response)=>{
+//   if(response){
 
-  }
-     }
+//   }
+//      }
 
-    })
-}
+//     })
+// }
 
 //product banner validation
 

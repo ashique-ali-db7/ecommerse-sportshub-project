@@ -287,7 +287,10 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
        return new Promise(async(resolve,reject)=>{
           
            if(orderdetails.paymentmethod === 'cod'){
-     let status =  'placed';
+            let status = "placed";
+            products.array.forEach(element => {
+                element.status = status;
+            });
 
      let orderObj = {
          deliveryDetails:{
@@ -302,7 +305,7 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
          userId:objectId(userId),
          paymentmethod:orderdetails.paymentmethod,
          products:products,
-         status:status,
+        
          total:total,
          date:new Date()
      }
@@ -312,34 +315,16 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
             db.get().collection(collections.CART_DETAILS_COLLECTION).remove({user:objectId(userId)})
              let id = new objectId();
         
-         resolve("hi");
+         resolve();
      })
     }else if(orderdetails.paymentmethod === 'razorpay'){
-         let status = 'placed';
-
-      let orderObj = {
-         deliveryDetails:{
-             name: orderdetails.name,
-             housename: orderdetails.housename,
-             street: orderdetails.street,
-             district: orderdetails.district,
-             state: orderdetails.state,
-             pincode: orderdetails.pincode,
-             mobilenumber: orderdetails.mobilenumber
-      },
-          userId:objectId(userId),
-          paymentmethod:orderdetails.paymentmethod,
-          products:products,
-         status:status,
-          total:total,
-          date:new Date()
-      }
+       
      
 
 
        
         
-         resolve(orderObj);
+         resolve();
     }
        })
     },
@@ -356,14 +341,14 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
            resolve(allOrders);
         })
     },
-    changeOrderStatus:(orderid,orderstatus)=>{
+    // changeOrderStatus:(orderid,orderstatus)=>{
 
-        return new Promise(async(resolve,reject)=>{
-           await db.get().collection(collections.ORDER_DETAILS_COLLECTION).updateOne({_id:objectId(orderid)},{$set:{status:orderstatus}})
-           resolve();
-        })
+    //     return new Promise(async(resolve,reject)=>{
+    //        await db.get().collection(collections.ORDER_DETAILS_COLLECTION).updateOne({_id:objectId(orderid)},{$set:{status:orderstatus}})
+    //        resolve();
+    //     })
 
-    },
+    // },
     getorderedproditdetils:(orderid)=>{
 
         return new Promise(async(resolve,reject)=>{
@@ -393,15 +378,14 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
              
                       }
               },
-            //  {
-            //      $project:{
-            //          item:1,quantity:1,size:1,subtotal:1,productdetail:{$arrayElemAt:['$productdetail',0]}
-            //      }
-            //  }
+              {
+                  $project:{
+                      item:1,quantity:1,size:1,subtotal:1,productdetail:{$arrayElemAt:['$productdetail',0]}
+                  }
+              }
      ]).toArray();
- console.log("idh secenan");
- console.log(vieworderproductdetails);
-    //  resolve(vieworderproductdetails);
+
+      resolve(vieworderproductdetails);
 
         })
 
@@ -443,15 +427,15 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
           }
         })
     },
-    changePaymentStatus:(orderId)=>{
+    // changePaymentStatus:(orderId)=>{
        
-         return new Promise(async(resolve,reject)=>{
-             db.get().collection(collections.ORDER_DETAILS_COLLECTION)
-             .updateOne({_id:objectId(orderId)},{$set:{status:'placed'}}).then(()=>{
-                 resolve();
-             })
-         })
-    },
+    //      return new Promise(async(resolve,reject)=>{
+    //          db.get().collection(collections.ORDER_DETAILS_COLLECTION)
+    //          .updateOne({_id:objectId(orderId)},{$set:{status:'placed'}}).then(()=>{
+    //              resolve();
+    //          })
+    //      })
+    // },
 
 
     deleteCartForPayment:(userId)=>{
@@ -464,16 +448,46 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
     },
 
 
-    razorpayPlaceorder:(orderdetails)=>{
-       
-       
-    return new Promise(async(resolve,reject)=>{
-        db.get().collection(collections.ORDER_DETAILS_COLLECTION).insertOne(orderdetails).then((response)=>{
-       
-          
+    razorpayPlaceorder:(orderdetails,products,total,userId)=>{
+        console.log("please");
+        console.log(products);
+        return new Promise(async(resolve,reject)=>{
+
+            let status = "placed";
+            products.array.forEach(element => {
+                element.status = status;
+            });
+      
+
+     let orderObj = {
+         deliveryDetails:{
+            name: orderdetails.name,
+            housename: orderdetails.housename,
+            street: orderdetails.street,
+            district: orderdetails.district,
+            state: orderdetails.state,
+            pincode: orderdetails.pincode,
+            mobilenumber: orderdetails.mobilenumber
+         },
+         userId:objectId(userId),
+         paymentmethod:orderdetails.paymentmethod,
+         products:products,
         
-         resolve(response);
+         total:total,
+         date:new Date()
+     }
+     
+     db.get().collection(collections.ORDER_DETAILS_COLLECTION).insertOne(orderObj).then((response)=>{
+       
+            db.get().collection(collections.CART_DETAILS_COLLECTION).remove({user:objectId(userId)})
+            
+        
+         resolve();
      })
+       
+   
+      
+    
     })
     },
     saveProfile:(data,userId)=>{

@@ -586,16 +586,16 @@ if(req.session.admin){
 });
 
 // change order status
-router.get('/changeorderstatus',(req,res)=>{
-  let orderid = req.query.orderid;
-  let orderstatus = req.query.orderstatus;
+// router.get('/changeorderstatus',(req,res)=>{
+//   let orderid = req.query.orderid;
+//   let orderstatus = req.query.orderstatus;
 
-  userhelpers.changeOrderStatus(orderid,orderstatus).then(()=>{
-    res.json({orderstatus:orderstatus})
-  })
+//   userhelpers.changeOrderStatus(orderid,orderstatus).then(()=>{
+//     res.json({orderstatus:orderstatus})
+//   })
 
    
-})
+// })
 
 //view orderd products
 router.get('/orderproductsview',(req,res)=>{
