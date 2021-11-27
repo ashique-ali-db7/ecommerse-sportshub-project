@@ -1428,21 +1428,27 @@ $("#brandvalidationform").validate({
 
 //order status changing
 
-// function orderstatus(orderid,orderstatus){
-// document.getElementById(orderid).innerHTML = orderstatus;
+ function orderstatus(orderid,orderstatus,proId,size){
+   
+ document.getElementById(proId+size).innerHTML = orderstatus;
+  document.getElementById(proId+size+"sp").textContent = orderstatus;
 
-//     $.ajax({
 
-//      url:'/admin/changeorderstatus?orderid='+orderid+'&orderstatus='+orderstatus,
-//      method:'get',
-//      success:(response)=>{
-//   if(response){
+     $.ajax({
 
-//   }
-//      }
+      url:'/admin/changeorderstatus?orderid='+orderid+'&orderstatus='+orderstatus+'&proId='+proId+'&size='+size,
+      method:'get',
+      success:(response)=>{
+   if(response){
+       if(orderstatus === 'delivered' || orderstatus === 'cancel'){
+   
+       }
 
-//     })
-// }
+   }
+      }
+
+     })
+ }
 
 //product banner validation
 

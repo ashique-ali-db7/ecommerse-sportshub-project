@@ -900,6 +900,16 @@ router.post('/profileotheraddressedit',(req,res)=>{
   })
  })
 
+ //get user order details
+
+ router.get('/userorderdetails',verifyLoginForLoginpage,async(req,res)=>{
+  let user = req.session.user;
+  let cartcount =await producthelpers.getCartCount(req.session.user?._id);
+  let allCategory = await categoryhelpers.getCategory();
+   let userAllOrderedProducts =    await userhelpers.getAllOrderedProductForUser(req.session.user._id);
+   res.render('users/userorderdetails',{admin:false,user,cartcount,allCategory,userAllOrderedProducts});
+ })
+
 
 
 // get user logout

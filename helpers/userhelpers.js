@@ -288,7 +288,7 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
           
            if(orderdetails.paymentmethod === 'cod'){
             let status = "placed";
-            products.array.forEach(element => {
+            products.forEach(element => {
                 element.status = status;
             });
 
@@ -307,7 +307,8 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
          products:products,
         
          total:total,
-         date:new Date()
+         date:new Date().toISOString().slice(0,10),
+         longdate:new Date()
      }
      
      db.get().collection(collections.ORDER_DETAILS_COLLECTION).insertOne(orderObj).then((response)=>{
@@ -341,14 +342,19 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
            resolve(allOrders);
         })
     },
-    // changeOrderStatus:(orderid,orderstatus)=>{
+     changeOrderStatus:(orderid,orderstatus,proId,size)=>{
+       
+        console.log("1111");
+        console.log(orderid,orderstatus,proId,size);
 
-    //     return new Promise(async(resolve,reject)=>{
-    //        await db.get().collection(collections.ORDER_DETAILS_COLLECTION).updateOne({_id:objectId(orderid)},{$set:{status:orderstatus}})
-    //        resolve();
-    //     })
+         return new Promise(async(resolve,reject)=>{
+           await db.get().collection(collections.ORDER_DETAILS_COLLECTION).updateOne({_id:objectId(orderid),"products":{$elemMatch:{item:objectId(proId),size:size}}},{$set:{'products.$.status':orderstatus}}).then(()=>{
+               resolve();
+           })
+          
+         })
 
-    // },
+     },
     getorderedproditdetils:(orderid)=>{
 
         return new Promise(async(resolve,reject)=>{
@@ -358,6 +364,7 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
          {
              $match:{_id:objectId(orderid)}
          },
+       
          {
              $unwind:'$products'
          },
@@ -366,7 +373,9 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
                  item:"$products.item",
                   quantity:"$products.quantity",
                   size:"$products.size",
-                  subtotal:"$products.subtotal"
+                  subtotal:"$products.subtotal",
+                  status:"$products.status",
+                  _id:orderid
               }
             },
               {
@@ -380,11 +389,11 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
               },
               {
                   $project:{
-                      item:1,quantity:1,size:1,subtotal:1,productdetail:{$arrayElemAt:['$productdetail',0]}
+                      item:1,_id:1,quantity:1,size:1,status:1,subtotal:1,productdetail:{$arrayElemAt:['$productdetail',0]}
                   }
               }
      ]).toArray();
-
+console.log(vieworderproductdetails);
       resolve(vieworderproductdetails);
 
         })
@@ -454,7 +463,7 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
         return new Promise(async(resolve,reject)=>{
 
             let status = "placed";
-            products.array.forEach(element => {
+            products.forEach(element => {
                 element.status = status;
             });
       
@@ -507,7 +516,56 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
 //             resolve(userprofile)
 //     })
 // }
-    
+getAllOrderedProductForUser:(userId)=>{
+    return new Promise(async(resolve,reject)=>{
+        let vieworderproductdetails =  await db.get().collection(collections.ORDER_DETAILS_COLLECTION)
+        .aggregate([
+            {
+                $match:{userId:objectId(userId)}
+            },
+              
+            
+
+             
+          
+             {
+                 $unwind:'$products'
+             },
+              {
+                 $project:{
+                  
+                     item:"$products.item",
+                     quantity:"$products.quantity",
+                     size:"$products.size",
+                      subtotal:"$products.subtotal",
+                      status:"$products.status",
+                    date: "$date"
+                    
+                     
+                     
+                  }
+                },
+                 {
+                 $lookup:{
+                     from:collections.PRODUCTS_DETAILS_COLLECTION,
+                      localField:'item',
+                      foreignField:'_id',
+                as:'productdetail'
+                
+                          }
+                  },
+                  {
+                      $project:{
+                          item:1,quantity:1,size:1,status:1,subtotal:1,date:1,productdetail:{$arrayElemAt:['$productdetail',0]}
+                      }
+                  }
+        ]).toArray();
+      
+
+   resolve(vieworderproductdetails);
+         
+    })
+}
 
 
 

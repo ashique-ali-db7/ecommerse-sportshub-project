@@ -586,22 +586,27 @@ if(req.session.admin){
 });
 
 // change order status
-// router.get('/changeorderstatus',(req,res)=>{
-//   let orderid = req.query.orderid;
-//   let orderstatus = req.query.orderstatus;
+ router.get('/changeorderstatus',(req,res)=>{
+  
+   let orderid = req.query.orderid;
+   let orderstatus = req.query.orderstatus;
+   let proId = req.query.proId;
+   let size = req.query.size;
 
-//   userhelpers.changeOrderStatus(orderid,orderstatus).then(()=>{
-//     res.json({orderstatus:orderstatus})
-//   })
+     userhelpers.changeOrderStatus(orderid,orderstatus,proId,size).then(()=>{
+       res.json({orderstatus:orderstatus})
+    })
 
    
-// })
+ })
 
 //view orderd products
 router.get('/orderproductsview',(req,res)=>{
+  
 
-  let orderid =   req.query.orderid;
+  let orderid =  req.query.orderid;
  userhelpers.getorderedproditdetils(orderid).then((response)=>{
+   
   res.render('admin/view-ordered-products',{admin:true,response});
  })
 
