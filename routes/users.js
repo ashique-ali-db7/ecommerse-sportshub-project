@@ -20,8 +20,8 @@ var paypal = require('paypal-rest-sdk');
 
 paypal.configure({
   'mode': 'sandbox', //sandbox or live
-  'client_id': 'AWPBmW_X6WuWTPTePp1dNkK76OzvUn69WD51gJRyVJ7Tj1K7XuD435AM7WVle7kmBpNq4D-svJgAZN9e',
-  'client_secret': 'EHyPlmXTbb4EtoqZa8EtlNTVKO9Wzaz8GTqh8OnSWIy1LVP6CV2fWMCmNDe9OO5WS3YlcZuLlht7ZBWK'
+  client_id: process.env.client_id,
+  client_secret: process.env.client_secret
 });
 
 
