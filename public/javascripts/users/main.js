@@ -816,7 +816,14 @@ if(typeof placeOrderAddressId === 'undefined' || typeof paymentMethodForOrder ==
      if(response.codsuccess){
         
 location.replace('/ordersuccess');
-     }else{
+     }else if(response.data){
+console.log("macahneeee");
+      location.href=response.url;
+     }
+     
+     
+     
+     else{
       
          razorpayPayment(response);
      }

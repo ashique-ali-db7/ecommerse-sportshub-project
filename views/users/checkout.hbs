@@ -144,20 +144,21 @@
                                         </label>
                                     </div>
                                     <div class="pc-item">
-                                        <label for="pc-paypal">
+                                        <label for="pc-razorpay">
                                             razorpay
-                                            <input type="checkbox" onclick="paymentMethod('razorpay')" id="pc-paypal">
+                                            <input type="checkbox" onclick="paymentMethod('razorpay')" value="razorpay" id="pc-razorpay">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                     <div class="pc-item">
+                                        <label for="pc-paypal">
+                                            paypal
+                                            <input type="checkbox" onclick="paymentMethod('paypal')" value="paypal" id="pc-paypal">
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
 
-                                    <div class="pc-item">
-                                        <label for="pc-paypal">
-                                            paypal
-                                            <input type="checkbox" onclick="paymentMethod('paypal')" id="pc-paypal">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </div>
+                                    
                                 </div>
                                 <div class="order-btn">
                                     <button onclick="placeOrder('{{userId}}')" style="background-color: #e7ab3c;border:none" class="site-btn place-btn">Place Order</button>
