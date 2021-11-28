@@ -1005,7 +1005,13 @@ router.post('/profileotheraddressedit',(req,res)=>{
  })
 
 
+// userOrderProductcancel
 
+router.get('/usercancelorder',(req,res)=>{
+   userhelpers.userChangeOrderStatus(req.query.orderId,req.query.proId,req.query.size).then(()=>{
+     res.json({exist:true})
+   })
+})
 // get user logout
 router.get('/userlogout',(req,res)=>{
   

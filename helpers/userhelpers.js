@@ -344,13 +344,41 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
     },
      changeOrderStatus:(orderid,orderstatus,proId,size)=>{
        
-        console.log("1111");
+      
         console.log(orderid,orderstatus,proId,size);
 
          return new Promise(async(resolve,reject)=>{
-           await db.get().collection(collections.ORDER_DETAILS_COLLECTION).updateOne({_id:objectId(orderid),"products":{$elemMatch:{item:objectId(proId),size:size}}},{$set:{'products.$.status':orderstatus}}).then(()=>{
-               resolve();
-           })
+
+            let product =  await db.get().collection(collections.ORDER_DETAILS_COLLECTION).findOne({_id:objectId(orderid),"products":{$elemMatch:{item:objectId(proId),size:size}}});
+     
+            
+            if(orderstatus === 'canceled'){
+if(product.canceled){
+resolve();
+}else{
+    await db.get().collection(collections.ORDER_DETAILS_COLLECTION).updateOne({_id:objectId(orderid),"products":{$elemMatch:{item:objectId(proId),size:size}}},{$set:{'products.$.status':orderstatus,'products.$.canceled':true}}).then(()=>{
+        resolve();
+    })
+}
+
+            }
+
+          else if(orderstatus === 'delivered'){
+                if(product.delivered){
+                resolve();
+                }else{
+                    await db.get().collection(collections.ORDER_DETAILS_COLLECTION).updateOne({_id:objectId(orderid),"products":{$elemMatch:{item:objectId(proId),size:size}}},{$set:{'products.$.status':orderstatus,'products.$.delivered':true}}).then(()=>{
+                        resolve();
+                    })
+                }
+                
+                            }else{
+                                await db.get().collection(collections.ORDER_DETAILS_COLLECTION).updateOne({_id:objectId(orderid),"products":{$elemMatch:{item:objectId(proId),size:size}}},{$set:{'products.$.status':orderstatus}}).then(()=>{
+                                    resolve();
+                                })
+                            }
+
+         
           
          })
 
@@ -375,6 +403,8 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
                   size:"$products.size",
                   subtotal:"$products.subtotal",
                   status:"$products.status",
+                  canceled:"$products.canceled",
+                  delivered:"$products.delivered",
                   _id:orderid
               }
             },
@@ -389,10 +419,11 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
               },
               {
                   $project:{
-                      item:1,_id:1,quantity:1,size:1,status:1,subtotal:1,productdetail:{$arrayElemAt:['$productdetail',0]}
+                      item:1,_id:1,quantity:1,size:1,status:1,subtotal:1,canceled:1,delivered:1,productdetail:{$arrayElemAt:['$productdetail',0]}
                   }
               }
      ]).toArray();
+     console.log("nokalo");
 console.log(vieworderproductdetails);
       resolve(vieworderproductdetails);
 
@@ -539,6 +570,8 @@ getAllOrderedProductForUser:(userId)=>{
                      size:"$products.size",
                       subtotal:"$products.subtotal",
                       status:"$products.status",
+                      canceled:"$products.canceled",
+                      delivered:"$products.delivered",
                     date: "$date"
                     
                      
@@ -556,7 +589,7 @@ getAllOrderedProductForUser:(userId)=>{
                   },
                   {
                       $project:{
-                          item:1,quantity:1,size:1,status:1,subtotal:1,date:1,productdetail:{$arrayElemAt:['$productdetail',0]}
+                          item:1,quantity:1,size:1,status:1,subtotal:1,date:1,canceled:1,delivered:1,productdetail:{$arrayElemAt:['$productdetail',0]}
                       }
                   }
         ]).toArray();
@@ -564,6 +597,27 @@ getAllOrderedProductForUser:(userId)=>{
 
    resolve(vieworderproductdetails);
          
+    })
+},
+
+
+userChangeOrderStatus:(orderId,proId,size)=>{
+    
+    return new Promise(async(resolve,reject)=>{
+      let productcancel =  await db.get().collection(collections.ORDER_DETAILS_COLLECTION).findOne({_id:objectId(orderId),"products":{$elemMatch:{item:objectId(proId),size:size}}});
+
+     
+          if(productcancel.canceled){
+resolve();
+          }else{
+            await  db.get().collection(collections.ORDER_DETAILS_COLLECTION).updateOne({_id:objectId(orderId),"products":{$elemMatch:{item:objectId(proId),size:size}}},{$set:{'products.$.status':"canceled",'products.$.canceled':true}}).then((response)=>{
+                resolve();
+            })
+            
+          }
+    
+     
+      
     })
 }
 
