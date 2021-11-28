@@ -16,6 +16,15 @@ const authToken = process.env.authToken;
 const client = require("twilio")(accountId,authToken)
 
 
+var paypal = require('paypal-rest-sdk');
+
+paypal.configure({
+  'mode': 'sandbox', //sandbox or live
+  'client_id': 'AWPBmW_X6WuWTPTePp1dNkK76OzvUn69WD51gJRyVJ7Tj1K7XuD435AM7WVle7kmBpNq4D-svJgAZN9e',
+  'client_secret': 'EHyPlmXTbb4EtoqZa8EtlNTVKO9Wzaz8GTqh8OnSWIy1LVP6CV2fWMCmNDe9OO5WS3YlcZuLlht7ZBWK'
+});
+
+
 
 
 var confirmPasswordError = "";
@@ -746,7 +755,7 @@ router.post('/otheraddressedit',(req,res)=>{
  
    if(req.query?.paymentmethod === 'cod' ){
     res.json({codsuccess:true})
-   }else{
+   }else if(req.query?.paymentmethod === 'razorpay'){
       userhelpers.generateRazorpay(onlinepaymentid,totalPrice).then((response)=>{
       
        
@@ -754,6 +763,52 @@ router.post('/otheraddressedit',(req,res)=>{
       })
        
       
+   }else if(req.query?.paymentmethod === 'paypal'){
+    
+    var create_payment_json = {
+      "intent": "sale",
+      "payer": {
+          "payment_method": "paypal"
+      },
+      "redirect_urls": {
+          "return_url": "http://localhost:3000/success",
+          "cancel_url": "http://localhost:3000/cancel"
+      },
+      "transactions": [{
+          "item_list": {
+              "items": [{
+                  "name": "item",
+                  "sku": "item",
+                  "price": "25.00",
+                  "currency": "USD",
+                  "quantity": 1
+              }]
+          },
+          "amount": {
+              "currency": "USD",
+              "total": "25.00"
+          },
+          "description": "Sports hub."
+      }]
+  };
+
+  paypal.payment.create(create_payment_json, function (error, payment) {
+    if (error) {
+        throw error;
+    } else {
+       for(let i=0;i<payment.links.length;i++){
+  if(payment.links[i].rel === 'approval_url'){
+  
+ let url = payment.links[i].href;
+  res.json({data:true,url})
+  }
+       }
+        
+    }
+});
+   
+
+
    }
   
  })
@@ -908,6 +963,45 @@ router.post('/profileotheraddressedit',(req,res)=>{
   let allCategory = await categoryhelpers.getCategory();
    let userAllOrderedProducts =    await userhelpers.getAllOrderedProductForUser(req.session.user._id);
    res.render('users/userorderdetails',{admin:false,user,cartcount,allCategory,userAllOrderedProducts});
+ });
+
+
+
+ router.get('/success',(req,res)=>{
+  let user = req.session.user;
+  const payerId = req.query.PayerID;
+  const paymentId = req.query.paymentId;
+  console.log("hhh:",payerId,paymentId)
+
+  const execute_payment_json = {
+    "payer_id": payerId,
+    "transactions": [{
+        "amount": {
+            "currency": "USD",
+            "total": "25.00"
+        }
+    }]
+  };
+
+
+    paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+      if (error) {
+          console.log(error.response);
+          throw error;
+      } else {
+       
+          console.log(JSON.stringify(payment));
+          // res.send('Success');
+          res.render('users/ordersuccess',{user,admin:false,user,notheader:true})
+      }
+  });
+  
+
+  
+ });
+
+ router.get('/cancel',(req,res)=>{
+   console.log("cancelled");
  })
 
 

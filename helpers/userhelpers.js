@@ -318,7 +318,7 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
         
          resolve();
      })
-    }else if(orderdetails.paymentmethod === 'razorpay'){
+    }else{
        
      
 

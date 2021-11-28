@@ -18,13 +18,7 @@ const accountId = process.env.accountId;
 const authToken = process.env.authToken;
 const client = require("twilio")(accountId,authToken)
 
-var paypal = require('paypal-rest-sdk');
 
-paypal.configure({
-  'mode': 'sandbox', //sandbox or live
-  'client_id': 'AWPBmW_X6WuWTPTePp1dNkK76OzvUn69WD51gJRyVJ7Tj1K7XuD435AM7WVle7kmBpNq4D-svJgAZN9e',
-  'client_secret': 'EHyPlmXTbb4EtoqZa8EtlNTVKO9Wzaz8GTqh8OnSWIy1LVP6CV2fWMCmNDe9OO5WS3YlcZuLlht7ZBWK'
-});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
