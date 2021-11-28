@@ -901,6 +901,13 @@ router.post('/homepageproductstwo',(req,res)=>{
   })
 })
 
+// get offer managment
+
+router.get('/offermanagment',async(req,res)=>{
+  let categoryData =await categoryhelpers.getCategory();
+  res.render('admin/offermanagment',{admin:true,categoryData})
+})
+
 /* GET admin logout. */
 router.get('/adminlogout', function(req, res, next) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
