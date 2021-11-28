@@ -740,6 +740,12 @@ router.post('/otheraddressedit',(req,res)=>{
   
 
   let totalPrice =  await producthelpers.getTotalAmount(userId);
+  req.session.totalPrice = totalPrice;
+  
+  let sampleprice = (totalPrice/70).toFixed(2);
+ 
+
+ let  totalpriceForpaypal =  sampleprice.toString();
 
 
 
@@ -747,7 +753,7 @@ router.post('/otheraddressedit',(req,res)=>{
   let onlinepaymentid = new objectId();
 
   console.log("heubau");
-  console.log(req.session.products);
+ 
 
  userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId).then(()=>{
  
@@ -755,7 +761,10 @@ router.post('/otheraddressedit',(req,res)=>{
  
    if(req.query?.paymentmethod === 'cod' ){
     res.json({codsuccess:true})
-   }else if(req.query?.paymentmethod === 'razorpay'){
+   }
+   
+   
+   else if(req.query?.paymentmethod === 'razorpay'){
       userhelpers.generateRazorpay(onlinepaymentid,totalPrice).then((response)=>{
       
        
@@ -764,7 +773,8 @@ router.post('/otheraddressedit',(req,res)=>{
        
       
    }else if(req.query?.paymentmethod === 'paypal'){
-    
+    console.log("idh angane alla");
+    console.log(totalpriceForpaypal);
     var create_payment_json = {
       "intent": "sale",
       "payer": {
@@ -777,16 +787,16 @@ router.post('/otheraddressedit',(req,res)=>{
       "transactions": [{
           "item_list": {
               "items": [{
-                  "name": "item",
-                  "sku": "item",
-                  "price": "25.00",
+                
+               
+                  "price": totalpriceForpaypal,
                   "currency": "USD",
                   "quantity": 1
               }]
           },
           "amount": {
               "currency": "USD",
-              "total": "25.00"
+              "total": totalpriceForpaypal
           },
           "description": "Sports hub."
       }]
@@ -800,7 +810,7 @@ router.post('/otheraddressedit',(req,res)=>{
   if(payment.links[i].rel === 'approval_url'){
   
  let url = payment.links[i].href;
-  res.json({data:true,url})
+  res.json({data:true,url:url})
   }
        }
         
@@ -965,20 +975,37 @@ router.post('/profileotheraddressedit',(req,res)=>{
    res.render('users/userorderdetails',{admin:false,user,cartcount,allCategory,userAllOrderedProducts});
  });
 
+// paypal success
 
-
- router.get('/success',(req,res)=>{
+ router.get('/success',async(req,res)=>{
   let user = req.session.user;
   const payerId = req.query.PayerID;
   const paymentId = req.query.paymentId;
-  console.log("hhh:",payerId,paymentId)
+  let deliveryaddressAndMethod = await userhelpers.editotheraddress(req.session.deliveryaddressid,req.session.userId)
 
+  deliveryaddressAndMethod.paymentmethod = req.session.paymentmethod;
+
+
+ 
+
+  let products = await userhelpers.getCartProductList(req.session.userId);
+  
+
+  let totalPrice =  await producthelpers.getTotalAmount(req.session.userId);
+
+ 
+
+  let sampleprice = (totalPrice/70).toFixed(2);
+ 
+
+  let  totalpriceForpaypal =  sampleprice.toString();
+ 
   const execute_payment_json = {
     "payer_id": payerId,
     "transactions": [{
         "amount": {
             "currency": "USD",
-            "total": "25.00"
+            "total": totalpriceForpaypal
         }
     }]
   };
@@ -989,10 +1016,21 @@ router.post('/profileotheraddressedit',(req,res)=>{
           console.log(error.response);
           throw error;
       } else {
+      
+    
+
+        userhelpers.deleteCartForPayment(req.session.user._id).then(()=>{
+    
+          userhelpers.razorpayPlaceorder(deliveryaddressAndMethod,products,totalPrice,req.session.userId).then(()=>{
+        
+          
+            console.log(JSON.stringify(payment));
+         
+            res.render('users/ordersuccess',{user,admin:false,user,notheader:true})
+          })
        
-          console.log(JSON.stringify(payment));
-          // res.send('Success');
-          res.render('users/ordersuccess',{user,admin:false,user,notheader:true})
+        })
+
       }
   });
   
