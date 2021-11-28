@@ -1440,8 +1440,8 @@ $("#brandvalidationform").validate({
       method:'get',
       success:(response)=>{
    if(response){
-       if(orderstatus === 'delivered' || orderstatus === 'cancel'){
-   
+       if(orderstatus === 'delivered' || orderstatus === 'canceled'){
+   location.reload();
        }
 
    }

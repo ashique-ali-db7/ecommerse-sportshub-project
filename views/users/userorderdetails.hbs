@@ -4,9 +4,9 @@
             <div class="d-flex flex-column align-items-center text-center p-3 py-5">
               {{!-- <img class="rounded-circle mt-5" width="100px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"> --}}
               <span class="font-weight-bold">{{user.profile.fullname}}</span><span class="text-black-50">{{user.profile.email}}</span><span> </span></div>
-            <a  class="btn mt-2" style="width: 100%;background-color:#e7ab3c;border:1px solid #e7ab3c">Profile information</a>
-             <a  class="btn mt-2" style="width: 100%;background-color:#ffff;border:1px solid #e7ab3c">Manage Addresses</a>
-              <a  class="btn mt-2" style="width: 100%;background-color:#ffff;border:1px solid #e7ab3c">My orders</a>
+            <a href="/userprofile"  class="btn mt-2" style="width: 100%;background-color:#fff;border:1px solid #e7ab3c">Profile information</a>
+             <a href="/profileaddress" class="btn mt-2" style="width: 100%;background-color:#ffff;border:1px solid #e7ab3c">Manage Addresses</a>
+              <a href="/userorderdetails" class="btn mt-2" style="width: 100%;background-color:#e7ab3c;border:1px solid #e7ab3c">My orders</a>
         </div>
         <div class="col-md-8 border-right">
             
@@ -19,7 +19,7 @@
   <div class="card-body" style="background-color: #f5f5f5;">
     <div class="card">
   <div class="card-body">
-    <h6>{{this.status}}</h6>
+    <h6 id="{{this.item}}{{this.size}}uo">{{this.status}}</h6>
     <h6 class="mt-2 mb-3">{{this.date}}</h6>
    <div class="card">
   <div class="card-body" style="background-color: #f5f5f5;">
@@ -32,7 +32,16 @@
  <h6 class="mt-2"><span>{{this.productdetail.productname}}</span></h6>
  <h6 class="mt-2">Size: <span>{{this.size}}</span></h6>
  <h6 class="mt-2">Quantity: <span>{{this.quantity}}</span></h6>
- <button class="btn mt-3" style="background-color: #c9c6c6;" onclick="cancelproduct({{this._id}})">cancel</button>
+ {{#if this.canceled}}
+
+ {{else}}
+
+ {{#if this.delivered}}
+
+ {{else}}
+ <button class="btn mt-3" style="background-color: #c9c6c6;" onclick="cancelproduct('{{this._id}}','{{this.item}}','{{this.size}}')">cancel</button>
+ {{/if}}
+ {{/if}}
         </div>
 
     </div>

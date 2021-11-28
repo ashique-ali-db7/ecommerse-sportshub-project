@@ -21,6 +21,8 @@
 
 
 
+
+
 // verifuacation
 
 
@@ -943,6 +945,22 @@ if(willdelete){
 //     document.getElementById('profilsub').submit();
   
 // }
+
+function cancelproduct(orderId,proId,size){
+
+    // document.getElementById(proId+size+"uo").innerHTML = "Canceled";
+
+    $.ajax({
+        url:'/usercancelorder?orderId='+orderId+'&proId='+proId+'&size='+size,
+        method:'get',
+        success:(response)=>{
+            if(response.exist){
+                location.reload();
+            }
+        
+        }
+    })
+}
 
 
 

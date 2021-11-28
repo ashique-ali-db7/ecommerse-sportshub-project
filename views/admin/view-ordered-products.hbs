@@ -29,12 +29,30 @@
   <button class="btn btn-secondary dropdown-toggle" type="button" id="{{this.item}}{{this.size}}" data-bs-toggle="dropdown" aria-expanded="false">
    {{this.status}}
   </button>
+  {{#if this.canceled}}
+   
+
+
+  {{else}}
+    
+
+    {{#if this.delivered}}
+
+    {{else}}
   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
     <li><button class="dropdown-item" onclick="orderstatus('{{this._id}}','placed','{{this.item}}','{{this.size}}')">Placed</button></li>
     <li><button class="dropdown-item" onclick="orderstatus('{{this._id}}','pending','{{this.item}}','{{this.size}}')">Pending</button></li>
     <li><button class="dropdown-item" onclick="orderstatus('{{this._id}}','delivered','{{this.item}}','{{this.size}}')">delivered</button></li>
-    <li><button class="dropdown-item"onclick="orderstatus('{{this._id}}','cancel','{{this.item}}','{{this.size}}')">Cancel</button></li>
+    <li><button class="dropdown-item"onclick="orderstatus('{{this._id}}','canceled','{{this.item}}','{{this.size}}')">Cancel</button></li>
   </ul>
+
+    {{/if}}
+
+
+
+  {{/if}}
+  
+
 </div> 
         
           </div>
