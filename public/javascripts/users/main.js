@@ -16,7 +16,17 @@
 
 
 
-
+//   const Toast = Swal.mixin({
+//      toast: true,
+//      position: 'top-end',
+//      showConfirmButton: false,
+//      timer: 3000,
+//      timerProgressBar: true,
+//      didOpen: (toast) => {
+//        toast.addEventListener('mouseenter', Swal.stopTimer)
+//        toast.addEventListener('mouseleave', Swal.resumeTimer)
+//      }
+//    })
 
 
 
@@ -598,6 +608,14 @@ if(sizeOfProduct){
                 setTimeout(function(){ 
                      document.getElementById("addedcart").classList.add("selectsize")
                  }, 3000);
+
+
+                
+                  
+                //    Toast.fire({
+                //      icon: 'success',
+                //      title: 'Item added to cart'
+                //    })
                  
               
              }

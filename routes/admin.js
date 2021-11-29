@@ -918,6 +918,9 @@ producthelpers.addCategoryOffer(req.body).then((response)=>{
   if(response.exist){
     categoryofferExistError = "This category already have a offer"
     res.redirect('/admin/categoryoffermanagment')
+  }else{
+    console.log("hi monusse");
+    res.redirect('/admin/categoryoffermanagment')
   }
 })
 });
@@ -927,6 +930,20 @@ router.get('/categoryoffereditdata',(req,res)=>{
   producthelpers.categoryoffereditdataForEdit(req.query.categoryofferid).then((response)=>{
    
 res.send(response);
+  })
+});
+
+
+router.post('/editcategoryoffer',(req,res)=>{
+ producthelpers.editCategoryOffer(req.body).then(()=>{
+   res.redirect('/admin/categoryoffermanagment')
+ })
+})
+
+router.get('/deletecategoryoffer',(req,res)=>{
+ 
+  producthelpers.deleteCategoryOffers(req.query).then(()=>{
+    res.json({status:true})
   })
 })
 

@@ -1530,7 +1530,10 @@ function categoryOfferEdit(id){
         success:(response)=>{
             if(response){
 document.getElementById('discountedit').value = response.discountpercentage;
-document.getElementById('disabledoption').innerHTML = response.category
+document.getElementById('disabledoption').innerHTML = response.category;
+document.getElementById('hiddencategory').value = response.category;
+document.getElementById('startdateedit').value  = response.caofferstartdate;
+document.getElementById('enddateedit').value  = response.caofferenddate;
 
             }else{
 
@@ -1538,6 +1541,32 @@ document.getElementById('disabledoption').innerHTML = response.category
         }
 
     })
+}
+
+
+function deletecategoryoffer(category,offerpercentage){
+     
+    swal("Are you sure you want to remove "+category+" offer ?", {
+        buttons: true,
+      }).then((willdelete)=>{
+if(willdelete){
+    
+ 
+
+    $.ajax({
+        url:'/admin/deletecategoryoffer?category='+category+"&percentage="+offerpercentage,
+      
+        method:'get',
+        success:(response)=>{
+         if(response.status){
+             location.reload();
+         }
+        }
+    })
+}else{
+
+}
+      })
 }
 
 

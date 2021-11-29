@@ -32,7 +32,7 @@ return new Promise(async(resolve,reject)=>{
 
     
     await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION)
-    .insertOne({productid:data.productid,productname:data.productname,category:data.category,subcategory:data.subcategory,brand:data.brand,landingprice:data.landingprice,price:data.price,description:data.description,instock:[{id:smallid,size:'s',quantity:data.smallquantity},{id:mediumid,size:'m',quantity:data.mediumquantity},{id:largeid,size:'l',quantity:data.largequantity}]}).then((data)=>{
+    .insertOne({productid:data.productid,productname:data.productname,category:data.category,subcategory:data.subcategory,brand:data.brand,landingprice:data.price,price:data.price,description:data.description,instock:[{id:smallid,size:'s',quantity:data.smallquantity},{id:mediumid,size:'m',quantity:data.mediumquantity},{id:largeid,size:'l',quantity:data.largequantity}]}).then((data)=>{
       
         response.exist = false;
         response.data = data;
@@ -82,7 +82,7 @@ data.landingprice = Number(data.landingprice);
 
 
 await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION)
- .updateOne({productid:productid.productid},{$set:{productname:data.productname,category:data.category,subcategory:data.subcategory,brand:data.brand,landingprice:data.landingprice,price:data.price,description:data.description,instock:[{size:'s',quantity:data.smallquantity},{size:'m',quantity:data.mediumquantity},{size:'l',quantity:data.largequantity}]}}).then((status)=>{
+ .updateOne({productid:productid.productid},{$set:{productname:data.productname,category:data.category,subcategory:data.subcategory,brand:data.brand,landingprice:data.price,price:data.price,description:data.description,instock:[{size:'s',quantity:data.smallquantity},{size:'m',quantity:data.mediumquantity},{size:'l',quantity:data.largequantity}]}}).then((status)=>{
     resolve(status);
  })
 
@@ -439,7 +439,7 @@ let result={};
 
 
       let productsForoffer =  await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:data.category,offer:{$exists:false}}).toArray();
-      console.log(productsForoffer);
+    
     
 
 
@@ -451,7 +451,13 @@ let result={};
           
 
           db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).updateOne({_id:objectId(product._id)},{$set:{price:offerprice,offer:true,offerpercentage:data.discountpercentage}})
+
+        
       })
+
+      result.exist = false;
+        
+      resolve(result);
 
        
 
@@ -503,6 +509,57 @@ categoryoffereditdataForEdit:(id)=>{
         let categoryoffer = await db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).findOne({_id:objectId(id)});
         resolve(categoryoffer);
     })
+},
+editCategoryOffer:(data)=>{
+    return new Promise(async(resolve,reject)=>{
+        db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION)
+        .updateOne({category:data.category},{$set:{discountpercentage:data.discountpercentage,caofferstartdate:data.caofferstartdate,caofferenddate:data.caofferenddate}});
+
+
+        let productsForoffer =  await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:data.category,offer:{$exists:true}}).toArray();
+
+        await productsForoffer.map(async(product)=>{
+            let price = product.landingprice;
+            let offer = (price/100)*data.discountpercentage;
+            let offerprice = (price - offer).toFixed(0);
+            offerprice = Number(offerprice);
+            
+  
+            db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).updateOne({_id:objectId(product._id)},{$set:{price:offerprice,offer:true,offerpercentage:data.discountpercentage}})
+            resolve();
+  
+        })
+
+    })
+},
+
+deleteCategoryOffers:(data)=>{
+    console.log(data);
+return new Promise(async(resolve,reject)=>{
+   db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).deleteOne({category:data.category});
+
+   let allProducts = await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:data.category,offerpercentage:data.percentage}).toArray();
+   
+   await allProducts.map(async(product)=>{
+     let landingprice = product.landingprice;
+    // let offer = (price/100)*data.discountpercentage;
+    // let offerprice = (price - offer).toFixed(0);
+    // offerprice = Number(offerprice);
+
+    db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).updateOne({_id:objectId(product._id)},{$unset:{offer:"",offerpercentage:""}});
+    db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).updateOne({_id:objectId(product._id)},{$set:{price:landingprice}});
+
+
+    
+resolve();
+    // db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).updateOne({_id:objectId(product._id)},{$set:{price:offerprice,offer:true,offerpercentage:data.discountpercentage}})
+    // resolve();
+
+
+
+})
+
+})
 }
 
 
