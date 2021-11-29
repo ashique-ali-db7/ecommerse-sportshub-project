@@ -69,6 +69,8 @@
       <th scope="col">Offer %</th>
       <th scope="col">start date</th>
       <th scope="col">End date</th>
+       <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
     </tr>
   </thead>
   <tbody>
@@ -78,11 +80,84 @@
       <td>{{this.discount}}</td>
       <td>{{this.profferstartdate}}</td>
       <td>{{this.profferenddate}}</td>
+       <td><button onclick="productOfferEdit('{{this._id}}')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalforproductedit">Edit Offer</button></td>
+      <td><button class="btn btn-danger" onclick="deleteproductoffer('{{this.productname}}')">Delete Offer</button></td>
     </tr>
     {{/each}}
    
   </tbody>
 </table>
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalforproductedit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit offer</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <form action="/admin/editproductoffer" style="width: 80%;margin-left: 10%;"  method="post">
+
+
+
+
+    
+     
+<h4 style="text-align: center;" id="h4product"></h4>
+{{!-- <p style="color: red;">{{categoryofferExistError}}</p> --}}
+ <div class="row mb-3">
+           <div class="col-6" style="display: none;">
+          <input type="text" name="productname" id="hiddenproductname" value="">
+     {{!-- <select class="mt-4" style="height:45px;width:100%"  name="category" id="categoryedit">
+      <option selected="true" disabled="disabled" id="disabledoption" ></option>
+         {{#each categoryData}}
+         <option>{{this.category}}</option>
+         {{/each}} 
+     </select><br> --}}
+</div> 
+<div class="col-12">
+   <label class="mt-3" for="caofferstartdate">Discount in percentage</label><br>
+     <input type="text" name="discountpercentageproduct" id="discounteditproduct" placeholder="Discount in percentage" class="mt-4" style="height:45px;width:100%">
+</div>
+     </div>
+
+     <div class="row">
+
+         <div class="col-6 mb-3">
+ <label class="mt-3" for="caofferstartdate">Start date</label><br>
+  <input type="date" id="startdateeditproduct" name="profferstartdate" style="width:100%;height:45px;">
+         </div>
+
+           <div class="col-6">
+ <label class="mt-3" for="caofferenddate">End date</label><br>
+  <input type="date" id="enddateeditproduct" name="profferenddate" style="width:100%;height:45px;">
+         </div>
+
+     </div>
+
+
+
+
+
+     <div class="mt-4" style="text-align: center;">
+     <button type="submit" style="width: 50%;"  class="btn btn-primary">Submit</button>
+     </div>
+</form>
+      </div>
+    
+    </div>
+  </div>
+</div>
+
+
+
+
 
 
 

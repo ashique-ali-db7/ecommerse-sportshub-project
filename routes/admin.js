@@ -970,6 +970,27 @@ router.post('/productoffer',(req,res)=>{
    
 })
 
+
+router.get('/productOfferEdit',(req,res)=>{
+  producthelpers.getEditOfferProduct(req.query).then((response)=>{
+   
+    res.send(response)
+  })
+});
+
+
+router.post('/editproductoffer',(req,res)=>{
+producthelpers.editProductOffer(req.body).then(()=>{
+  res.redirect('/admin/productoffermanagment')
+})
+});
+
+router.get('/deleteproductoffer',(req,res)=>{
+
+  producthelpers.deleteProductOffers(req.query).then(()=>{
+    res.json({status:true})
+  })
+})
 //coupen managment
 
 router.get('/coupenmanagment',async(req,res)=>{

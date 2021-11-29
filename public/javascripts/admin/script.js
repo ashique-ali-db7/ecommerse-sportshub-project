@@ -1569,6 +1569,51 @@ if(willdelete){
       })
 }
 
+function productOfferEdit(id){
+    $.ajax({
+        url:'/admin/productOfferEdit?id='+id,
+        method:'get',
+        success:(response)=>{
+
+            document.getElementById('discounteditproduct').value = response.discount;
+            document.getElementById('h4product').innerHTML = response.productname;
+            document.getElementById('hiddenproductname').value = response.productname;
+            document.getElementById('startdateeditproduct').value  = response.profferstartdate;
+            document.getElementById('enddateeditproduct').value  = response.profferenddate;
+
+
+
+        }
+    })
+}
+
+function deleteproductoffer(productname){
+
+    swal("Are you sure you want to remove "+productname+" offer ?", {
+        buttons: true,
+      }).then((willdelete)=>{
+if(willdelete){
+    
+ 
+
+    $.ajax({
+        url:'/admin/deleteproductoffer?productname='+productname,
+      
+        method:'get',
+        success:(response)=>{
+         if(response.status){
+             location.reload();
+         }
+        }
+    })
+}else{
+
+}
+      })
+
+
+}
+
 
 
 
