@@ -922,6 +922,14 @@ producthelpers.addCategoryOffer(req.body).then((response)=>{
 })
 });
 
+
+router.get('/categoryoffereditdata',(req,res)=>{
+  producthelpers.categoryoffereditdataForEdit(req.query.categoryofferid).then((response)=>{
+   
+res.send(response);
+  })
+})
+
 // get product offer managment
 
 router.get('/productoffermanagment',async(req,res)=>{

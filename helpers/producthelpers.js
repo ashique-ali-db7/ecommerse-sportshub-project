@@ -496,6 +496,13 @@ getAllProductsOffers:()=>{
         let allproductOffers =  await db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).find().toArray();
         resolve(allproductOffers)
     })
+},
+
+categoryoffereditdataForEdit:(id)=>{
+    return new Promise(async(resolve,reject)=>{
+        let categoryoffer = await db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).findOne({_id:objectId(id)});
+        resolve(categoryoffer);
+    })
 }
 
 
