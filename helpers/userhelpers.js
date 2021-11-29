@@ -345,7 +345,7 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
      changeOrderStatus:(orderid,orderstatus,proId,size)=>{
        
       
-        console.log(orderid,orderstatus,proId,size);
+       
 
          return new Promise(async(resolve,reject)=>{
 
