@@ -1,5 +1,6 @@
 
 
+
 function formCategory(){
     var x = document.getElementById("categorychange").value;
   
@@ -1518,6 +1519,25 @@ function productBannerTwoFileValidation() {
             reader.readAsDataURL(fileInput.files[0]);
         }
     }
+}
+
+
+function categoryOfferEdit(id){
+   
+    $.ajax({
+        url:'/admin/categoryoffereditdata?categoryofferid='+id,
+        method:'get',
+        success:(response)=>{
+            if(response){
+document.getElementById('discountedit').value = response.discountpercentage;
+document.getElementById('disabledoption').innerHTML = response.category
+
+            }else{
+
+            }
+        }
+
+    })
 }
 
 
