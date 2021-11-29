@@ -157,7 +157,9 @@
                                 <div class="product-item">
                                     <div class="pi-pic">
                                         <img  src="/images/product-images/{{this._id}}1.png" alt="">
-                                        {{!-- <div class="sale pp-sale">Sale</div> --}}
+                                        {{#if offer}}
+                                         <div style="background-color:red" class="sale pp-sale">{{this.offerpercentage}} %off</div>
+                                         {{/if}}
                                         <div class="icon">
                                             <i class="icon_heart_alt"></i>
                                         </div>
@@ -174,7 +176,9 @@
                                         </a>
                                         <div class="product-price">
                                            <i class="fas fa-rupee-sign"></i> {{this.price}}
-                                             <span>{{this.landingprice}}</span> 
+                                           {{#if this.offer}}
+                                             <span>{{this.landingprice}}</span>
+                                             {{/if}} 
                                         </div>
                                     </div>
                                 </div>

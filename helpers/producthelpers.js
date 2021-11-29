@@ -4,6 +4,7 @@ var collections = require('../config/collection');
 
 var objectId = require('mongodb').ObjectId;
 const { response } = require('express');
+const { ItemAssignmentContext } = require('twilio/lib/rest/numbers/v2/regulatoryCompliance/bundle/itemAssignment');
 module.exports = {
     addProduct:(data)=>{
 data.smallquantity = Number(data.smallquantity);
@@ -420,6 +421,81 @@ categoryProductTwoForHomeProducts:(category)=>{
         let homeProductsTwo = await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:category}).toArray();
         resolve(homeProductsTwo);
       })
+},
+
+addCategoryOffer:(data)=>{
+    return new Promise(async(resolve,reject)=>{
+let result={};
+       let exist =  await db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).findOne({category:data.category});
+
+       if(exist){
+        
+           result.exist = true
+           resolve(result);
+       }
+       else{
+       
+       db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).insertOne(data); 
+
+
+      let productsForoffer =  await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:data.category,offer:{$exists:false}}).toArray();
+      console.log(productsForoffer);
+    
+
+
+      await productsForoffer.map(async(product)=>{
+          let price = product.landingprice;
+          let offer = (price/100)*data.discountpercentage;
+          let offerprice = (price - offer).toFixed(0);
+          offerprice = Number(offerprice);
+          
+
+          db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).updateOne({_id:objectId(product._id)},{$set:{price:offerprice,offer:true,offerpercentage:data.discountpercentage}})
+      })
+
+       
+
+       }
+    })
+},
+
+
+getAllCategoryOffers:()=>{
+    return new Promise(async(resolve,reject)=>{
+
+        let allCategoryOffers =await db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).find().toArray();
+    
+        resolve(allCategoryOffers)
+    })
+},
+addProductOffer:(data)=>{
+    return new Promise(async(resolve,reject)=>{
+        let response = {};
+        let productAlreadyHaveOffer =await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).findOne({productname:data.productname,offer:{$exists:true}});
+      if(productAlreadyHaveOffer){
+  response.exist = true;
+  resolve(response);
+      }else{
+          db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).insertOne(data);
+        let productdetails = await  db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).findOne({productname:data.productname});
+
+        let price = productdetails.landingprice;
+        let offer = (price/100)*data.discount;
+        let offerprice = (price - offer).toFixed(0);
+        offerprice = Number(offerprice);
+
+         db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).updateOne({productname:data.productname},{$set:{price:offerprice,offer:true,offerpercentage:data.discount}});
+         response.exist = false;
+         resolve(response);
+      }
+    })
+},
+
+getAllProductsOffers:()=>{
+    return new Promise(async(resolve,reject)=>{
+        let allproductOffers =  await db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).find().toArray();
+        resolve(allproductOffers)
+    })
 }
 
 

@@ -1,15 +1,34 @@
 <!-- The sidebar -->
 <div class="sidebar">
 
+
+
   <a  href="#home" style="font-size: 1.2rem;color:#fff"><i class="fas fa-home mt-3 me-2"></i>Dashboard</a>
   <a href="/admin/category-managment" style="font-size: 1.2rem;color:#fff"><i class="fas fa-tasks me-2"></i>Category managment</a>
   <a href="/admin/brand-managment" style="font-size: 1.2rem;color:#fff"><i class="fas fa-copyright me-2"></i>Brand managment</a>
   <a href="/admin/view-product" style="font-size: 1.2rem;color:#fff"><i class="fas fa-shopping-cart me-2"></i>Product managment</a>
+
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle ms-2" type="button" style="background-color: #142F43;font-size: 1.2rem;color:#fff;border:none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+  <i class="fas fa-sign-out-alt me-2"></i> Offer managment
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li><a class="dropdown-item" href="/admin/categoryoffermanagment">Category offer managment</a></li>
+    <li><a class="dropdown-item" href="/admin/productoffermanagment">Product offer managment</a></li>
+    <li><a class="dropdown-item" href="/admin/coupenmanagment">Coupen managment</a></li>
+  </ul>
+</div>
+
+
+
   <a href="/admin/usermanagment" style="font-size: 1.2rem;color:#fff"><i class="fas fa-users me-2"></i>User managment</a>
   <a href="/admin/ordermanagment" style="font-size: 1.2rem;color:#fff"><i class="fas fa-location-arrow me-2"></i>Order managment</a>
   <a href="/admin/bannermanagment" style="font-size: 1.2rem;color:#fff"><i class="fas fa-image me-2" ></i>Banner managment</a>
-  <a href="/admin/offermanagment" style="font-size: 1.2rem;color:#fff"><i class="fas fa-image me-2" ></i>Offer managment</a>
+  {{!-- <a href="/admin/categoryoffermanagment" style="font-size: 1.2rem;color:#fff"><i class="fas fa-align-justify me-2"></i>Category offer</a>
+  <a href="/admin/productoffermanagment" style="font-size: 1.2rem;color:#fff"><i class="fas fa-align-justify me-2"></i>Product offer</a> --}}
   <a href="/admin/adminlogout" style="font-size: 1.2rem;color:#fff"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+
+
   
 </div>
 

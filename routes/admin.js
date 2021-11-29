@@ -16,6 +16,8 @@ var subcategoryExistError = "";
 var productExistError = "";
 var varsubcategoryError = "";
 var invalidusername = "";
+let categoryofferExistError = "";
+let productofferExistError = ""
 
 const verifyLogin = (req,res,next)=>{
   if(req.session.admin){
@@ -901,12 +903,56 @@ router.post('/homepageproductstwo',(req,res)=>{
   })
 })
 
-// get offer managment
+// get category offer managment
 
-router.get('/offermanagment',async(req,res)=>{
+router.get('/categoryoffermanagment',async(req,res)=>{
   let categoryData =await categoryhelpers.getCategory();
-  res.render('admin/offermanagment',{admin:true,categoryData})
+  let categoryOffers = await producthelpers.getAllCategoryOffers();
+  res.render('admin/categoryoffermanagment',{admin:true,categoryData,categoryofferExistError,categoryOffers})
+  categoryofferExistError = ""
+});
+
+
+router.post('/categoryoffer',(req,res)=>{
+producthelpers.addCategoryOffer(req.body).then((response)=>{
+  if(response.exist){
+    categoryofferExistError = "This category already have a offer"
+    res.redirect('/admin/categoryoffermanagment')
+  }
 })
+});
+
+// get product offer managment
+
+router.get('/productoffermanagment',async(req,res)=>{
+  let categoryData =await categoryhelpers.getCategory();
+  let allproducts =  await producthelpers.getProduct();
+  let productOffers = await producthelpers.getAllProductsOffers();
+  res.render('admin/productoffermanagment',{admin:true,categoryData,allproducts,productofferExistError,productOffers});
+  productofferExistError = "";
+});
+
+
+router.post('/productoffer',(req,res)=>{
+  producthelpers.addProductOffer(req.body).then((response)=>{
+    if(response.exist){
+      productofferExistError = "This product already have a offer";
+      res.redirect('/admin/productoffermanagment')
+    }else{
+      res.redirect('/admin/productoffermanagment')
+    }
+  })
+   
+})
+
+//coupen managment
+
+router.get('/coupenmanagment',async(req,res)=>{
+  let categoryData =await categoryhelpers.getCategory();
+  res.render('admin/coupenmanagment',{admin:true,categoryData})
+});
+
+
 
 /* GET admin logout. */
 router.get('/adminlogout', function(req, res, next) {
