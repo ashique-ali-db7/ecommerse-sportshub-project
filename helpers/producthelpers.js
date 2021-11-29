@@ -5,6 +5,8 @@ var collections = require('../config/collection');
 var objectId = require('mongodb').ObjectId;
 const { response } = require('express');
 const { ItemAssignmentContext } = require('twilio/lib/rest/numbers/v2/regulatoryCompliance/bundle/itemAssignment');
+const collection = require('../config/collection');
+const { Collection } = require('mongodb');
 module.exports = {
     addProduct:(data)=>{
 data.smallquantity = Number(data.smallquantity);
@@ -485,7 +487,7 @@ addProductOffer:(data)=>{
           db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).insertOne(data);
         let productdetails = await  db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).findOne({productname:data.productname});
 
-        let price = productdetails.landingprice;
+        let price = productdetails?.landingprice;
         let offer = (price/100)*data.discount;
         let offerprice = (price - offer).toFixed(0);
         offerprice = Number(offerprice);
@@ -559,6 +561,49 @@ resolve();
 
 })
 
+})
+},
+
+
+getEditOfferProduct:(data)=>{
+    return new Promise(async(resolve,reject)=>{
+        let productOffer =await db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).findOne({_id:objectId(data.id)})
+        resolve(productOffer);
+    })
+},
+
+
+
+editProductOffer:(data)=>{
+    console.log(data);
+
+return new Promise(async(resolve,reject)=>{
+    db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).updateOne({productname:data.productname},{$set:{discount:data.discountpercentageproduct,profferstartdate:data.profferstartdate,profferenddate:data.profferenddate}});
+
+   let productdetails =  await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).findOne({productname:data.productname})
+
+   let price = productdetails.landingprice;
+   let offer = (price/100)*data.discountpercentageproduct;
+   let offerprice = (price - offer).toFixed(0);
+   offerprice = Number(offerprice);
+
+   db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).updateOne({productname:data.productname},{$set:{price:offerprice,offer:true,offerpercentage:data.discountpercentageproduct}});
+
+resolve();
+})
+
+},
+
+deleteProductOffers:(data)=>{
+   
+return new Promise(async(resolve,reject)=>{
+   db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).deleteOne({productname:data.productname});
+
+  let product =  await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).findOne({productname:data.productname});
+
+  db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).updateOne({productname:data.productname},{$set:{price:product.landingprice}});
+  db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).updateOne({productname:data.productname},{$unset:{offer:"",offerpercentage:""}});
+  resolve();
 })
 }
 
