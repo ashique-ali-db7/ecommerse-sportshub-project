@@ -15,9 +15,9 @@
                             <a href="#" class="primary-btn">Shop Now</a>
                         </div>
                     </div>
-                    {{!-- <div class="off-card">
+                     <div class="off-card">
                         <h2>Sale <span>50%</span></h2>
-                    </div> --}}
+                    </div> 
                 </div>
             </div>
             <div class="single-hero-items set-bg" data-setbg="/images/banner-images/{{bannerTwo._id}}.png">
@@ -97,7 +97,9 @@
                         <div class="product-item">
                             <div class="pi-pic">
                                 <img src="/images/product-images/{{this._id}}1.png" alt="">
-                                {{!-- <div class="sale">Sale</div> --}}
+                                {{#if offer}}
+                                         <div style="background-color:red" class="sale pp-sale">{{this.offerpercentage}} %off</div>
+                                         {{/if}}
                                 <div class="icon">
                                     <i class="icon_heart_alt"></i>
                                 </div>
@@ -247,7 +249,9 @@
                         <div class="product-item">
                             <div class="pi-pic">
                                 <img src="/images/product-images/{{this._id}}1.png" alt="">
-                                {{!-- <div class="sale">Sale</div> --}}
+                                {{#if offer}}
+                                         <div style="background-color:red" class="sale pp-sale">{{this.offerpercentage}} %off</div>
+                                         {{/if}}
                                 <div class="icon">
                                     <i class="icon_heart_alt"></i>
                                 </div>

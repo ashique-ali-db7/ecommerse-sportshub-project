@@ -819,7 +819,7 @@ if(typeof placeOrderAddressId === 'undefined' || typeof paymentMethodForOrder ==
         
 location.replace('/ordersuccess');
      }else if(response.data){
-console.log("macahneeee");
+
       location.href=response.url;
      }
      
