@@ -12,12 +12,12 @@
 
                             <h1 style="color: #fff;">{{bannerOne.bannerOneHeading}}</h1>
                             <p style="color: #ffff;">{{bannerOne.bannerOneDescription}}</p>
-                            <a href="#" class="primary-btn">Shop Now</a>
+                            <a href="/shopcategory?categoryname=shoes" class="primary-btn">Shop Now</a>
                         </div>
                     </div>
-                     <div class="off-card">
+                     {{!-- <div class="off-card">
                         <h2>Sale <span>50%</span></h2>
-                    </div> 
+                    </div>  --}}
                 </div>
             </div>
             <div class="single-hero-items set-bg" data-setbg="/images/banner-images/{{bannerTwo._id}}.png">
@@ -27,7 +27,7 @@
                             
                             <h1 style="color: #fff;">{{bannerTwo.bannerTwoHeading}}</h1>
                             <p style="color:#fff;">{{bannerTwo.bannerTwoDescription}}</p>
-                            <a href="#" class="primary-btn">Shop Now</a>
+                            <a href="/shopcategory?categoryname=clothings" class="primary-btn">Shop Now</a>
                         </div>
                     </div>
                     {{!-- <div class="off-card">
@@ -46,7 +46,7 @@
                 <div class="col-lg-4">
                  
                     <div class="single-banner">
-                        <img style="height:18rem;" src="/images/banner-images/{{categorybannerOne._id}}.png" alt="">
+                        <img style="height:16rem;" src="/images/banner-images/{{categorybannerOne._id}}.png" alt="">
                         <div class="inner-text">
                               <a href="/shopcategory?categoryname={{categorybannerOne.category}}" style="cursor: pointer;"><h4>{{categorybannerOne.category}}</h4></a> 
                         </div>
@@ -54,7 +54,7 @@
                 </div>
                 <div class="col-lg-4">
                     <div class="single-banner">
-                        <img style="height:18rem;" src="/images/banner-images/{{categorybannerTwo._id}}.png" alt="">
+                        <img style="height:16rem;" src="/images/banner-images/{{categorybannerTwo._id}}.png" alt="">
                         <div class="inner-text">
                             <a href="/shopcategory?categoryname={{categorybannerTwo.category}}" style="cursor: pointer;"><h4>{{categorybannerTwo.category}}</h4></a> 
                         </div>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="col-lg-4">
                     <div class="single-banner">
-                        <img style="height:18rem;" src="/images/banner-images/{{categorybannerThree._id}}.png" alt="">
+                        <img style="height:16rem;" src="/images/banner-images/{{categorybannerThree._id}}.png" alt="">
                         <div class="inner-text">
                             <a href="/shopcategory?categoryname={{categorybannerThree.category}}" style="cursor: pointer;"><h4>{{categorybannerThree.category}}</h4></a> 
                         </div>
@@ -79,14 +79,14 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="product-large set-bg" data-setbg="/images/banner-images/{{productOneForHomecategory._id}}.png">
-                        <h2>{{productOneForHomecategory.category}}</h2>
-                        <a href="/shopcategory?categoryname={{productOneForHomecategory.category}}">Discover More</a>
+                        <h2 >Sports {{productOneForHomecategory.category}}</h2>
+                        <a  href="/shopcategory?categoryname={{productOneForHomecategory.category}}">Discover More</a>
                     </div>
                 </div>
                 <div class="col-lg-8 offset-lg-1">
                     <div class="filter-control">
                         <ul>
-                            <li class="active">All products</li>
+                            <li class="active">Sports {{productOneForHomecategory.category}}</li>
                             {{!-- <li>Cricket</li>
                             <li>Tennis</li>
                             <li>Basketball</li> --}}
@@ -96,9 +96,9 @@
                         {{#each productOneForHomecategoryProducts}}
                         <div class="product-item">
                             <div class="pi-pic">
-                                <img src="/images/product-images/{{this._id}}1.png" alt="">
+                              <a href="/product?productid={{this.productid}}"><img src="/images/product-images/{{this._id}}1.png" alt=""></a>  
                                 {{#if offer}}
-                                         <div style="background-color:red" class="sale pp-sale">{{this.offerpercentage}} %off</div>
+                                         <div style="background-color:#e7ab3c;font-size:0.8rem" class="sale pp-sale">{{this.offerpercentage}} %off</div>
                                          {{/if}}
                                 <div class="icon">
                                     <i class="icon_heart_alt"></i>
@@ -238,7 +238,7 @@
                 <div class="col-lg-8">
                     <div class="filter-control">
                         <ul>
-                            <li class="active">All products</li>
+                            <li class="active">Sports {{productTwoForHomecategory.category}} </li>
                             {{!-- <li>HandBag</li>
                             <li>Shoes</li>
                             <li>Accessories</li> --}}
@@ -248,9 +248,9 @@
                           {{#each productTwoForHomecategoryProducts}}
                         <div class="product-item">
                             <div class="pi-pic">
-                                <img src="/images/product-images/{{this._id}}1.png" alt="">
+                             <a href="/product?productid={{this.productid}}"><img src="/images/product-images/{{this._id}}1.png" alt=""></a>   
                                 {{#if offer}}
-                                         <div style="background-color:red" class="sale pp-sale">{{this.offerpercentage}} %off</div>
+                                         <div style="background-color:#e7ab3c" class="sale pp-sale">{{this.offerpercentage}} %off</div>
                                          {{/if}}
                                 <div class="icon">
                                     <i class="icon_heart_alt"></i>
@@ -343,7 +343,7 @@
                 </div>
                 <div class="col-lg-3 offset-lg-1">
                     <div class="product-large set-bg m-large" data-setbg="images/banner-images/{{productTwoForHomecategory._id}}.png">
-                        <h2>{{productTwoForHomecategory.category}}</h2>
+                        <h2>Sports {{productTwoForHomecategory.category}}</h2>
                         <a href="/shopcategory?categoryname={{productTwoForHomecategory.category}}">Discover More</a>
                     </div>
                 </div>
@@ -468,7 +468,9 @@
                     </div>
                 </div>
             </div> --}}
-            <div class="benefit-items">
+            <section>
+                 <div class="container">
+             <div class="benefit-items">
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="single-benefit">
@@ -477,7 +479,7 @@
                             </div>
                             <div class="sb-text">
                                 <h6>Free Shipping</h6>
-                                <p>For all order over 99$</p>
+                                <p>For all orders</p>
                             </div>
                         </div>
                     </div>
@@ -506,5 +508,5 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> 
     <!-- Latest Blog Section End -->

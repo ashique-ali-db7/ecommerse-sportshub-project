@@ -927,7 +927,7 @@ if (!allowedExtensions.exec(filePath)) {
             scalable: false,
             zoomable: false,
             movable: false,
-            aspectRatio: 16 / 19,
+            aspectRatio: 23 / 12,
             //  preview: '.preview',
             minCropBoxWidth: 180,
             minCropBoxHeight: 240,
@@ -985,7 +985,7 @@ if (!allowedExtensions.exec(filePath)) {
             scalable: false,
             zoomable: false,
             movable: false,
-            aspectRatio: 16 / 19,
+            aspectRatio: 23 / 12,
             //  preview: '.preview',
             minCropBoxWidth: 180,
             minCropBoxHeight: 240,
@@ -1042,7 +1042,7 @@ if (!allowedExtensions.exec(filePath)) {
             scalable: false,
             zoomable: false,
             movable: false,
-            aspectRatio: 16 / 19,
+            aspectRatio: 23 / 12,
             //  preview: '.preview',
             minCropBoxWidth: 180,
             minCropBoxHeight: 240,
@@ -1087,6 +1087,16 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $('#ordermange').DataTable();
+} );
+
+$(document).ready(function() {
+    $('#productoffertable').DataTable();
+} );
+
+
+
+$(document).ready(function() {
+    $('#categoryoffertable').DataTable();
 } );
 
 //modal
@@ -1225,13 +1235,120 @@ $("#brandvalidationform").validate({
        
         brandName:{
             required:true,
-            maxlength:10
+           
         },
         brandDescription:{
             required:true,
            
         },
         logo:{
+            required:true,
+           
+        }
+        
+    }
+   
+  
+});
+
+$("#productoffer").validate({
+    rules:{
+       
+        productname:{
+            required:true,
+           
+        },
+        discount:{
+            required:true,
+            number:true,
+            max:100
+           
+        },
+        profferstartdate:{
+            required:true,
+           
+        },
+        profferenddate:{
+            required:true,
+           
+        }
+        
+    }
+   
+  
+});
+
+
+$("#editproductoffer").validate({
+    rules:{
+       
+        
+        discountpercentageproduct:{
+            required:true,
+            number:true,
+            max:100
+           
+        },
+        profferstartdate:{
+            required:true,
+           
+        },
+        profferenddate:{
+            required:true,
+           
+        }
+        
+    }
+   
+  
+});
+
+
+
+$("#categoryoffer").validate({
+    rules:{
+        category:{
+            required:true,
+           
+        },
+        
+        discountpercentage:{
+            required:true,
+            number:true,
+            max:100
+           
+        },
+        caofferstartdate:{
+            required:true,
+           
+        },
+        caofferenddate:{
+            required:true,
+           
+        }
+        
+    }
+   
+  
+});
+
+
+
+$("#editcategoryoffer").validate({
+    rules:{
+     
+        
+        discountpercentage:{
+            required:true,
+            number:true,
+            max:100
+           
+        },
+        caofferstartdate:{
+            required:true,
+           
+        },
+        caofferenddate:{
             required:true,
            
         }
@@ -1313,7 +1430,7 @@ $("#brandvalidationform").validate({
            
             banner1heading:{
                 required:true,
-               maxlength:20
+               maxlength:30
             },
             banner1description:{
                 required:true,
@@ -1337,7 +1454,7 @@ $("#brandvalidationform").validate({
            
             banner2heading:{
                 required:true,
-               maxlength:20
+               maxlength:30
             },
             banner2description:{
                 required:true,
@@ -1613,6 +1730,94 @@ if(willdelete){
 
 
 }
+
+// //chart
+// let myChart = document.getElementById('myChart').getContext('2d');
+
+// let brandWiseChartOrders = new Chart(myChart,{
+//     type:'bar'
+// })
+
+
+
+
+const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Clothings', 'Shoes', 'Accessories', 'Green'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+
+
+
+
+// const ctx = document.getElementById('myChart2').getContext('2d');
+// const myChart2 = new Chart(ctx, {
+//     type: 'bar',
+//     data: {
+//         labels: ['Clothings', 'Shoes', 'Accessories', 'Green'],
+//         datasets: [{
+//             label: '# of Votes',
+//             data: [12, 19, 3, 5, 2, 3],
+//             backgroundColor: [
+//                 'rgba(255, 99, 132, 0.2)',
+//                 'rgba(54, 162, 235, 0.2)',
+//                 'rgba(255, 206, 86, 0.2)',
+//                 'rgba(75, 192, 192, 0.2)',
+//                 'rgba(153, 102, 255, 0.2)',
+//                 'rgba(255, 159, 64, 0.2)'
+//             ],
+//             borderColor: [
+//                 'rgba(255, 99, 132, 1)',
+//                 'rgba(54, 162, 235, 1)',
+//                 'rgba(255, 206, 86, 1)',
+//                 'rgba(75, 192, 192, 1)',
+//                 'rgba(153, 102, 255, 1)',
+//                 'rgba(255, 159, 64, 1)'
+//             ],
+//             borderWidth: 1
+//         }]
+//     },
+//     options: {
+//         scales: {
+//             y: {
+//                 beginAtZero: true
+//             }
+//         }
+//     }
+// });
+
+
 
 
 

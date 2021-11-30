@@ -40,7 +40,7 @@
           
             <div class="inner-header">
                 <div class="row">
-                    <div class="col-lg-2 col-md-2">
+                    <div class="col-lg-3 col-md-2">
                         <div class="logo">
                           
                                  {{!-- <img src="images/users/logo.png" alt="">  --}}
@@ -48,16 +48,16 @@
                            
                         </div>
                     </div>
-                    <div class="col-lg-7 col-md-7">
-                        <div class="advanced-search">
-                            <button type="button" class="category-btn">All Categories</button>
+                    <div class="col-lg-6 col-md-7">
+                        <div class="advanced-search"  >
+                           <button type="button" class="category-btn" style="width: 100%;">Search products</button>  
                             <div class="input-group">
                                 <input type="text" placeholder="What do you need?">
-                                <button type="button"><i class="fas fa-search"></i></button>
+                                <button type="button" ><i class="fas fa-search"></i></button>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 text-right col-md-3">
+                    <div class="col-lg-3 text-right col-md-3 ml-auto">
                         <ul class="nav-right">
 
                          <li class="heart-icon">
@@ -126,7 +126,7 @@
                             {{else}}
                             <li><a href="/userlogin" class="btn btn-primary login-button">Login</a></li>
                             {{/if}}
-                            <li><p>{{user.name}}</p></li>
+                            {{!-- <li><p>{{user.name}}</p></li> --}}
                         </ul>
                     </div>
                 </div>

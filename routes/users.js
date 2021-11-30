@@ -34,6 +34,7 @@ var phonenumberExistError = "";
 var blockedError = "";
 var cartItemsEmpty = "";
 var existDefaultAddress = "";
+var paypalcancel = "";
 
 
 // verify login middleware
@@ -104,7 +105,9 @@ let productTwoForHomecategorysubcategory = await categoryhelpers.allSubCategorie
 let productTwoForHomecategoryProducts = await producthelpers.categoryProductTwoForHomeProducts(productTwoForHomecategory.category);
 
 
+let todayDate = new Date().toISOString().slice(0, 10);
 
+// producthelpers.deleteExpiredproductoffers(todayDate)
 
 
 
@@ -191,8 +194,9 @@ router.get('/checkout',verifyLoginForLoginpage, async(req, res) =>{
       let total =  await producthelpers.getTotalAmount(req.session.user._id);
       let cartItems = await producthelpers.getCartProducts(userId);
       if(cartItems.length>=1){
-        res.render('users/checkout',{ admin:false,user,notheader:true,defaultaddress,otheraddress,total,cartItems,userId,existDefaultAddress});
+        res.render('users/checkout',{ admin:false,user,notheader:true,defaultaddress,otheraddress,total,cartItems,userId,existDefaultAddress,paypalcancel});
         existDefaultAddress = "";
+        paypalcancel = "";
       }else{
        
         res.redirect('/')
@@ -1039,7 +1043,8 @@ router.post('/profileotheraddressedit',(req,res)=>{
  });
 
  router.get('/cancel',(req,res)=>{
-   console.log("cancelled");
+   paypalcancel = "payment is cancelled you can try again"
+   res.redirect('/checkout')
  })
 
 

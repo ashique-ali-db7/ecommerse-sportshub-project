@@ -7,6 +7,12 @@
                         <a href="/"><i class="fa fa-home"></i> Home</a>
                         <a href="/">Shop</a>
                         <span>Check Out</span>
+                                      <div class="logo" style="float:right">
+                          
+                                 {{!-- <img src="images/users/logo.png" alt="">  --}}
+                                <h4 style="color:#e7ab3c;">Sportshub</h4> 
+                           
+                        </div>
                     </div>
                 </div>
             </div>
@@ -38,7 +44,7 @@
  <p>pincode: {{defaultaddress.pincode}}</p>
  <p>mobile number: <span  style="font-size: 1.1rem;color:black">{{defaultaddress.mobilenumber}}</span></p>
   {{!-- <button style="background-color: #ffff;" class="text-danger" >Remove</button>  --}}
-   <button class="text-primary" style="background-color: #ffff; width:12%" onclick="editdefaultaddress('{{defaultaddress._id}}')"  data-toggle="modal" data-target="#modaladdressFormEdit" >Edit</button>
+   <button class="text-primary" style="background-color: #ffff;" onclick="editdefaultaddress('{{defaultaddress._id}}')"  data-toggle="modal" data-target="#modaladdressFormEdit" >Edit</button>
  </div>
  </div>
   </div>
@@ -120,6 +126,10 @@
                     </div>
                     <div class="col-lg-4">
                       <p style="color: red;" id="placeordervalidation" class="selectsize" >You should select address and payment method for place order</p>
+                       {{#if paypalcancel}}
+  <p style="color: red;" id="paypalcancel" hidden>{{paypalcancel}}</p>
+                      {{/if}}
+                     
                         {{!-- <div class="checkout-content">
                             <input type="text" placeholder="Enter Your Coupon Code">
                         </div> --}}
