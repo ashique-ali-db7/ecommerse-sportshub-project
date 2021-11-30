@@ -605,7 +605,14 @@ return new Promise(async(resolve,reject)=>{
   db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).updateOne({productname:data.productname},{$unset:{offer:"",offerpercentage:""}});
   resolve();
 })
-}
+},
+
+
+// deleteExpiredproductoffers:(date)=>{
+// return new Promise(async(resolve,reject)=>{
+//     resolve();
+// })
+// }
 
 
 }

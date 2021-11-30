@@ -182,6 +182,11 @@
                                     <p>{{response.description}}</p>
                                     <h4>{{response.price}} <span>{{response.landingprice}}</span></h4>
                                 </div>
+                                {{#if response.offer}}
+                                <div style="margin:0">
+                                   <p class="text-danger">({{response.offerpercentage}}<span> % off)</span></p>
+                                </div>
+                                {{/if}}
                                 {{!-- <div class="pd-color">
                                     <h6>Color</h6>
                                     <div class="pd-color-choose">

@@ -93,13 +93,15 @@ await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
             let response = {};
             let bannerOne =await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({banner:"one"});
             if(bannerOne){
-                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({banner:"one"},{$set:{bannerOneHeading:data.banner1heading,bannerOneDescription:data.banner1description}})
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION)
+                .updateOne({banner:"one"},{$set:{bannerOneHeading:data.banner1heading,bannerOneDescription:data.banner1description}})
                
                 response.id = bannerOne._id;
                 response.exist = true;
                 resolve(response);
             }else{
-                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({banner:"one",bannerOneHeading:data.banner1heading,bannerOneDescription:data.banner1description}).then((response)=>{
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION)
+                .insertOne({banner:"one",bannerOneHeading:data.banner1heading,bannerOneDescription:data.banner1description}).then((response)=>{
                    
                     response.id = response.insertedId;
                     response.exist = false;

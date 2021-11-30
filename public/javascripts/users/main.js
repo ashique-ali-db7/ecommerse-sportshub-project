@@ -338,7 +338,67 @@ $("#userlogin").validate({
   
 });
 
+$("#phonenumberpage").validate({
+    rules:{
+        number:{
+            required:true,
+            maxlength:10,
+            minlength:10
+          
+        },
+       
+       
+       
+       
+       
+       
+        
+    }
+   
+  
+});
 
+
+
+
+$("#profleedit").validate({
+    rules:{
+        fullname:{
+            required:true,
+            
+        },
+        email:{
+            required:true,
+            email:true
+        },
+        mobilenumber:{
+            required:true,
+            number:true,
+            maxlength:10,
+            minlength:10
+        },
+        location:{
+            required:true,
+            
+        },
+        country:{
+            required:true,
+            
+        },
+        state:{
+            required:true
+        }
+
+       
+       
+       
+       
+       
+        
+    }
+   
+  
+});
 
 $("#modaladdaddress").validate({
     rules:{
@@ -607,7 +667,7 @@ if(sizeOfProduct){
                  document.getElementById("addedcart").classList.remove("selectsize")
                 setTimeout(function(){ 
                      document.getElementById("addedcart").classList.add("selectsize")
-                 }, 3000);
+                 }, 2000);
 
 
                 
@@ -979,6 +1039,11 @@ function cancelproduct(orderId,proId,size){
         }
     })
 }
+
+
+ if(document.getElementById('paypalcancel')){
+     swal("Payment is cancelled you can try again!");
+ }
 
 
 
