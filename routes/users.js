@@ -107,11 +107,15 @@ let productTwoForHomecategoryProducts = await producthelpers.categoryProductTwoF
 
 let todayDate = new Date().toISOString().slice(0, 10);
 
-// producthelpers.deleteExpiredproductoffers(todayDate)
+ producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
+   producthelpers.deleteCategoryoffers(todayDate).then(()=>{
+    res.render('users/home',{ admin:false,user,cartcount,allCategory,bannerOne,bannerTwo,categorybannerOne,categorybannerTwo,categorybannerThree,productOneForHomecategoryProducts,productTwoForHomecategoryProducts,productOneForHomecategory,productTwoForHomecategory});
+   })
+ })
 
 
 
-  res.render('users/home',{ admin:false,user,cartcount,allCategory,bannerOne,bannerTwo,categorybannerOne,categorybannerTwo,categorybannerThree,productOneForHomecategoryProducts,productTwoForHomecategoryProducts,productOneForHomecategory,productTwoForHomecategory});
+  
 });
 
 
