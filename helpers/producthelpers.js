@@ -480,6 +480,8 @@ addProductOffer:(data)=>{
     return new Promise(async(resolve,reject)=>{
         let response = {};
         let productAlreadyHaveOffer =await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).findOne({productname:data.productname,offer:{$exists:true}});
+        console.log("idadada");
+        console.log(productAlreadyHaveOffer);
       if(productAlreadyHaveOffer){
   response.exist = true;
   resolve(response);
@@ -514,11 +516,12 @@ categoryoffereditdataForEdit:(id)=>{
 },
 editCategoryOffer:(data)=>{
     return new Promise(async(resolve,reject)=>{
+        let dataOfProductOffer = await db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).findOne({category:data.category})
         db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION)
         .updateOne({category:data.category},{$set:{discountpercentage:data.discountpercentage,caofferstartdate:data.caofferstartdate,caofferenddate:data.caofferenddate}});
 
 
-        let productsForoffer =  await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:data.category,offer:{$exists:true}}).toArray();
+        let productsForoffer =  await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:data.category,offer:{$exists:true},offerpercentage:dataOfProductOffer.discountpercentage}).toArray();
 
         await productsForoffer.map(async(product)=>{
             let price = product.landingprice;
@@ -608,11 +611,62 @@ return new Promise(async(resolve,reject)=>{
 },
 
 
-// deleteExpiredproductoffers:(date)=>{
-// return new Promise(async(resolve,reject)=>{
-//     resolve();
-// })
-// }
+ deleteExpiredproductoffers:(date)=>{
+ 
+ return new Promise(async(resolve,reject)=>{
+
+  let existingProductOffer =  await db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).findOne({profferenddate:date});
+
+   if(existingProductOffer){
+console.log("monnnusseee");
+db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).deleteOne({productname:existingProductOffer.productname});
+
+
+let product =  await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).findOne({productname:existingProductOffer.productname});
+
+db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).updateOne({productname:product.productname},{$set:{price:product.landingprice}});
+db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).updateOne({productname:product.productname},{$unset:{offer:"",offerpercentage:""}});
+resolve();
+
+   }else{
+    resolve(); 
+   }
+    
+ })
+ },
+
+
+ deleteCategoryoffers:(date)=>{
+ return new Promise(async(resolve,reject)=>{
+
+    let existingCategoryOffer = await db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).findOne({caofferenddate:date});
+    if(existingCategoryOffer){
+db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).deleteOne({caofferenddate:date})
+
+
+        let allProducts = await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:existingCategoryOffer.category,offerpercentage:existingCategoryOffer.discountpercentage}).toArray();
+
+         await allProducts.map(async(product)=>{
+        //   let landingprice = product.landingprice;
+        //  // let offer = (price/100)*data.discountpercentage;
+        //  // let offerprice = (price - offer).toFixed(0);
+        //  // offerprice = Number(offerprice);
+     
+          db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).updateOne({_id:objectId(product._id)},{$unset:{offer:"",offerpercentage:""}});
+          db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).updateOne({_id:objectId(product._id)},{$set:{price:product.landingprice}});
+
+
+         resolve();
+
+    }
+         )
+ }else{
+     resolve();
+ }
+})
+ }
+
+
 
 
 }
