@@ -14,43 +14,49 @@
     <!-- Breadcrumb Form Section Begin -->
 
     <!-- Register Section Begin -->
+    
+
+
+
+    <!-- Register Section Begin -->
     <div class="register-login-section spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 offset-lg-3">
-                    <div class="login-form " >
-                        
-                        <form action="/userlogin" method="post" id="userlogin"style="border:1px solid #e7ab3c;width:65%;height:75%" class="ml-auto mr-auto p-5" >
-                     
-                        <p style="color: red;">{{loginError}}</p>
+                    <div class="login-form">
+                        {{!-- <h2>Login</h2> --}}
+                        <form action="/userlogin" method="post" id="userlogin" style="border: 1px solid #e7ab3c;" class="p-5">
+                        <h2 class="text-center">Login</h2>
+                                                <p style="color: red;">{{loginError}}</p>
                         <p style="color: red;">{{blockedError}}</p>
                             <div class="group-input">
-                                <label for="username">email address</label>
-                                <input type="text" name="emailaddress">
+                               
+                                <input type="text" placeholder="Email" id="username" name="emailaddress">
                             </div>
                             <div class="group-input">
-                                <label for="">Password</label>
-                                <input type="password" name="password" >
+                              
+                                <input type="password" placeholder="password" id="pass" name="password">
                             </div>
-                            {{!-- <div class="group-input gi-check">
+                            <div class="group-input gi-check">
                                 <div class="gi-more">
-                                     <label for="save-pass">
+                                    {{!-- <label for="save-pass">
                                         Save Password
                                         <input type="checkbox" id="save-pass">
                                         <span class="checkmark"></span>
-                                    </label> 
-                                  
+                                    </label> --}}
+                                    <a href="/loginidentify" style="color:blue" class="forget-pass">Forget your Password</a>
                                 </div>
-                            </div> --}}
+                            </div>
                             <button type="submit" class="site-btn login-btn">Sign In</button>
+                               <div class="switch-login">
+                            <a href="/register" style="color:blue;text-decoration: none;" class="">Create An Account</a>
+                        </div>
+                         <div class="switch-login">
+                            <a href="/phonenumberpage" style="color:blue" class="">Login with mobile number</a>
                         </form>
-                      <div class="switch-login">
-                            <a href="/loginidentify" class="text-primary">Forgotten password?</a><br><br>
-                          <p style="display:inline-block">don't have an account</p>  <a href="/register" class="text-primary">Create An Account</a><br>
-                          <p style="display:inline-block">Login with mobile number</p>  <a href="/phonenumberpage" class="text-primary">click here</a>
+                     
                         </div>
                     </div>
-                      
                 </div>
             </div>
         </div>
