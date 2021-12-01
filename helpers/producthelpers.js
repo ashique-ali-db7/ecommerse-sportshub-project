@@ -618,7 +618,7 @@ return new Promise(async(resolve,reject)=>{
   let existingProductOffer =  await db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).findOne({profferenddate:date});
 
    if(existingProductOffer){
-console.log("monnnusseee");
+
 db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).deleteOne({productname:existingProductOffer.productname});
 
 
@@ -664,6 +664,247 @@ db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).deleteOne({cao
      resolve();
  }
 })
+ },
+
+ deliveredOrders:()=>{
+     return new Promise(async(resolve,reject)=>{
+      let result =  await  db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+            {
+                 $unwind:"$products"
+             },
+             {
+                 $match:{'products.status':'delivered'}
+             },
+             {
+                 $count:"deliverdorders"
+             }
+         ]).toArray();
+      if(result[0]?.deliverdorders){
+        resolve(result[0].deliverdorders);
+      }else{
+          resolve();
+      }
+        
+     })
+ },
+ placedOrders:()=>{
+    return new Promise(async(resolve,reject)=>{
+        let result =  await  db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+              {
+                   $unwind:"$products"
+               },
+               {
+                   $match:{'products.status':'placed'}
+               },
+               {
+                   $count:"placeddorders"
+               }
+           ]).toArray();
+        if(result[0]?.placeddorders){
+            resolve(result[0].placeddorders);
+        }else{
+            resolve();
+        }
+          
+       })
+ },
+ pendingOrders:()=>{
+    return new Promise(async(resolve,reject)=>{
+        let result =  await  db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+              {
+                   $unwind:"$products"
+               },
+               {
+                   $match:{'products.status':'pending'}
+               },
+               {
+                   $count:"pendingdorders"
+               }
+           ]).toArray();
+        if(result[0]?.pendingdorders){
+            resolve(result[0].pendingdorders);
+        }else{
+resolve();
+        }
+          
+       })
+ },
+ canceledOrders:()=>{
+    return new Promise(async(resolve,reject)=>{
+        let result =  await  db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+              {
+                   $unwind:"$products"
+               },
+               {
+                   $match:{'products.status':'canceled'}
+               },
+               {
+                   $count:"canceleddorders"
+               }
+           ]).toArray();
+        if(result[0]?.canceleddorders){
+            resolve(result[0].canceleddorders);
+        }else{
+resolve();
+        }
+          
+       })
+ },
+ totalOrders:()=>{
+     return new Promise(async(resolve,reject)=>{
+         let totalCount = await db.get().collection(collections.ORDER_DETAILS_COLLECTION).count()
+       resolve(totalCount)
+     })
+ },
+ totalRevenue:()=>{
+     return new Promise(async(resolve,reject)=>{
+         let totalRevenue  =await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+             {
+                 $unwind:"$products"
+                },
+                {
+                    $match:{'products.status':'delivered'}
+
+                },
+                {
+                    $project:{
+                        subtotal:'$products.subtotal',
+                       
+                    },
+
+                },
+              {
+                 $project:{
+                     subtotal:1,
+                     _id:0
+                 }
+                 
+              },
+              {
+                  $group:{
+                 _id:null,
+                 total:{$sum:'$subtotal'}
+                  }
+              }
+                
+
+         ]).toArray();
+        if(totalRevenue[0]?.total){
+            resolve(totalRevenue[0].total);
+        }else{
+resolve();
+        }
+         
+     })
+ },
+ totalUsers:()=>{
+     
+    return new Promise(async(resolve,reject)=>{
+       let users = await db.get().collection(collections.USERS_DETAILS_COLLECTION).count();
+
+       resolve(users);
+    })
+ },
+
+ totalProducts:()=>{
+     return new Promise(async(resolve,reject)=>{
+        let products = await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).count();
+
+        resolve(products);
+     })
+ },
+
+ paymentCount:()=>{
+     return new Promise(async(resolve,reject)=>{
+         let data  = await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+             {
+                 $project:{
+                     payments:'$paymentmethod'
+                 }
+             },
+             {
+                 $group:{
+                     _id:'$payments',
+                     count:{$sum:1}
+                 }
+             },{
+                 $sort:{_id:1}
+             },
+         ]).toArray();
+       resolve(data);
+     })
+ },
+
+ dailysalescount:()=>{
+
+    return new Promise(async(resolve,reject)=>{
+        let data =await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+            {
+               $project:{
+                   date:"$date"
+               }
+            },
+            {
+                $group:{
+                    _id:"$date",
+                    count:{$sum:1}
+                }
+            },{
+                $sort:{_id:-1}
+            },{
+                $limit:7
+            }
+        ]).toArray();
+      
+       resolve(data)
+    })
+   
+   
+ },
+
+ totalCategorysales:()=>{
+     return new Promise(async(resolve,reject)=>{
+
+        let categorywisesales =  await db.get().collection(collections.ORDER_DETAILS_COLLECTION)
+        .aggregate([
+           
+          
+            {
+                $unwind:'$products'
+            },
+             {
+                 $project:{
+                    item:"$products.item",
+                  
+                 }
+               },
+                 {
+                 $lookup:{
+                     from:collections.PRODUCTS_DETAILS_COLLECTION,
+                     localField:'item',
+                     foreignField:'_id',
+                as:'productdetail'
+                
+                         }
+                 },
+                 {
+                     $project:{
+                         item:1,productdetail:{$arrayElemAt:['$productdetail.category',0]}
+                     }
+                 },{
+                     $group:{
+                         _id:"$productdetail",
+                         count:{$sum:1}
+                     }
+                 },
+              
+        ]).toArray();
+      
+        var newArraycategorywisesales = categorywisesales.filter((item) => item._id !== null);
+      resolve(newArraycategorywisesales)
+     
+     
+     })
  }
 
 

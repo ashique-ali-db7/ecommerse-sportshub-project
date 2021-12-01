@@ -29,10 +29,65 @@ const verifyLogin = (req,res,next)=>{
 
 
 /* GET home page. */
-router.get('/',verifyLogin, function(req, res, next) {
+router.get('/',verifyLogin,async function(req, res, next) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  res.render('admin/dashboard', { admin:true});
+ 
+
+  let totalorders = await producthelpers.totalOrders();
+
+  let revenue = await producthelpers.totalRevenue();
+
+  let totalUsers = await producthelpers.totalUsers();
+
+  let totalProducts = await producthelpers.totalProducts(); 
+
+ 
+ 
+  
+
+
+ 
+ 
+
+
+  res.render('admin/dashboard', { admin:true,totalorders,revenue,totalUsers,totalProducts});
 });
+
+
+
+// get chart data
+
+router.get('/chartdata',async(req,res)=>{
+  let response = {}
+  const orderstatus = [];
+  let deliverdorders = await producthelpers. deliveredOrders();
+
+  let placeddorders = await producthelpers.placedOrders();
+
+  let pendingdorders = await producthelpers.pendingOrders();
+
+  let canceleddorders = await producthelpers.canceledOrders();
+
+  orderstatus.push(deliverdorders,placeddorders,pendingdorders,canceleddorders);
+
+  let paymentCount = await producthelpers.paymentCount();
+
+  let dailysalescount = await producthelpers.dailysalescount(); 
+
+  let categorysalescount = await producthelpers.totalCategorysales();
+
+  
+
+  response.paymentCount = paymentCount;
+  response.orderstatus = orderstatus;
+  response.dailysalescount = dailysalescount;
+  response.categorysalescount = categorysalescount;
+
+
+
+  res.send(response)
+
+})
 
 
 /* GET category managment. */

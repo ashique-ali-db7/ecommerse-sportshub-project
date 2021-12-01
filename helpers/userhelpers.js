@@ -423,7 +423,7 @@ resolve();
                   }
               }
      ]).toArray();
-     console.log("nokalo");
+   
 console.log(vieworderproductdetails);
       resolve(vieworderproductdetails);
 
