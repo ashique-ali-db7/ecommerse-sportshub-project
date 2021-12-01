@@ -837,6 +837,40 @@ resolve();
 
  dailysalescount:()=>{
 
+
+
+
+    {
+        $unwind:"$products"
+       },
+       {
+           $match:{'products.status':'delivered'}
+
+       },
+       {
+           $project:{
+               subtotal:'$products.subtotal',
+              
+           },
+
+       },
+     {
+        $project:{
+            subtotal:1,
+            _id:0
+        }
+        
+     },
+     {
+         $group:{
+        _id:null,
+        total:{$sum:'$subtotal'}
+         }
+     }
+
+
+
+
     return new Promise(async(resolve,reject)=>{
         let data =await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
             {
@@ -849,13 +883,16 @@ resolve();
                     _id:"$date",
                     count:{$sum:1}
                 }
-            },{
-                $sort:{_id:-1}
-            },{
+            },
+            {
+                $sort:{_id:1}
+            },
+            {
                 $limit:7
             }
         ]).toArray();
-      
+        console.log("ordere");
+      console.log(data);
        resolve(data)
     })
    
