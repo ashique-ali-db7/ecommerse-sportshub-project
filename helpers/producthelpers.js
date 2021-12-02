@@ -1032,16 +1032,63 @@ resolve(data)
  },
 
 
- todaySales:()=>{
+ todaySales:(todaydate)=>{
 
     return new Promise(async(resolve,reject)=>{
- db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+  let data = await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
      {
-      $match:{}
-     }
- ])
+      $match:{"date":todaydate}
+     },
+  {
+         $project:{
+             total:"$total",
+              date:"$date"
+         }
+  },
+       {
+           $group:{
+               _id:"$date",
+               todaytotal:{$sum:'$total'}
+          }
+       },
+    //   {
+    //      $project:{
+    //          todaytotal:1,date:1
+    //      }
+    //  },
+ ]).toArray();
+ 
+ resolve(data);
 
     })
+ },
+
+ todayOrders:(todaydate)=>{
+     return new Promise(async(resolve,reject)=>{
+let data =await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+    {
+        $match:{"date":todaydate}
+    },
+    {
+        $project:{
+            date:"$date"
+        }
+    },
+     {
+         $group:{
+             _id:"$date",
+            count:{$sum:1}
+         }
+     },
+     {
+         $project:{
+             date:1,count:1
+         }
+     }
+]).toArray();
+resolve(data);
+
+     })
  }
 
 

@@ -45,10 +45,13 @@ router.get('/',verifyLogin,async function(req, res, next) {
 
    let recenteOrders = await producthelpers.recenteOrders();
 
-   let todaySales = await producthelpers.todaySales();
+   let todayDate = new Date().toISOString().slice(0, 10);
 
 
- 
+   let todaySales = await producthelpers.todaySales(todayDate);
+
+   let todayOrders = await producthelpers.todayOrders(todayDate);
+
  
   
 
@@ -57,7 +60,7 @@ router.get('/',verifyLogin,async function(req, res, next) {
  
 
 
-  res.render('admin/dashboard', { admin:true,totalorders,revenue,totalUsers,totalProducts,topSellingProducts,recenteOrders});
+  res.render('admin/dashboard', { admin:true,totalorders,revenue,totalUsers,totalProducts,topSellingProducts,recenteOrders,todaySales,todayOrders});
 });
 
 
