@@ -426,6 +426,9 @@ categoryProductTwoForHomeProducts:(category)=>{
 },
 
 addCategoryOffer:(data)=>{
+  
+   let endDateIso =  new Date(data.caofferenddate)
+  data.endDateIso = endDateIso;
     return new Promise(async(resolve,reject)=>{
 let result={};
        let exist =  await db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).findOne({category:data.category});
@@ -478,9 +481,11 @@ getAllCategoryOffers:()=>{
 },
 addProductOffer:(data)=>{
     return new Promise(async(resolve,reject)=>{
+        let proendDateIso =  new Date(data.profferenddate)
+        data.proendDateIso = proendDateIso;
         let response = {};
         let productAlreadyHaveOffer =await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).findOne({productname:data.productname,offer:{$exists:true}});
-        console.log("idadada");
+     
         console.log(productAlreadyHaveOffer);
       if(productAlreadyHaveOffer){
   response.exist = true;
@@ -515,10 +520,12 @@ categoryoffereditdataForEdit:(id)=>{
     })
 },
 editCategoryOffer:(data)=>{
+    let endDateIso =  new Date(data.caofferenddate)
+    data.endDateIso = endDateIso;
     return new Promise(async(resolve,reject)=>{
         let dataOfProductOffer = await db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).findOne({category:data.category})
         db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION)
-        .updateOne({category:data.category},{$set:{discountpercentage:data.discountpercentage,caofferstartdate:data.caofferstartdate,caofferenddate:data.caofferenddate}});
+        .updateOne({category:data.category},{$set:{discountpercentage:data.discountpercentage,caofferstartdate:data.caofferstartdate,caofferenddate:data.caofferenddate,endDateIso:data.endDateIso}});
 
 
         let productsForoffer =  await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:data.category,offer:{$exists:true},offerpercentage:dataOfProductOffer.discountpercentage}).toArray();
@@ -578,10 +585,13 @@ getEditOfferProduct:(data)=>{
 
 
 editProductOffer:(data)=>{
-    console.log(data);
+   
+    let proendDateIso =  new Date(data.profferenddate)
+    data.proendDateIso = proendDateIso;
+    console.log(proendDateIso);
 
 return new Promise(async(resolve,reject)=>{
-    db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).updateOne({productname:data.productname},{$set:{discount:data.discountpercentageproduct,profferstartdate:data.profferstartdate,profferenddate:data.profferenddate}});
+    db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).updateOne({productname:data.productname},{$set:{discount:data.discountpercentageproduct,profferstartdate:data.profferstartdate,profferenddate:data.profferenddate,proendDateIso:data.proendDateIso}});
 
    let productdetails =  await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).findOne({productname:data.productname})
 
