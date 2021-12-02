@@ -1,10 +1,11 @@
-<div class="container">
-<h2>Order managment</h2>
+<div class="container p-3">
+  <div  class="p-3" style="background-color: #fff;border:1px solid rgb(199, 196, 196)">
+<h2 class="text-center">Order managment</h2>
 <table class="table table-striped" id="ordermangementtable">
   <thead>
     <tr>
       <th scope="col">Order date</th>
-      <th scope="col">User Id</th>
+      {{!-- <th scope="col">User Id</th> --}}
       <th scope="col">Ordered address</th>
       <th scope="col">Payment method</th>
    
@@ -16,21 +17,21 @@
   <tbody>
       {{#each allOrders}}
     <tr>
-      <th scope="row">{{this.date}}</th>
-      <td>{{this.userId}}</td>
+      <td >{{this.date}}</td>
+      {{!-- <td>{{this.userId}}</td> --}}
       <td>{{this.deliveryDetails.housename}}</td>
       <td>{{this.paymentmethod}}</td>
      
       <td>{{this.total}}</td>
       <td><a href="/admin/orderproductsview?orderid={{this._id}}" class="btn btn-primary">products</a></td>
-      <td>
+     
            
 
-            </td>
     </tr>
    {{/each}}
   </tbody>
 </table>
+</div>
 </div>
 
 

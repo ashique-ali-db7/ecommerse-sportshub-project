@@ -1,18 +1,17 @@
+  <div class="container p-3">
   <div class="row">
   {{#each response}}
-<div class="col-6">
-<div class="card me-auto ms-auto mb-3" style="width: 100%;">
+<div class="col-5 shadow p-3 mb-5 bg-body rounded ms-5">
 
-  <div class="card-body">
      
         
            <div class="row">
           <div class="col-3">
 
-<img style="" src="/images/product-images/{{this.item}}3.png" alt="">
+<img style="" src="/images/product-images/{{this.item}}1.png" alt="">
           </div>
           <div class="col-9">
-           <p><b>product id:</b>   <span>{{this.item}}</span></p>
+           {{!-- <p><b>product id:</b>   <span>{{this.item}}</span></p> --}}
            <p><b>product name:</b>   <span>{{this.productdetail.productname}}</span></p>
            <p><b>product category:</b>   <span>{{this.productdetail.category}}</span></p>
            <p><b>product subcategory:</b>    <span>{{this.productdetail.subcategory}}</span></p>
@@ -60,8 +59,9 @@
  
     
     
-  </div>
-  </div>
+  
   </div>
            {{/each}}
+  </div>
+
   </div>
