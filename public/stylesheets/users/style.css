@@ -2330,6 +2330,15 @@ border: none;
 	width: 18px;
 }
 
+.closebtn {
+	font-size: 24px;
+	color: #b2b2b2;
+	float: left;
+	line-height: 38px;
+	cursor: pointer;
+	width: 18px;
+}
+
 .product-details .quantity .pro-qty .qtybtn.dec {
 	font-size: 30px;
 }
