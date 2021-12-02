@@ -846,34 +846,34 @@ resolve();
                 $unwind:"$products"
                },
 
-               {
-                $match:{'products.status':'delivered'}
+            //    {
+            //     $match:{'products.status':'delivered'}
      
-            },
+            // },
                          {
                 $project:{
                  subtotal:'$products.subtotal',
                     date:"$date"
                 }
              },
-             {
-                 $group:{
-                     _id:"$date",
-                     total:{$sum:'$subtotal'}
-                 }
+              {
+                  $group:{
+                      _id:"$date",
+                      total:{$sum:'$subtotal'}
+                  }
              },
            
            
           
-             {
-                 $sort:{_id:1}
-             },
-             {
-                 $limit:7
-             }
+              {
+                  $sort:{_id:1}
+              },
+              {
+                  $limit:7
+              }
         ]).toArray();
-     
-       resolve(data)
+    
+      resolve(data)
     })
    
    
