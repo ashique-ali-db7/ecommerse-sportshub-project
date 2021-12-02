@@ -101,13 +101,21 @@
 
 <div class="row mt-5">
     <div class="col-md-6">
+          <div class="card">
+  <div class="card-body">
         <h6>Order Status</h6>
         <canvas id="myChart1" width="250" height="150"></canvas>
+  </div>
+          </div>
     </div>
   
     <div class="col-md-6" >
+          <div class="card">
+  <div class="card-body">
         <h6>Daily sales amount</h6>
         <canvas id="myChart11"  width="250" height="150"></canvas>
+        </div>
+          </div>
     </div>
 
   
@@ -119,51 +127,300 @@
 <div class="row mt-5">
 
     <div class="col-md-4">
+        <div class="card">
+  <div class="card-body">
         <h6>Payment Methods</h6>
 <canvas id="myChart2"  width="250" height="150"></canvas>
-    </div>
+  </div>
+
+        </div>  
+          </div>
 
     
 
   <div class="col-md-4">
+      <div class="card">
+  <div class="card-body">
          <h6>Category wise sales</h6>
 <canvas id="myChart3"  width="250" height="150"></canvas>
-    </div>
-
-
-  
-
-   
-    </div>
-
-    
-
 </div>
+      </div>
+    </div>
 
 
 
-
-
-
-
-
-   
-
-
-
-
-
+<div class="col-md-4">
+<div class="card">
+  <div class="card-body">
+    This is some text within a card body.
+  </div>
+</div>
+</div>
   
 
+   
+    </div>
 
-    
+
+    <div class="row mt-5">
+
+        <div class="col-lg-6">
+
+            <div class="card">
+               <p class="mt-2 ms-2" style="font-size:1.5rem"><b>Top selling products</b> </p>
+  <div class="card-body">
+<table class="table table-striped" id="topsellingproducts" style="height: 435px;">
+  <thead>
+    <tr>
+      <th scope="col">product name</th>
+      <th scope="col">Brand</th>
+      <th scope="col">Orders</th>
+   
+    </tr>
+  </thead>
+  <tbody>
+      {{#each topSellingProducts}}
+    <tr>
+      <td >{{this.productdetail.productname}}</td>
+      <td>{{this.productdetail.brand}}</td>
+      <td>{{this.count}}</td>
  
+    </tr>
+    {{/each}}
+  
+  </tbody>
+</table>
+ </div>
+</div>
+
+        </div>
 
 
 
 
+        <div class="col-lg-6">
 
+            <div class="card">
+               <p class="mt-2 ms-2" style="font-size:1.5rem"><b>Recent orders</b> </p>
+  <div class="card-body">
+<table class="table table-striped" id="topsellingproducts" style="height: 435px;">
+  <thead>
+    <tr>
+      <th scope="col">Status</th>
+      <th scope="col">Customer</th>
+      <th scope="col">Date</th>
+      <th>Total</th>
+   
+    </tr>
+  </thead>
+  <tbody>
+      {{#each recenteOrders}}
+    <tr>
+      <td scope="row">{{this.status}}</td>
+      <td>{{this.productdetail.name}}</td>
+      <td>{{this.date}}</td>
+      <td>{{this.total}}</td>
+ 
+    </tr>
+    {{/each}}
+  
+  </tbody>
+</table>
+ </div>
+</div>
 
+        </div>
 
+    </div>
+
+    
 
 </div>
+
+  <script src="/javascripts/admin/jquery.min.js"></script>
+
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
+
+<script>
+
+
+$(document).ready(function(){
+
+    $.ajax({
+        url:'/admin/chartdata',
+        method:'get',
+        success:(response)=>{
+
+
+            const paymentcounts = [];
+     response.paymentCount.map((eachpayment)=>{
+let count = eachpayment.count
+paymentcounts.push(count);
+     });
+
+     const dateForDailiySales = [];
+     const countOfDailySales = [];
+
+      response.dailysalescount.map((eachDay)=>{
+let date = eachDay._id;
+
+let countfordailysale = eachDay.total;
+
+dateForDailiySales.push(date);
+
+countOfDailySales.push(countfordailysale);
+     })
+const category = [];
+const categorycount = [];
+      response.categorysalescount.map((eachcategory)=>{
+         let categoryname = eachcategory._id;
+         let categorysalecounts = eachcategory.count;
+         
+         category.push(categoryname);
+         categorycount.push(categorysalecounts)
+     })
+
+     
+      
+
+            const ctx1 = document.getElementById('myChart1').getContext('2d');
+            const myChart1 = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Delivered', 'Placed', 'Pending', 'Canceled'],
+                    datasets: [{
+                        label: 'Order Status',
+                        data: response.orderstatus,
+                    backgroundColor: [
+                        'rgb(145, 22, 201)',
+                      
+                    ],
+                   
+                }]
+            },
+                options: {
+                 
+                  
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+               
+            }
+            });
+
+
+
+const ctx11 = document.getElementById('myChart11').getContext('2d');
+const myChart11 = new Chart(ctx11, {
+    type: 'bar',
+    data: {
+        labels: dateForDailiySales,
+        datasets: [{
+            label: 'Daily sales',
+            data: countOfDailySales,
+            backgroundColor: [
+                'rgb(218, 49, 11)',
+              
+            ],
+    }]
+},
+    options: {
+      
+    scales: {
+        y: {
+            beginAtZero: true
+        }
+    },
+   
+}
+});
+
+
+
+
+
+
+
+
+const ctx2 = document.getElementById('myChart2').getContext('2d');
+const myChart2 = new Chart(ctx2, {
+    type: 'doughnut',
+    data: {
+        labels: ['COD', 'Paypal', 'Razorpay'],
+        datasets: [{
+            label: 'Payment Methods',
+            data: paymentcounts,
+        backgroundColor: [
+            'rgb(145, 22, 201)',
+            'rgb(201, 22, 169)',
+            'rgb(201, 55, 22)',
+            'rgb(22, 201, 201)',
+            'rgb(201, 201, 22)',
+            'rgb(123, 123, 100)'
+        ],
+        borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+    }]
+},
+    options: {
+   
+}
+});
+const ctx3 = document.getElementById('myChart3').getContext('2d');
+const myChart3 = new Chart(ctx3, {
+    type: 'doughnut',
+    data: {
+        labels: category,
+        datasets: [{
+            label: 'Payment Methods',
+            data: categorycount,
+        backgroundColor: [
+            'rgb(201, 55, 22)',
+            'rgb(22, 201, 201)',
+            'rgb(201, 201, 22)',
+            'rgb(123, 123, 100)',
+            'rgb(145, 22, 201)',
+            'rgb(201, 22, 169)',
+            
+           
+           
+        ],
+        borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+    }]
+},
+    options: {
+ 
+}
+});
+ 
+        }
+    })
+    
+
+
+    
+        }) 
+    
+    
+
+
+
+
+</script>

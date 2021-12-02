@@ -591,6 +591,9 @@ getAllOrderedProductForUser:(userId)=>{
                       $project:{
                           item:1,quantity:1,size:1,status:1,subtotal:1,date:1,canceled:1,delivered:1,productdetail:{$arrayElemAt:['$productdetail',0]}
                       }
+                  },
+                  {
+                    $sort:{date:-1} 
                   }
         ]).toArray();
       

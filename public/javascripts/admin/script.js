@@ -1069,35 +1069,32 @@ if (!allowedExtensions.exec(filePath)) {
 
 $(document).ready(function() {
     $('#brandtable').DataTable();
-} );
-
-
-$(document).ready(function() {
     $('#categorytable').DataTable();
-} );
-
-
-$(document).ready(function() {
     $('#producttable').DataTable();
-} );
-
-$(document).ready(function() {
     $('#usertable').DataTable();
-} );
-
-$(document).ready(function() {
-    $('#ordermange').DataTable();
-} );
-
-$(document).ready(function() {
+    $('#ordermangementtable').DataTable();
+   
     $('#productoffertable').DataTable();
-} );
-
-
-
-$(document).ready(function() {
     $('#categoryoffertable').DataTable();
+    
+
+  
 } );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //modal
  function updateproductdetails(){
@@ -1733,98 +1730,98 @@ if(willdelete){
 
 
 
-$(document).ready(function(){
+// $(document).ready(function(){
 
-    $.ajax({
-        url:'/admin/chartdata',
-        method:'get',
-        success:async(response)=>{
+//     $.ajax({
+//         url:'/admin/chartdata',
+//         method:'get',
+//         success:(response)=>{
 
 
-            const paymentcounts = [];
-  await   response.paymentCount.map((eachpayment)=>{
-let count = eachpayment.count
-paymentcounts.push(count);
-     });
+//             const paymentcounts = [];
+//      response.paymentCount.map((eachpayment)=>{
+// let count = eachpayment.count
+// paymentcounts.push(count);
+//      });
 
-     const dateForDailiySales = [];
-     const countOfDailySales = [];
+//      const dateForDailiySales = [];
+//      const countOfDailySales = [];
 
-     await response.dailysalescount.map((eachDay)=>{
-let date = eachDay._id;
+//       response.dailysalescount.map((eachDay)=>{
+// let date = eachDay._id;
 
-let countfordailysale = eachDay.count;
+// let countfordailysale = eachDay.total;
 
-dateForDailiySales.push(date);
+// dateForDailiySales.push(date);
 
-countOfDailySales.push(countfordailysale);
-     })
-const category = [];
-const categorycount = [];
-     await response.categorysalescount.map((eachcategory)=>{
-         let categoryname = eachcategory._id;
-         let categorysalecounts = eachcategory.count;
+// countOfDailySales.push(countfordailysale);
+//      })
+// const category = [];
+// const categorycount = [];
+//       response.categorysalescount.map((eachcategory)=>{
+//          let categoryname = eachcategory._id;
+//          let categorysalecounts = eachcategory.count;
          
-         category.push(categoryname);
-         categorycount.push(categorysalecounts)
-     })
+//          category.push(categoryname);
+//          categorycount.push(categorysalecounts)
+//      })
 
      
       
 
-            const ctx1 = document.getElementById('myChart1').getContext('2d');
-            const myChart1 = new Chart(ctx1, {
-                type: 'bar',
-                data: {
-                    labels: ['Delivered', 'Placed', 'Pending', 'Canceled'],
-                    datasets: [{
-                        label: 'Order Status',
-                        data: response.orderstatus,
-                    backgroundColor: [
-                        'rgb(145, 22, 201)',
+//             const ctx1 = document.getElementById('myChart1').getContext('2d');
+//             const myChart1 = new Chart(ctx1, {
+//                 type: 'bar',
+//                 data: {
+//                     labels: ['Delivered', 'Placed', 'Pending', 'Canceled'],
+//                     datasets: [{
+//                         label: 'Order Status',
+//                         data: response.orderstatus,
+//                     backgroundColor: [
+//                         'rgb(145, 22, 201)',
                       
-                    ],
+//                     ],
                    
-                }]
-            },
-                options: {
+//                 }]
+//             },
+//                 options: {
                  
                   
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                },
+//                 scales: {
+//                     y: {
+//                         beginAtZero: true
+//                     }
+//                 },
                
-            }
-            });
+//             }
+//             });
 
 
 
-const ctx11 = document.getElementById('myChart11').getContext('2d');
-const myChart11 = new Chart(ctx11, {
-    type: 'bar',
-    data: {
-        labels: dateForDailiySales,
-        datasets: [{
-            label: 'Daily sales',
-            data: countOfDailySales,
-            backgroundColor: [
-                'rgb(218, 49, 11)',
+// const ctx11 = document.getElementById('myChart11').getContext('2d');
+// const myChart11 = new Chart(ctx11, {
+//     type: 'bar',
+//     data: {
+//         labels: dateForDailiySales,
+//         datasets: [{
+//             label: 'Daily sales',
+//             data: countOfDailySales,
+//             backgroundColor: [
+//                 'rgb(218, 49, 11)',
               
-            ],
-    }]
-},
-    options: {
+//             ],
+//     }]
+// },
+//     options: {
       
-    scales: {
-        y: {
-            beginAtZero: true
-        }
-    },
+//     scales: {
+//         y: {
+//             beginAtZero: true
+//         }
+//     },
    
-}
-});
+// }
+// });
 
 
 
@@ -1833,117 +1830,112 @@ const myChart11 = new Chart(ctx11, {
 
 
 
-const ctx2 = document.getElementById('myChart2').getContext('2d');
-const myChart2 = new Chart(ctx2, {
-    type: 'doughnut',
-    data: {
-        labels: ['COD', 'Paypal', 'Razorpay'],
-        datasets: [{
-            label: 'Payment Methods',
-            data: paymentcounts,
-        backgroundColor: [
-            'rgb(145, 22, 201)',
-            'rgb(201, 22, 169)',
-            'rgb(201, 55, 22)',
-            'rgb(22, 201, 201)',
-            'rgb(201, 201, 22)',
-            'rgb(123, 123, 100)'
-        ],
-        borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-        ],
-        borderWidth: 1
-    }]
-},
-    options: {
+// const ctx2 = document.getElementById('myChart2').getContext('2d');
+// const myChart2 = new Chart(ctx2, {
+//     type: 'doughnut',
+//     data: {
+//         labels: ['COD', 'Paypal', 'Razorpay'],
+//         datasets: [{
+//             label: 'Payment Methods',
+//             data: paymentcounts,
+//         backgroundColor: [
+//             'rgb(145, 22, 201)',
+//             'rgb(201, 22, 169)',
+//             'rgb(201, 55, 22)',
+//             'rgb(22, 201, 201)',
+//             'rgb(201, 201, 22)',
+//             'rgb(123, 123, 100)'
+//         ],
+//         borderColor: [
+//             'rgba(255, 99, 132, 1)',
+//             'rgba(54, 162, 235, 1)',
+//             'rgba(255, 206, 86, 1)',
+//             'rgba(75, 192, 192, 1)',
+//             'rgba(153, 102, 255, 1)',
+//             'rgba(255, 159, 64, 1)'
+//         ],
+//         borderWidth: 1
+//     }]
+// },
+//     options: {
    
-}
-});
-const ctx3 = document.getElementById('myChart3').getContext('2d');
-const myChart3 = new Chart(ctx3, {
-    type: 'doughnut',
-    data: {
-        labels: category,
-        datasets: [{
-            label: 'Payment Methods',
-            data: categorycount,
-        backgroundColor: [
-            'rgb(201, 55, 22)',
-            'rgb(22, 201, 201)',
-            'rgb(201, 201, 22)',
-            'rgb(123, 123, 100)',
-            'rgb(145, 22, 201)',
-            'rgb(201, 22, 169)',
+// }
+// });
+// const ctx3 = document.getElementById('myChart3').getContext('2d');
+// const myChart3 = new Chart(ctx3, {
+//     type: 'doughnut',
+//     data: {
+//         labels: category,
+//         datasets: [{
+//             label: 'Payment Methods',
+//             data: categorycount,
+//         backgroundColor: [
+//             'rgb(201, 55, 22)',
+//             'rgb(22, 201, 201)',
+//             'rgb(201, 201, 22)',
+//             'rgb(123, 123, 100)',
+//             'rgb(145, 22, 201)',
+//             'rgb(201, 22, 169)',
             
            
            
-        ],
-        borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-        ],
-        borderWidth: 1
-    }]
-},
-    options: {
+//         ],
+//         borderColor: [
+//             'rgba(255, 99, 132, 1)',
+//             'rgba(54, 162, 235, 1)',
+//             'rgba(255, 206, 86, 1)',
+//             'rgba(75, 192, 192, 1)',
+//             'rgba(153, 102, 255, 1)',
+//             'rgba(255, 159, 64, 1)'
+//         ],
+//         borderWidth: 1
+//     }]
+// },
+//     options: {
  
-}
-});
-const ctx4 = document.getElementById('myChart4').getContext('2d');
-const myChart4 = new Chart(ctx4, {
-    type: 'doughnut',
-    data: {
-        labels: ['COD', 'Razorpay', 'Paypal'],
-        datasets: [{
-            label: 'Payment Methods',
-            data: [1,2,3],
-        backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-        ],
-        borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-        ],
-        borderWidth: 1
-    }]
-},
-    options: {
+// }
+// });
+// const ctx4 = document.getElementById('myChart4').getContext('2d');
+// const myChart4 = new Chart(ctx4, {
+//     type: 'doughnut',
+//     data: {
+//         labels: ['COD', 'Razorpay', 'Paypal'],
+//         datasets: [{
+//             label: 'Payment Methods',
+//             data: [1,2,3],
+//         backgroundColor: [
+//             'rgba(255, 99, 132, 0.2)',
+//             'rgba(54, 162, 235, 0.2)',
+//             'rgba(255, 206, 86, 0.2)',
+//             'rgba(75, 192, 192, 0.2)',
+//             'rgba(153, 102, 255, 0.2)',
+//             'rgba(255, 159, 64, 0.2)'
+//         ],
+//         borderColor: [
+//             'rgba(255, 99, 132, 1)',
+//             'rgba(54, 162, 235, 1)',
+//             'rgba(255, 206, 86, 1)',
+//             'rgba(75, 192, 192, 1)',
+//             'rgba(153, 102, 255, 1)',
+//             'rgba(255, 159, 64, 1)'
+//         ],
+//         borderWidth: 1
+//     }]
+// },
+//     options: {
 
-}
-});
-        }
-    })
+// }
+// });
+//         }
+//     })
     
 
 
-
-
-
     
-    
-    
-        }) 
+//         }) 
     
     
 
-
-
+   
+    
 
