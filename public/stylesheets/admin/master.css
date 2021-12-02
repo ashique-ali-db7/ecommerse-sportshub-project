@@ -223,12 +223,12 @@ img {
 }
 
 
-.tableheaderfontsize{
+/* .tableheaderfontsize{
     font-size: 0.8rem;
 }
 .tabledatafontsize{
     font-size: 0.7rem;
-}
+} */
 
 .editimage{
     display: none;
@@ -565,6 +565,9 @@ table.dataTable>tbody>tr.child ul.dtr-details {
         flex-direction: row;
     }
 }
+
+
+
 
 
 

@@ -840,59 +840,39 @@ resolve();
 
 
 
-    {
-        $unwind:"$products"
-       },
-       {
-           $match:{'products.status':'delivered'}
-
-       },
-       {
-           $project:{
-               subtotal:'$products.subtotal',
-              
-           },
-
-       },
-     {
-        $project:{
-            subtotal:1,
-            _id:0
-        }
-        
-     },
-     {
-         $group:{
-        _id:null,
-        total:{$sum:'$subtotal'}
-         }
-     }
-
-
-
-
     return new Promise(async(resolve,reject)=>{
         let data =await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
             {
-               $project:{
-                   date:"$date"
-               }
+                $unwind:"$products"
+               },
+
+               {
+                $match:{'products.status':'delivered'}
+     
             },
-            {
-                $group:{
-                    _id:"$date",
-                    count:{$sum:1}
+                         {
+                $project:{
+                 subtotal:'$products.subtotal',
+                    date:"$date"
                 }
-            },
-            {
-                $sort:{_id:1}
-            },
-            {
-                $limit:7
-            }
+             },
+             {
+                 $group:{
+                     _id:"$date",
+                     total:{$sum:'$subtotal'}
+                 }
+             },
+           
+           
+          
+             {
+                 $sort:{_id:1}
+             },
+             {
+                 $limit:7
+             }
         ]).toArray();
-        console.log("ordere");
-      console.log(data);
+     
        resolve(data)
     })
    
@@ -942,6 +922,126 @@ resolve();
      
      
      })
+ },
+
+
+ topSellingProducts:()=>{
+     return new Promise(async(resolve,reject)=>{
+
+  let data = await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+    {
+        $unwind:"$products"
+       },
+
+       {
+        $match:{'products.status':'delivered'}
+
+    },
+    {
+        $project:{
+           item:"$products.item",
+    
+        }
+      },
+      {
+          $group:{
+              _id:"$item",
+              count:{$sum:1}
+          }
+      },
+     {
+         $lookup:{
+             from:collections.PRODUCTS_DETAILS_COLLECTION,
+             localField:'_id',
+             foreignField:'_id',
+        as:'productdetail'
+       
+                }
+         },
+         {
+             $project:{
+                 count:1,productdetail:{$arrayElemAt:['$productdetail',0]}
+             }
+         },
+         {
+            $sort:{count:-1}
+        },
+        {
+            $limit:8
+        }
+   
+
+  
+
+   ]).toArray();
+  
+ 
+resolve(data)
+
+     })
+ },
+ recenteOrders:()=>{
+
+  return new Promise(async(resolve,reject)=>{
+     let data =  await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+        {
+            $unwind:'$products'
+        },
+         {
+             $project:{
+                item:"$products.item",
+                 
+                 date:"$date",
+                 total:"$total",
+                 status:"$products.status",
+                 paymentmethod:"$paymentmethod",
+                 userId:"$userId"
+              
+               
+             }
+           },
+           {
+            $lookup:{
+                from:collections.USERS_DETAILS_COLLECTION,
+                localField:'userId',
+                foreignField:'_id',
+           as:'productdetail'
+          
+                   }
+            },
+            {
+                $project:{
+                    item:1,date:1,total:1,status:1,paymentmethod:1,productdetail:{$arrayElemAt:['$productdetail',0]}
+                }
+            },
+          
+            {
+                $sort:{date:-1}
+            },
+            {
+                $limit:10
+            }
+      ]).toArray();
+     
+  resolve(data);
+  })
+
+  
+
+
+ },
+
+
+ todaySales:()=>{
+
+    return new Promise(async(resolve,reject)=>{
+ db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+     {
+      $match:{}
+     }
+ ])
+
+    })
  }
 
 

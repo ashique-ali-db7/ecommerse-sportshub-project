@@ -41,6 +41,13 @@ router.get('/',verifyLogin,async function(req, res, next) {
 
   let totalProducts = await producthelpers.totalProducts(); 
 
+   let topSellingProducts = await producthelpers.topSellingProducts();
+
+   let recenteOrders = await producthelpers.recenteOrders();
+
+   let todaySales = await producthelpers.todaySales();
+
+
  
  
   
@@ -50,7 +57,7 @@ router.get('/',verifyLogin,async function(req, res, next) {
  
 
 
-  res.render('admin/dashboard', { admin:true,totalorders,revenue,totalUsers,totalProducts});
+  res.render('admin/dashboard', { admin:true,totalorders,revenue,totalUsers,totalProducts,topSellingProducts,recenteOrders});
 });
 
 

@@ -1,5 +1,6 @@
+<div class="container">
 <h2>Order managment</h2>
-<table class="table" id="ordermange">
+<table class="table table-striped" id="ordermangementtable">
   <thead>
     <tr>
       <th scope="col">Order date</th>
@@ -23,34 +24,16 @@
       <td>{{this.total}}</td>
       <td><a href="/admin/orderproductsview?orderid={{this._id}}" class="btn btn-primary">products</a></td>
       <td>
-           {{!-- <select name="orders" id="ordersttt" style=""  onchange="orderstatus('{{this._id}}')">
-            
-              <option selected="true" disabled="disabled">{{this.status}}</option> 
-              
-              <option value="Placed">Placed</option>
-               <option value="pending">Pending</option>
-              
-            
-               <option value="delivered">delivered</option>
-
-              <option value="cancel">Cancel</option>
-  
-            </select> --}}
-
-{{!-- <div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="{{this._id}}" data-bs-toggle="dropdown" aria-expanded="false">
-   {{this.status}}
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-    <li><button class="dropdown-item" onclick="orderstatus('{{this._id}}','placed')">Placed</button></li>
-    <li><button class="dropdown-item" onclick="orderstatus('{{this._id}}','pending')">Pending</button></li>
-    <li><button class="dropdown-item" onclick="orderstatus('{{this._id}}','delivered')">delivered</button></li>
-    <li><button class="dropdown-item"onclick="orderstatus('{{this._id}}','cancel')">Cancel</button></li>
-  </ul>
-</div> --}}
+           
 
             </td>
     </tr>
    {{/each}}
   </tbody>
 </table>
+</div>
+
+
+
+
+
