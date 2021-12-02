@@ -667,7 +667,7 @@ if(sizeOfProduct){
                  document.getElementById("addedcart").classList.remove("selectsize")
                 setTimeout(function(){ 
                      document.getElementById("addedcart").classList.add("selectsize")
-                 }, 2000);
+                 }, 1000);
 
 
                 
@@ -763,7 +763,8 @@ if(sizeOfProduct){
         buttons: true,
       }).then((willdelete)=>{
 if(willdelete){
-    document.getElementById(proId+size+"remove").classList.add("selectsize")
+    document.getElementById(proId+size+"remove").classList.add("selectsize");
+    
  
 
     $.ajax({
@@ -777,7 +778,9 @@ if(willdelete){
         method:'post',
         success:(response)=>{
             document.getElementById("total").innerHTML  = total - subtotal;
+           
             location.reload();
+           
         }
     })
 }else{

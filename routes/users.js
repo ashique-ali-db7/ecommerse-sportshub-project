@@ -155,7 +155,7 @@ router.get('/shopping-cart',verifyLoginForLoginpage, async(req, res, next) =>{
   }else{
     cartItemsEmpty = true;
   }
-  res.render('users/shoppingnewcart',{ admin:false,user,notheader:true,cartItems,total,cartItemsEmpty});
+  res.render('users/shoppingnewcart',{ admin:false,user,cartItems,notheader:true,total,cartItemsEmpty});
 
 });
 
