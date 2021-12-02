@@ -1,8 +1,11 @@
 
 <div class="container">
-  <a href="/admin/add-product" class="btn btn-primary mt-4">Add product</a>
-            <h2 class="mt-5">PRODUCT DETAILS</h2>
-     <table class="table table-striped mt-5" id="producttable">
+  {{!-- <a href="/admin/add-product" class="btn btn-primary mt-4">Add product</a> --}}
+ 
+  <div class="p-5"  style="background-color: #fff;border:1px solid rgb(199, 196, 196)">
+            {{!-- <h2 class="">PRODUCT DETAILS</h2> --}}
+            <h2 class="text-center">Product table</h2>
+     <table class="table table-striped mt-5 " id="producttable" >
         <thead>
           <tr>
             <th class="tableheaderfontsize" scope="col">product Id</th>
@@ -49,6 +52,8 @@
             {{/each}}
         </tbody> 
       </table>
+      </div>
+     
    </div>
 
 
