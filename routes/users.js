@@ -409,7 +409,7 @@ userhelpers.phoneNumberChecking(phoneNumber).then((response)=>{
        res.render('users/otplogin',{admin:false,phoneNumber,notheader:true})
       });
     }else{
-      phonenumberExistError = "Enterd phone number does not exist";
+      phonenumberExistError = "Entered phone number does not exist";
      res.redirect('/phonenumberpage');
  
     }
