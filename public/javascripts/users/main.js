@@ -1158,6 +1158,27 @@ function cancelproduct(orderId,proId,size){
  }
 
 
+//  function addToWishList(productId){
+
+//     $.ajax({
+//         url:'/addtowishlist',
+//         data:{
+//             productId,
+          
+//         },
+//         method:'post',
+//         success:(response)=>{
+//     if(response.sessionrequired){
+//         location.href = '/userlogin' 
+//     }
+//     else if(response.exist){
+
+//     }
+
+//         }
+//     })
+    
+//      }
 
 
 

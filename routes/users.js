@@ -1349,6 +1349,53 @@ router.get('/buynowcheckout',verifyLoginForLoginpage, async(req, res) =>{
  
 });
 
+router.get('/wishlist',verifyLoginForLoginpage,async(req,res)=>{
+  let user = req.session.user;
+    let categoryname =  req.query.categoryname;
+    // let products =   await  producthelpers.allCategoryProducts(categoryname);
+    let allsubcategories =await categoryhelpers.allSubCategories(categoryname);
+    let cartcount =await producthelpers.getCartCount(req.session.user?._id);
+    let allCategory = await categoryhelpers.getCategory();
+    let allBrands  =  await brandhelpers.getBrand();
+    let todayDate = new Date().toISOString().slice(0, 10);
+    producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
+      producthelpers.deleteCategoryoffers(todayDate).then(()=>{
+        res.render('users/wishlist', { admin:false,user,cartcount,allBrands,allsubcategories,allCategory});
+      })
+    })
+
+
+});
+
+
+router.post('/addtowishlist',(req,res)=>{
+
+let response = {};
+
+
+if(req.session.user){
+  let productId = req.body.productId;
+  let userId  =req.session.user._id;
+  
+producthelpers.addToWishList(productId,userId).then((result)=>{
+  if(result.exist){
+response.exist = true;
+res.json(response);
+  }else{
+response.added = true;
+res.json(response);
+  }
+})
+
+}else{
+  response.sessionrequired =true;
+res.json(response)
+}
+
+
+
+})
+
 
 
 

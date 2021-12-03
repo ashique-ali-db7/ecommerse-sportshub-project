@@ -10,5 +10,6 @@ module.exports={
     CATEGORYOFFER_DETAILS_COLLECTION:'categoryoffer',
     PRODUCTOFFER_DETAILS_COLLECTION:'productoffer',
     BUYNOW_DETAILS_COLLECTION:'buynow',
+    WISHLIST_DETAILS_COLLECTION:'wishlist',
     
 }

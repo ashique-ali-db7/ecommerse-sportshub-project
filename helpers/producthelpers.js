@@ -1299,7 +1299,48 @@ resolve(cartItems)
     })
 },
 
+addToWishList:(proId,userId)=>{
 
+   return new Promise(async(resolve,reject)=>{
+
+let response = {};
+
+    let userwishlistexist =await db.get().collection(collections.WISHLIST_DETAILS_COLLECTION).findOne({user:objectId(userId)})
+
+
+    if(userwishlistexist){
+    
+        let userProductExist = await db.get().collection(collections.WISHLIST_DETAILS_COLLECTION).findOne({user:objectId(userId),products:{$elemMatch:{$eq:objectId(proId)}}});
+console.log("mmmmm");
+        console.log(userProductExist);
+         if(userProductExist){
+response.exist = true;
+resolve(response);
+
+
+         }
+         else{
+            db.get().collection(collections.WISHLIST_DETAILS_COLLECTION)
+            .updateOne({user:objectId(userId)},{$push:{products:objectId(proId)}})
+            response.added = true;
+            resolve(response);
+        
+         }
+
+        }
+        else{
+            let wishlistObj = {
+                user:objectId(userId),
+                products:[objectId(proId)]
+            }
+            db.get().collection(collections.WISHLIST_DETAILS_COLLECTION).insertOne(wishlistObj).then((response)=>{
+                response.added = true;
+                resolve(response);
+            })
+        }
+   })
+
+}
 
 
 }
