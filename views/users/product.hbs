@@ -281,7 +281,7 @@
                                 <p class="text-success selectsize" style="font-size: 1.1rem;" id="addedcart">Added to cart</p>
 
                                  <button style="border: none;" onclick="addtocartproduct('{{response._id}}','{{response.price}}')" class="primary-btn pd-cart mb-4"><i class="fas fa-shopping-cart mr-3"></i>Add To Cart</button>
-                                 <a href="#" class="primary-btn pd-cart "><i class="fas fa-fire mr-3"></i>Buy Now</a>
+                                 <button style="border: none;" onclick="buynowproduct('{{response._id}}','{{response.price}}')"  class="primary-btn pd-cart "><i class="fas fa-fire mr-3"></i>Buy Now</button>
 
                                 
                                 <ul class="pd-tags">
@@ -617,3 +617,152 @@
         </div>
     </div> --}}
     <!-- Partner Logo Section End -->
+
+    <script src="javascripts/users/jquery-3.3.1.min.js"></script>
+
+
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+
+var sizeOfProduct;
+function checksize(size){ 
+    
+    document.getElementById('selectsize').classList.add('selectsize');
+    document.getElementById('outofstock').classList.add('selectsize');
+     sizeOfProduct = size;
+
+}
+
+function addtocartproduct(productid,productprice){
+ let cartcounts =  document.getElementById('cartcountvalue').innerHTML;
+
+
+    document.getElementById('selectsize').classList.add('selectsize');
+if(sizeOfProduct){
+
+    $.ajax({
+        
+        url:'/addtocartproduct?productid='+productid+'&size='+sizeOfProduct+'&subtotal='+productprice,
+        method:'get',
+         success:(response)=>{
+          
+             if(response.sessionrequired){
+                 window.location.replace("/userlogin");
+            }
+             else if(response.added){
+                 cartcounts = Number(cartcounts);
+                document.getElementById('cartcountvalue').innerHTML = cartcounts+1;
+                //  document.getElementById("addedcart").classList.remove("selectsize")
+                // setTimeout(function(){ 
+                //      document.getElementById("addedcart").classList.add("selectsize")
+                //  }, 1000);
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 1800,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
+
+Toast.fire({
+  icon: 'success',
+  title: 'Added to cart succesfully'
+})
+
+                
+                  
+                  //  Toast.fire({
+                    //  icon: 'success',
+                  //    title: 'Item added to cart'
+                 //   })
+                 
+              
+             }
+             else if(response.exist){
+               //  document.getElementById("existincart").classList.remove("selectsize")
+              //  setTimeout(function(){ 
+                //     document.getElementById("existincart").classList.add("selectsize")
+              //   }, 3000); 
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 1800,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
+
+Toast.fire({
+  icon: 'warning',
+  title: 'Product already exist in cart'
+})
+
+
+             }
+     
+         }
+    })
+
+
+
+}else{
+    document.getElementById('selectsize').classList.remove('selectsize');
+}
+
+}
+
+
+
+
+
+
+function buynowproduct(productid,productprice){
+  
+     document.getElementById('selectsize').classList.add('selectsize');
+    
+    if(sizeOfProduct){
+        $.ajax({
+            url:'/addToBuyNowProduct?productid='+productid+'&size='+sizeOfProduct+'&subtotal='+productprice,
+        method:'get',
+            success:(response)=>{
+    
+   if(response.sessionrequired){
+                 window.location.replace("/userlogin");
+            }
+
+             else if(response.ok){
+
+window.location.href = '/buynowcheckout';
+
+            }
+            }
+        })
+    }
+    
+    
+    
+    
+    
+    else{
+         document.getElementById('selectsize').classList.remove('selectsize');
+    }
+    
+    
+    
+    }  
+
+
+
+
+    </script>

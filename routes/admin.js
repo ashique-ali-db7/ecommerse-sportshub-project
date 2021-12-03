@@ -55,12 +55,16 @@ router.get('/',verifyLogin,async function(req, res, next) {
  
   
 
-
+   producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
+    producthelpers.deleteCategoryoffers(todayDate).then(()=>{
+      res.render('admin/dashboard', { admin:true,totalorders,revenue,totalUsers,totalProducts,topSellingProducts,recenteOrders,todaySales,todayOrders});
+    })
+  })
  
  
 
 
-  res.render('admin/dashboard', { admin:true,totalorders,revenue,totalUsers,totalProducts,topSellingProducts,recenteOrders,todaySales,todayOrders});
+ 
 });
 
 
@@ -973,7 +977,14 @@ router.post('/homepageproductstwo',(req,res)=>{
 router.get('/categoryoffermanagment',async(req,res)=>{
   let categoryData =await categoryhelpers.getCategory();
   let categoryOffers = await producthelpers.getAllCategoryOffers();
-  res.render('admin/categoryoffermanagment',{admin:true,categoryData,categoryofferExistError,categoryOffers})
+  let todayDate = new Date().toISOString().slice(0, 10);
+  producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
+    producthelpers.deleteCategoryoffers(todayDate).then(()=>{
+      res.render('admin/categoryoffermanagment',{admin:true,categoryData,categoryofferExistError,categoryOffers})
+    })
+  })
+
+
   categoryofferExistError = ""
 });
 
@@ -1018,7 +1029,15 @@ router.get('/productoffermanagment',async(req,res)=>{
   let categoryData =await categoryhelpers.getCategory();
   let allproducts =  await producthelpers.getProduct();
   let productOffers = await producthelpers.getAllProductsOffers();
-  res.render('admin/productoffermanagment',{admin:true,categoryData,allproducts,productofferExistError,productOffers});
+  let todayDate = new Date().toISOString().slice(0, 10);
+  producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
+    producthelpers.deleteCategoryoffers(todayDate).then(()=>{
+      res.render('admin/productoffermanagment',{admin:true,categoryData,allproducts,productofferExistError,productOffers});
+    })
+  })
+
+
+
   productofferExistError = "";
 });
 
