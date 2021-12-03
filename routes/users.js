@@ -107,6 +107,8 @@ let productTwoForHomecategoryProducts = await producthelpers.categoryProductTwoF
 
 let todayDate = new Date().toISOString().slice(0, 10);
 
+
+
  producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
    producthelpers.deleteCategoryoffers(todayDate).then(()=>{
     res.render('users/home',{ admin:false,user,cartcount,allCategory,bannerOne,bannerTwo,categorybannerOne,categorybannerTwo,categorybannerThree,productOneForHomecategoryProducts,productTwoForHomecategoryProducts,productOneForHomecategory,productTwoForHomecategory});
@@ -882,7 +884,7 @@ let  totalpriceForpaypal =  sampleprice.toString();
 
 
 
-userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId).then(()=>{
+userhelpers.buynowplaceOrder(deliveryaddressAndMethod,products,totalPrice,userId).then(()=>{
 
 
 
@@ -907,8 +909,8 @@ userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId).then
          "payment_method": "paypal"
      },
      "redirect_urls": {
-         "return_url": "http://localhost:3000/success",
-         "cancel_url": "http://localhost:3000/cancel"
+         "return_url": "http://localhost:3000/buynowsuccess",
+         "cancel_url": "http://localhost:3000/buynowcancel"
      },
      "transactions": [{
          "item_list": {
@@ -1008,6 +1010,47 @@ res.json({status:false,errMsg:''})
    })
  })
 })
+
+
+// post buynow verify payment 
+router.post('/buynowverify-payment',async(req,res)=>{
+
+
+  let deliveryaddressAndMethod = await userhelpers.editotheraddress(req.session.deliveryaddressid,req.session.userId)
+
+  deliveryaddressAndMethod.paymentmethod = req.session.paymentmethod;
+
+
+ 
+
+  let products = await userhelpers.getBuynowProductList(req.session.userId);
+  
+
+  let totalPrice =  await producthelpers.getBuyNowTotalAmount(req.session.userId);
+
+
+
+ 
+ userhelpers.verifyPayment(req.body).then(()=>{
+  //  userhelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
+    //  userhelpers.deleteCartForPayment(req.session.user._id).then(()=>{
+    
+       userhelpers. buynowrazorpayPlaceorder(deliveryaddressAndMethod,products,totalPrice,req.session.userId).then(()=>{
+     
+        res.json({status:true})
+       })
+    
+    //  })
+    
+  //  })
+   .catch(()=>{
+res.json({status:false,errMsg:''})
+   })
+ })
+})
+
+
+
 
 // get user profile
 
@@ -1167,10 +1210,83 @@ router.post('/profileotheraddressedit',(req,res)=>{
   
  });
 
+
+
+//buynow paypal success
+
+router.get('/buynowsuccess',async(req,res)=>{
+  let user = req.session.user;
+  const payerId = req.query.PayerID;
+  const paymentId = req.query.paymentId;
+  let deliveryaddressAndMethod = await userhelpers.editotheraddress(req.session.deliveryaddressid,req.session.userId)
+
+  deliveryaddressAndMethod.paymentmethod = req.session.paymentmethod;
+
+
+ 
+
+  let products = await userhelpers.getBuynowProductList(req.session.userId);
+  
+
+  let totalPrice =  await producthelpers.getBuyNowTotalAmount(req.session.userId);
+
+ 
+
+  let sampleprice = (totalPrice/70).toFixed(2);
+ 
+
+  let  totalpriceForpaypal =  sampleprice.toString();
+ 
+  const execute_payment_json = {
+    "payer_id": payerId,
+    "transactions": [{
+        "amount": {
+            "currency": "USD",
+            "total": totalpriceForpaypal
+        }
+    }]
+  };
+
+
+    paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+      if (error) {
+          console.log(error.response);
+          throw error;
+      } else {
+      
+    
+
+        // userhelpers.deleteCartForPayment(req.session.user._id).then(()=>{
+    
+          userhelpers.buynowrazorpayPlaceorder(deliveryaddressAndMethod,products,totalPrice,req.session.userId).then(()=>{
+        
+          
+            console.log(JSON.stringify(payment));
+         
+            res.render('users/ordersuccess',{user,admin:false,user,notheader:true})
+          })
+       
+        // })
+
+      }
+  });
+  
+
+  
+ });
+
+
+
+
  router.get('/cancel',(req,res)=>{
    paypalcancel = "payment is cancelled you can try again"
    res.redirect('/checkout')
- })
+ });
+
+ router.get('/buynowcancel',(req,res)=>{
+  paypalcancel = "payment is cancelled you can try again"
+  res.redirect('/buynowcheckout')
+})
 
 
 // userOrderProductcancel

@@ -928,45 +928,6 @@ location.replace('/ordersuccess');
 
 
 
-
-function buynowplaceOrder(userId){
-    if(typeof placeOrderAddressId === 'undefined' || typeof paymentMethodForOrder === 'undefined'){
-        // document.getElementById("placeordervalidation").classList.remove("selectsize")
-        // setTimeout(function(){ 
-        //      document.getElementById("placeordervalidation").classList.add("selectsize")
-        //  }, 5000);
-        swal("You should select address and payment method!");
-    }else{
-    
-        $.ajax({
-            url:'/buynowplace-order?deliveryaddress='+placeOrderAddressId+"&paymentmethod="+paymentMethodForOrder+"&userId="+userId,
-            method:'get',
-            success:(response)=>{
-         if(response.codsuccess){
-            
-    location.replace('/ordersuccess');
-         }else if(response.data){
-    
-          location.href=response.url;
-         }
-         
-         
-         
-         else{
-          
-             razorpayPayment(response);
-         }
-            }
-         
-         
-         })
-    
-    
-    }
-    
-    }
-
-
 function razorpayPayment(order){
 
     var options = {
@@ -1033,9 +994,110 @@ function verifyPayment(payment,order){
 
 
 
+//buynowwww
+
+function buynowplaceOrder(userId){
+    if(typeof placeOrderAddressId === 'undefined' || typeof paymentMethodForOrder === 'undefined'){
+        // document.getElementById("placeordervalidation").classList.remove("selectsize")
+        // setTimeout(function(){ 
+        //      document.getElementById("placeordervalidation").classList.add("selectsize")
+        //  }, 5000);
+        swal("You should select address and payment method!");
+    }else{
+    
+        $.ajax({
+            url:'/buynowplace-order?deliveryaddress='+placeOrderAddressId+"&paymentmethod="+paymentMethodForOrder+"&userId="+userId,
+            method:'get',
+            success:(response)=>{
+         if(response.codsuccess){
+            
+    location.replace('/ordersuccess');
+         }else if(response.data){
+    
+          location.href=response.url;
+         }
+         
+         
+         
+         else{
+          
+             buynowrazorpayPayment(response);
+         }
+            }
+         
+         
+         })
+    
+    
+    }
+    
+    }
+
+
+    function buynowrazorpayPayment(order){
+
+        var options = {
+            "key": "rzp_test_Ft0y0XvToSOOXp", // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Sports hub",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response){
+              
+    
+                 buynowverifyPayment(response,order);
+    
+                
+            },
+            "prefill": {
+                "name": "Ashique Ali",
+                "email": "ashiquealikmvkd@gmail.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response){
+            // alert(response.error.code);
+            // alert(response.error.description);
+            // alert(response.error.source);
+            // alert(response.error.step);
+            // alert(response.error.reason);
+            // alert(response.error.metadata.order_id);
+            // alert(response.error.metadata.payment_id);
+    });
+        rzp1.open();
+    }
 
 
 
+    function buynowverifyPayment(payment,order){
+
+        $.ajax({
+            url:'/buynowverify-payment',
+            data:{
+                payment,
+                order
+            },
+            method:'post',
+            success:(response)=>{
+                if(response.status){
+                   location.replace('/ordersuccess');
+                }else{
+                   swal({
+                       title: "Order failed try again",
+                     });
+                }
+            }
+        })
+   }
 
 
 //delete other address
