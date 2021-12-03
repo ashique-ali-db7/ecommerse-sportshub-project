@@ -31,6 +31,7 @@
 
                                  <p style="color: red;">{{existDefaultAddress}}</p>   
                      <button class="btn ml-3 text-primary" style="float: right;border:1px solid #bbb3b3" class="btn btn-default btn-rounded mb-4 " data-toggle="modal" data-target="#modaladdressForm">Add new</button>
+{{#if defaultaddress}}
 <h5 class="mb-2"><b>DEFAULT ADDRESS</b> </h5>
                                 <div class="card mt-5 mb-4 shadow p-3 mb-5 bg-body rounded">
   <div class="card-body">
@@ -49,6 +50,25 @@
  </div>
   </div>
                                 </div>
+   {{else}}
+
+<h5 class="mb-2"><b>DEFAULT ADDRESS</b> </h5>
+                                <div class="card mt-5 mb-4 shadow p-3 mb-5 bg-body rounded">
+  <div class="card-body">
+      <div class="row">
+<div class="col-1">
+ {{!-- <input type="radio" style="width: 15px; margin:0%;position:relative; bottom:7%" onclick="checkoutAddress('{{defaultaddress._id}}')" name="input-name" value="{{defaultaddress._id}}"> --}}
+</div>
+<div class="col-10">
+  <button class="btn ml-3 text-danger" style="float: left;border:1px solid #bbb3b3 width:100%" class="btn btn-default btn-rounded mb-4 " data-toggle="modal" data-target="#modaladdressForm"><span class="mr-3" style="font-size: 20px;">+</span><span style="font-size: 25px;">Add new</span></button>
+  
+ </div>
+ </div>
+  </div>
+                                </div>
+
+
+{{/if}}                           
 
 
                           <h5 class="mb-2 mt-2">
