@@ -331,6 +331,60 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
     },
 
 
+
+    
+
+
+    buynowplaceOrder:(orderdetails,products,total,userId)=>{
+        
+        return new Promise(async(resolve,reject)=>{
+           
+            if(orderdetails.paymentmethod === 'cod'){
+             let status = "placed";
+             products.forEach(element => {
+                 element.status = status;
+             });
+ 
+      let orderObj = {
+          deliveryDetails:{
+             name: orderdetails.name,
+             housename: orderdetails.housename,
+             street: orderdetails.street,
+             district: orderdetails.district,
+             state: orderdetails.state,
+             pincode: orderdetails.pincode,
+             mobilenumber: orderdetails.mobilenumber
+          },
+          userId:objectId(userId),
+          paymentmethod:orderdetails.paymentmethod,
+          products:products,
+         
+          total:total,
+          date:new Date().toISOString().slice(0,10),
+          longdate:new Date()
+      }
+      
+      db.get().collection(collections.ORDER_DETAILS_COLLECTION).insertOne(orderObj).then((response)=>{
+        
+            //  db.get().collection(collections.CART_DETAILS_COLLECTION).remove({user:objectId(userId)})
+            //   let id = new objectId();
+         
+          resolve();
+      })
+     }else{
+        
+      
+ 
+ 
+        
+         
+          resolve();
+     }
+        })
+     },
+ 
+
+
     deleteOtheraddress:(addressId,userId)=>{
         db.get().collection(collections.USERS_DETAILS_COLLECTION).update({_id:objectId(userId)},{$pull:{"address":{_id:objectId(addressId)}}})
     },
@@ -489,8 +543,7 @@ console.log(vieworderproductdetails);
 
 
     razorpayPlaceorder:(orderdetails,products,total,userId)=>{
-        console.log("please");
-        console.log(products);
+       
         return new Promise(async(resolve,reject)=>{
 
             let status = "placed";
@@ -514,7 +567,8 @@ console.log(vieworderproductdetails);
          products:products,
         
          total:total,
-         date:new Date()
+         date:new Date().toISOString().slice(0,10),
+         longdate:new Date()
      }
      
      db.get().collection(collections.ORDER_DETAILS_COLLECTION).insertOne(orderObj).then((response)=>{
@@ -530,6 +584,56 @@ console.log(vieworderproductdetails);
     
     })
     },
+
+    
+
+
+
+    buynowrazorpayPlaceorder:(orderdetails,products,total,userId)=>{
+       
+        return new Promise(async(resolve,reject)=>{
+
+            let status = "placed";
+            products.forEach(element => {
+                element.status = status;
+            });
+      
+
+     let orderObj = {
+         deliveryDetails:{
+            name: orderdetails.name,
+            housename: orderdetails.housename,
+            street: orderdetails.street,
+            district: orderdetails.district,
+            state: orderdetails.state,
+            pincode: orderdetails.pincode,
+            mobilenumber: orderdetails.mobilenumber
+         },
+         userId:objectId(userId),
+         paymentmethod:orderdetails.paymentmethod,
+         products:products,
+        
+         total:total,
+         date:new Date().toISOString().slice(0,10),
+         longdate:new Date()
+     }
+     
+     db.get().collection(collections.ORDER_DETAILS_COLLECTION).insertOne(orderObj).then((response)=>{
+       
+            // db.get().collection(collections.CART_DETAILS_COLLECTION).remove({user:objectId(userId)})
+            
+        
+         resolve();
+     })
+       
+   
+      
+    
+    })
+    },
+
+
+
     saveProfile:(data,userId)=>{
         return new Promise((resolve,reject)=>{
             db.get().collection(collections.USERS_DETAILS_COLLECTION).update({_id:objectId(userId)},{$set:{profile:data}}).then(async(response)=>{
@@ -572,7 +676,9 @@ getAllOrderedProductForUser:(userId)=>{
                       status:"$products.status",
                       canceled:"$products.canceled",
                       delivered:"$products.delivered",
-                    date: "$date"
+                    date: "$date",
+                    longdate:"$longdate"
+
                     
                      
                      
@@ -589,11 +695,11 @@ getAllOrderedProductForUser:(userId)=>{
                   },
                   {
                       $project:{
-                          item:1,quantity:1,size:1,status:1,subtotal:1,date:1,canceled:1,delivered:1,productdetail:{$arrayElemAt:['$productdetail',0]}
+                          longdate:1,item:1,quantity:1,size:1,status:1,subtotal:1,date:1,canceled:1,delivered:1,productdetail:{$arrayElemAt:['$productdetail',0]}
                       }
                   },
                   {
-                    $sort:{date:-1} 
+                    $sort:{longdate:-1} 
                   }
         ]).toArray();
       
