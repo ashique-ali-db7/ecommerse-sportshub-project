@@ -434,7 +434,7 @@ console.log(vieworderproductdetails);
     },
 
     generateRazorpay:(orderid,totalPrice)=>{
-       ;
+       
         return new Promise(async(resolve,reject)=>{
         var options = {
             amount:totalPrice*100,
@@ -622,7 +622,19 @@ resolve();
      
       
     })
-}
+},
+
+
+
+getBuynowProductList:(userId)=>{
+     
+       
+    return new Promise(async(resolve,reject)=>{
+
+   let buynow = await db.get().collection(collections.BUYNOW_DETAILS_COLLECTION).findOne({user:objectId(userId)})
+   resolve(buynow?.products);
+    })
+},
 
 
 

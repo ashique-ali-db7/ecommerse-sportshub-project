@@ -622,10 +622,11 @@ return new Promise(async(resolve,reject)=>{
 
 
  deleteExpiredproductoffers:(date)=>{
- 
+    let proendDateIso =  new Date(date)
+   
  return new Promise(async(resolve,reject)=>{
 
-  let existingProductOffer =  await db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).findOne({profferenddate:date});
+  let existingProductOffer =  await db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).findOne({proendDateIso:{$lte:proendDateIso}});
 
    if(existingProductOffer){
 
@@ -647,11 +648,13 @@ resolve();
 
 
  deleteCategoryoffers:(date)=>{
+    let caendDateIso =  new Date(date);
+ 
  return new Promise(async(resolve,reject)=>{
 
-    let existingCategoryOffer = await db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).findOne({caofferenddate:date});
+    let existingCategoryOffer = await db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).findOne({endDateIso:{$lte:caendDateIso}});
     if(existingCategoryOffer){
-db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).deleteOne({caofferenddate:date})
+db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).deleteOne({category:existingCategoryOffer.category})
 
 
         let allProducts = await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:existingCategoryOffer.category,offerpercentage:existingCategoryOffer.discountpercentage}).toArray();
@@ -1099,7 +1102,202 @@ let data =await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggreg
 resolve(data);
 
      })
+ },
+
+
+
+
+
+ addToBuyProduct:(proId,size,userId,subtotal)=>{
+   
+    let proObj = {}
+  
+    
+    if(size === "s"){
+     
+      proObj.item = objectId(proId),
+      proObj.quantity = 1,
+      proObj.size = "s",
+      proObj.subtotal = Number(subtotal);
+    }
+
+    if(size === "m"){
+      proObj.item = objectId(proId),
+      proObj.quantity = 1,
+      proObj.size = "m",
+      proObj.subtotal = Number(subtotal);
+    }
+
+    if(size === "l"){
+   
+          proObj.item = objectId(proId),
+          proObj.quantity = 1,
+          proObj.size = "l",
+          proObj.subtotal = Number(subtotal);
+      
+    }
+   
+return new Promise(async(resolve,reject)=>{
+
+let response = {};
+
+
+  let userBuynow = await db.get().collection(collections.BUYNOW_DETAILS_COLLECTION).findOne({user:objectId(userId)});
+
+ if(userBuynow){
+  
+//  let userProductExist = await db.get().collection(collections.CART_DETAILS_COLLECTION).aggregate([
+//      {$match:{user:objectId(userId)}},
+//      {$unwind:"$products"},
+//      {$match:{"products.item":objectId(proId),"products.size":size}},
+//   ]).toArray();
+//   console.log(userProductExist);
+// if(userProductExist.length>0){
+//   response.exist = true;
+//   resolve(response);
+ 
+// }else{
+
+//   db.get().collection(collections.CART_DETAILS_COLLECTION)
+//   .updateOne({user:objectId(userId)},{$push:{products:proObj}})
+//   response.added = true;
+//   resolve(response);
+
+
+
+
+// }
+
+
+let cartObj = {
+    user:objectId(userId),
+    products:[proObj]
+}
+
+db.get().collection(collections.BUYNOW_DETAILS_COLLECTION).updateOne({user:objectId(userId)},{$pop:{products:-1}})
+
+db.get().collection(collections.BUYNOW_DETAILS_COLLECTION).updateOne({user:objectId(userId)},{$push:{products:proObj}}).then((response)=>{
+    // response.added = true;
+    resolve();
+});
+
+
+     
+   
+   
+}
+   
+
+ 
+ 
+ 
+ else{
+     let buynowObj = {
+         user:objectId(userId),
+         products:[proObj]
+     }
+     db.get().collection(collections.BUYNOW_DETAILS_COLLECTION).insertOne(buynowObj).then((response)=>{
+        //  response.added = true;
+         resolve();
+     });
  }
+
+})
+},
+
+
+getBuyNowTotalAmount:(userId)=>{
+
+    return new Promise(async(resolve,reject)=>{
+     
+        let total =await db.get().collection(collections.BUYNOW_DETAILS_COLLECTION)
+        .aggregate([
+            {
+                $match:{user:objectId(userId)}
+            },
+            {
+                $unwind:"$products"
+            },
+            {
+                $project:{
+                    item:"$products.item",
+                    quantity:"$products.quantity",
+                    size:'$products.size'
+                }
+            },
+            {
+                $lookup:{
+                    from:collections.PRODUCTS_DETAILS_COLLECTION,
+                    localField:'item',
+                    foreignField:'_id',
+                    as:'productdetails'    }
+            },
+            {
+                $project:{
+                    item:1,quantity:1,size:1,productdetails:{$arrayElemAt:['$productdetails',0]}
+                }
+            },
+            {
+                $group:{
+                    _id:null,
+                    total:{$sum:{$multiply:['$quantity','$productdetails.price']}}
+                }
+            }    
+        
+        ]).toArray()
+       if(total[0]?.total){
+        resolve(total[0].total)
+       }else{
+           resolve();
+       }
+       
+        
+              })
+
+
+},
+
+
+
+getBuyNowProducts:(userId)=>{
+    return new Promise(async(resolve,reject)=>{
+   
+let cartItems =await db.get().collection(collections.BUYNOW_DETAILS_COLLECTION)
+.aggregate([
+  {
+      $match:{user:objectId(userId)}
+  },
+  {
+      $unwind:"$products"
+  },
+  {
+      $project:{
+          item:"$products.item",
+          quantity:"$products.quantity",
+          size:'$products.size',
+          subtotal:"$products.subtotal"
+      }
+  },
+  {
+      $lookup:{
+          from:collections.PRODUCTS_DETAILS_COLLECTION,
+          localField:'item',
+          foreignField:'_id',
+          as:'productdetails'    }
+  },
+  {
+      $project:{
+          item:1,quantity:1,size:1,subtotal:1,productdetails:{$arrayElemAt:['$productdetails',0]}
+      }
+  }    
+
+]).toArray()
+
+resolve(cartItems)
+
+
+    })
+},
 
 
 

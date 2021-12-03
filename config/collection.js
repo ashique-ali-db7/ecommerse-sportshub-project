@@ -8,6 +8,7 @@ module.exports={
     ORDER_DETAILS_COLLECTION:'order',
     BANNER_DETAILS_COLLECTION:'banner',
     CATEGORYOFFER_DETAILS_COLLECTION:'categoryoffer',
-    PRODUCTOFFER_DETAILS_COLLECTION:'productoffer'
+    PRODUCTOFFER_DETAILS_COLLECTION:'productoffer',
+    BUYNOW_DETAILS_COLLECTION:'buynow',
     
 }

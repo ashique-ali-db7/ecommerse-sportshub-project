@@ -626,76 +626,81 @@ function outofstock(){
 }
 
 
-function checking(){
-    alert("kooi")
+// function checking(){
+//     alert("kooi")
 
-}
-
-
+// }
 
 
-var sizeOfProduct;
-function checksize(size){ 
+
+
+// var sizeOfProduct;
+// function checksize(size){ 
     
-    document.getElementById('selectsize').classList.add('selectsize');
-    document.getElementById('outofstock').classList.add('selectsize');
-     sizeOfProduct = size;
+//     document.getElementById('selectsize').classList.add('selectsize');
+//     document.getElementById('outofstock').classList.add('selectsize');
+//      sizeOfProduct = size;
 
-}
+// }
 
 
 
-function addtocartproduct(productid,productprice){
- let cartcounts =  document.getElementById('cartcountvalue').innerHTML;
+// function addtocartproduct(productid,productprice){
+//  let cartcounts =  document.getElementById('cartcountvalue').innerHTML;
 
- console.log(cartcounts);
-    document.getElementById('selectsize').classList.add('selectsize');
-if(sizeOfProduct){
+//  console.log(cartcounts);
+//     document.getElementById('selectsize').classList.add('selectsize');
+// if(sizeOfProduct){
 
-    $.ajax({
+//     $.ajax({
         
-        url:'/addtocartproduct?productid='+productid+'&size='+sizeOfProduct+'&subtotal='+productprice,
-        method:'get',
-         success:(response)=>{
+//         url:'/addtocartproduct?productid='+productid+'&size='+sizeOfProduct+'&subtotal='+productprice,
+//         method:'get',
+//          success:(response)=>{
           
-             if(response.sessionrequired){
-                 window.location.replace("/userlogin");
-            }
-             else if(response.added){
-                 cartcounts = Number(cartcounts);
-                document.getElementById('cartcountvalue').innerHTML = cartcounts+1;
-                 document.getElementById("addedcart").classList.remove("selectsize")
-                setTimeout(function(){ 
-                     document.getElementById("addedcart").classList.add("selectsize")
-                 }, 1000);
+//              if(response.sessionrequired){
+//                  window.location.replace("/userlogin");
+//             }
+//              else if(response.added){
+//                  cartcounts = Number(cartcounts);
+//                 document.getElementById('cartcountvalue').innerHTML = cartcounts+1;
+//                 //  document.getElementById("addedcart").classList.remove("selectsize")
+//                 // setTimeout(function(){ 
+//                 //      document.getElementById("addedcart").classList.add("selectsize")
+//                 //  }, 1000);
+
+//                 toastMixin.fire({
+//                     animation: true,
+//                     title: 'Signed in Successfully'
+//                   });
 
 
                 
                   
-                //    Toast.fire({
-                //      icon: 'success',
-                //      title: 'Item added to cart'
-                //    })
+//                 //    Toast.fire({
+//                 //      icon: 'success',
+//                 //      title: 'Item added to cart'
+//                 //    })
                  
               
-             }
-             else if(response.exist){
-                document.getElementById("existincart").classList.remove("selectsize")
-                setTimeout(function(){ 
-                     document.getElementById("existincart").classList.add("selectsize")
-                 }, 3000);
-             }
+//              }
+//              else if(response.exist){
+//                 document.getElementById("existincart").classList.remove("selectsize")
+//                 setTimeout(function(){ 
+//                      document.getElementById("existincart").classList.add("selectsize")
+//                  }, 3000);
+//              }
      
-         }
-    })
+//          }
+//     })
 
 
 
-}else{
-    document.getElementById('selectsize').classList.remove('selectsize');
-}
+// }else{
+//     document.getElementById('selectsize').classList.remove('selectsize');
+// }
 
-}
+// }
 
 
 //change cart quantity
@@ -886,10 +891,11 @@ function paymentMethod(method){
 
 function placeOrder(userId){
 if(typeof placeOrderAddressId === 'undefined' || typeof paymentMethodForOrder === 'undefined'){
-    document.getElementById("placeordervalidation").classList.remove("selectsize")
-    setTimeout(function(){ 
-         document.getElementById("placeordervalidation").classList.add("selectsize")
-     }, 5000);
+    // document.getElementById("placeordervalidation").classList.remove("selectsize")
+    // setTimeout(function(){ 
+    //      document.getElementById("placeordervalidation").classList.add("selectsize")
+    //  }, 5000);
+    swal("You should select address and payment method!");
 }else{
 
     $.ajax({
@@ -919,6 +925,47 @@ location.replace('/ordersuccess');
 }
 
 }
+
+
+
+
+function buynowplaceOrder(userId){
+    if(typeof placeOrderAddressId === 'undefined' || typeof paymentMethodForOrder === 'undefined'){
+        // document.getElementById("placeordervalidation").classList.remove("selectsize")
+        // setTimeout(function(){ 
+        //      document.getElementById("placeordervalidation").classList.add("selectsize")
+        //  }, 5000);
+        swal("You should select address and payment method!");
+    }else{
+    
+        $.ajax({
+            url:'/buynowplace-order?deliveryaddress='+placeOrderAddressId+"&paymentmethod="+paymentMethodForOrder+"&userId="+userId,
+            method:'get',
+            success:(response)=>{
+         if(response.codsuccess){
+            
+    location.replace('/ordersuccess');
+         }else if(response.data){
+    
+          location.href=response.url;
+         }
+         
+         
+         
+         else{
+          
+             razorpayPayment(response);
+         }
+            }
+         
+         
+         })
+    
+    
+    }
+    
+    }
+
 
 function razorpayPayment(order){
 
@@ -951,13 +998,13 @@ function razorpayPayment(order){
     };
     var rzp1 = new Razorpay(options);
     rzp1.on('payment.failed', function (response){
-        alert(response.error.code);
-        alert(response.error.description);
-        alert(response.error.source);
-        alert(response.error.step);
-        alert(response.error.reason);
-        alert(response.error.metadata.order_id);
-        alert(response.error.metadata.payment_id);
+        // alert(response.error.code);
+        // alert(response.error.description);
+        // alert(response.error.source);
+        // alert(response.error.step);
+        // alert(response.error.reason);
+        // alert(response.error.metadata.order_id);
+        // alert(response.error.metadata.payment_id);
 });
     rzp1.open();
 }
@@ -1050,3 +1097,11 @@ function cancelproduct(orderId,proId,size){
 
 
 
+
+
+ 
+
+
+
+ 
+    

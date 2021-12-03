@@ -138,9 +138,15 @@ router.get('/shopcategory',blockCheck,async(req,res)=>{
     let cartcount =await producthelpers.getCartCount(req.session.user?._id);
     let allCategory = await categoryhelpers.getCategory();
     let allBrands  =  await brandhelpers.getBrand();
+    let todayDate = new Date().toISOString().slice(0, 10);
+    producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
+      producthelpers.deleteCategoryoffers(todayDate).then(()=>{
+        res.render('users/clothings', { admin:false,products,user,cartcount,allCategory,allBrands,allsubcategories});
+      })
+    })
   
   
-    res.render('users/clothings', { admin:false,products,user,cartcount,allCategory,allBrands,allsubcategories});
+    
 })
 
 /* GET shopping cart. */
@@ -760,7 +766,7 @@ router.post('/otheraddressedit',(req,res)=>{
 
   let onlinepaymentid = new objectId();
 
-  console.log("heubau");
+ 
  
 
  userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId).then(()=>{
@@ -781,8 +787,7 @@ router.post('/otheraddressedit',(req,res)=>{
        
       
    }else if(req.query?.paymentmethod === 'paypal'){
-    console.log("idh angane alla");
-    console.log(totalpriceForpaypal);
+  
     var create_payment_json = {
       "intent": "sale",
       "payer": {
@@ -832,7 +837,123 @@ router.post('/otheraddressedit',(req,res)=>{
  })
 
 
- })
+ });
+
+
+
+
+//get buynow place order
+
+
+
+router.get('/buynowplace-order',async(req,res)=>{
+
+  let deliveryaddressid = req.query.deliveryaddress;
+ let userId = req.query.userId;
+
+ req.session.deliveryaddressid = req.query.deliveryaddress;
+ req.session.userId = req.query.userId;
+
+ let deliveryaddressAndMethod = await userhelpers.editotheraddress(deliveryaddressid,userId)
+
+ deliveryaddressAndMethod.paymentmethod = req.query.paymentmethod;
+
+ req.session.paymentmethod = req.query.paymentmethod;
+
+
+
+
+ let products = await userhelpers.getBuynowProductList(userId);
+ 
+
+ let totalPrice =  await producthelpers.getBuyNowTotalAmount(userId);
+ req.session.totalPrice = totalPrice;
+ 
+ let sampleprice = (totalPrice/70).toFixed(2);
+
+
+let  totalpriceForpaypal =  sampleprice.toString();
+
+
+
+
+ let onlinepaymentid = new objectId();
+
+
+
+
+userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId).then(()=>{
+
+
+
+  if(req.query?.paymentmethod === 'cod' ){
+   res.json({codsuccess:true})
+  }
+  
+  
+  else if(req.query?.paymentmethod === 'razorpay'){
+     userhelpers.generateRazorpay(onlinepaymentid,totalPrice).then((response)=>{
+     
+      
+       res.json(response);
+     })
+      
+     
+  }else if(req.query?.paymentmethod === 'paypal'){
+ 
+   var create_payment_json = {
+     "intent": "sale",
+     "payer": {
+         "payment_method": "paypal"
+     },
+     "redirect_urls": {
+         "return_url": "http://localhost:3000/success",
+         "cancel_url": "http://localhost:3000/cancel"
+     },
+     "transactions": [{
+         "item_list": {
+             "items": [{
+               
+              
+                 "price": totalpriceForpaypal,
+                 "currency": "USD",
+                 "quantity": 1
+             }]
+         },
+         "amount": {
+             "currency": "USD",
+             "total": totalpriceForpaypal
+         },
+         "description": "Sports hub."
+     }]
+ };
+
+ paypal.payment.create(create_payment_json, function (error, payment) {
+   if (error) {
+       throw error;
+   } else {
+      for(let i=0;i<payment.links.length;i++){
+ if(payment.links[i].rel === 'approval_url'){
+ 
+let url = payment.links[i].href;
+ res.json({data:true,url:url})
+ }
+      }
+       
+   }
+});
+  
+
+
+  }
+ 
+})
+
+
+});
+
+
+
 
 
  //deleteotheraddress
@@ -1058,7 +1179,65 @@ router.get('/usercancelorder',(req,res)=>{
    userhelpers.userChangeOrderStatus(req.query.orderId,req.query.proId,req.query.size).then(()=>{
      res.json({exist:true})
    })
-})
+});
+
+
+//get buy now
+
+router.get('/addToBuyNowProduct',(req,res)=>{
+
+  let response = {}
+  if(req.session.user){
+    let productSize = req.query.size;
+    let productId = req.query.productid;
+    let subtotal = req.query.subtotal;
+    let userId = req.session.user._id
+   
+    producthelpers.addToBuyProduct(productId,productSize,userId,subtotal).then(()=>{
+   
+        response.ok = true;
+res.json(response);
+  
+     
+  
+    })
+  
+  }else{
+response.sessionrequired = true;
+res.json(response);
+  }
+ 
+});
+
+
+
+
+/*buynow GET checkout. */
+router.get('/buynowcheckout',verifyLoginForLoginpage, async(req, res) =>{
+
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+  let user = req.session.user;
+  let userId  = req.session.user?._id;
+     let defaultaddress =  await userhelpers.getdefaultaddress(req.session.user._id);
+      let otheraddress = await userhelpers.getotheraddress(req.session.user._id);
+      let total =  await producthelpers.getBuyNowTotalAmount(req.session.user._id);
+      let cartItems = await producthelpers.getBuyNowProducts(userId);
+      // if(cartItems.length>=1){
+        res.render('users/buynowcheckout',{ admin:false,user,notheader:true,defaultaddress,otheraddress,total,cartItems,userId,existDefaultAddress,paypalcancel});
+        existDefaultAddress = "";
+        paypalcancel = "";
+      // }else{
+       
+        // res.redirect('/')
+      // }
+ 
+});
+
+
+
+
+
+
 // get user logout
 router.get('/userlogout',(req,res)=>{
   
