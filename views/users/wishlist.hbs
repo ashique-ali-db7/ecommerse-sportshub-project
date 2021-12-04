@@ -101,33 +101,33 @@
                                  {{!-- small --}}
                                  <div class="col-2">
 
-                                    {{#if quantity.smalloutofstock}}      
-                                     <div class="sc-item">
+                                      
+                                     <div class="sc-item selectsize" id="smalloutofstock">
                                          
-                                         <button class="roundmodalbutton"  onclick="outofstock()" style="color: grey;"  id="sm-size">S</button>
+                                         <button class="roundmodalbutton"  onclick="outofstock()" style="color: grey;border:1px solid grey"  id="sm-size">S</button>
                                         {{!-- <label for="sm-size"  style="color: grey;">s</label> --}}
                                     </div>
-                                    {{else}}
-                                   <div class="sc-item">
+                                  
+                                   <div class="sc-item" id="smallstockin">
                                         <button class="roundmodalbutton" onclick="checksize('s')" id="sm-size">S</button>
                                       
                                     </div>
-                                    {{/if}}
+                                 
 
 </div>
                                    {{!-- medium --}}
                                     <div class="col-2">
-                                     {{#if quantity.mediumoutofstock}}      
-                                    <div class="sc-item">
-                                        <button class="roundmodalbutton" onclick="outofstock()" style="color: grey;" id="md-size">M</button>
+                                    
+                                    <div class="sc-item selectsize" id="mediumoutofstock">
+                                        <button class="roundmodalbutton" onclick="outofstock()" style="color: grey;border:1px solid grey" id="md-size">M</button>
                                         {{!-- <label for="md-size" style="color: rgb(182, 179, 179);">m</label> --}}
                                     </div>
-                                    {{else}}
-                                     <div class="sc-item">
+                                 
+                                     <div class="sc-item" id="mediumstockin">
                                         <button class="roundmodalbutton" onclick="checksize('m')" id="md-size">M</button>
                                        
                                     </div>
-                                    {{/if}}
+                                 
 
                                 
                                   
@@ -136,18 +136,18 @@
                                     {{!-- large --}}
                                     <div class="col-2">
                                  
-                                   {{#if quantity.largeoutofstock}}      
-                                   <div class="sc-item">
-                                        <button class="roundmodalbutton" onclick="outofstock()" style="color: grey;" id="lg-size">L</button>
+                                     
+                                   <div class="sc-item selectsize" id="largeoutofstock">
+                                        <button class="roundmodalbutton" onclick="outofstock()" style="color: grey;border:1px solid grey" id="lg-size">L</button>
 
                                         {{!-- <label for="lg-size" style="color: rgb(182, 179, 179);">l</label> --}}
                                     </div>
-                                    {{else}}
-                                   <div class="sc-item">
+                                  
+                                   <div class="sc-item" id="largestockin">
                                         <button class="roundmodalbutton" onclick="checksize('l')" id="lg-size">L</button>
                                        
                                     </div>
-                                    {{/if}}
+                                  
 
 </div>
 
@@ -169,7 +169,7 @@
       </div>
       <div class="modal-footer">
        
-        <button style="width: 100%;background-color:#e7ab3c;border:none" onclick="addtocartproduct('{{this.productdetails._id}}','{{this.productdetails.price}}')" type="button" class="btn btn-primary"><i class="fas fa-shopping-cart mr-3"></i>DONE</button>
+        <button style="width: 100%;background-color:#e7ab3c;border:none" onclick="addtocartproduct()" type="button" class="btn btn-primary"><i class="fas fa-shopping-cart mr-3"></i>DONE</button>
       </div>
     </div>
   </div>
@@ -241,7 +241,8 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-
+let productIdForAddToCart  
+let productPriceForAddToCart
 var sizeOfProduct;
 function checksize(size){ 
     
@@ -251,7 +252,7 @@ function checksize(size){
 
 }
 
-function addtocartproduct(productid,productprice){
+function addtocartproduct(){
     console.log("hi")
  let cartcounts =  document.getElementById('cartcountvalue').innerHTML; 
 
@@ -261,7 +262,7 @@ if(sizeOfProduct){
 
     $.ajax({
         
-        url:'/addtocartproduct?productid='+productid+'&size='+sizeOfProduct+'&subtotal='+productprice,
+        url:'/addtocartproduct?productid='+productIdForAddToCart+'&size='+sizeOfProduct+'&subtotal='+productPriceForAddToCart,
         method:'get',
          success:(response)=>{
           
@@ -275,7 +276,7 @@ if(sizeOfProduct){
                 // setTimeout(function(){ 
                 //      document.getElementById("addedcart").classList.add("selectsize")
                 //  }, 1000);
-
+location.reload();
 const Toast = Swal.mixin({
   toast: true,
   position: 'top-end',
@@ -343,7 +344,6 @@ Toast.fire({
 
 
 
-
 function wishlistAddtoCart(id){
     $.ajax({
         url:'productwishlist?productid='+id,
@@ -357,6 +357,23 @@ document.getElementById('modalproductname').innerHTML = response.productdetails.
 
 document.getElementById('productpricemodal').innerHTML = response.productdetails.price;
 
+if(response.quantity.smalloutofstock){
+document.getElementById('smalloutofstock').classList.remove('selectsize');
+document.getElementById('smallstockin').classList.add('selectsize');
+}
+
+if(response.quantity.mediumoutofstock){
+document.getElementById('mediumoutofstock').classList.remove('selectsize');
+document.getElementById('mediumstockin').classList.add('selectsize');
+}
+
+if(response.quantity.largeoutofstock){
+document.getElementById('largeoutofstock').classList.remove('selectsize');
+document.getElementById('largestockin').classList.add('selectsize');
+}
+
+productIdForAddToCart = response.productdetails._id;
+productPriceForAddToCart = response.productdetails.price
         }
     })
 }
