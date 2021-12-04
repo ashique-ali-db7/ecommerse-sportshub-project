@@ -105,8 +105,8 @@
                                 </div>
                                 <ul>
                                     {{!-- <li class="w-icon active"><a href="#"><i class="icon_bag_alt"></i></a></li> --}}
-                                    <li style="width: 80%;background-color:#e7ab3c" class="quick-view"><a  href="/product?productid={{this.productid}}">+ Quick View</a></li>
-                                     <li class="w-icon" style="cursor: pointer;"><a ><i class="far fa-heart"></i></a></li> 
+                                    <li class="quick-view" style="width:100%;cursor: pointer;"><a onclick="addToWishList('{{this._id}}')" style="color:#e7ab3c;background-color:#e1dada"><i class="far fa-heart mr-2" ></i>WISH LIST</a></li>
+                                     {{!-- <li class="w-icon" style="cursor: pointer;"><a ><i class="far fa-heart"></i></a></li>  --}}
                                 </ul>
                             </div>
                             <div class="pi-text">
@@ -257,8 +257,8 @@
                                 </div>
                                 <ul>
                                     {{!-- <li class="w-icon active"><a href="#"><i class="icon_bag_alt"></i></a></li> --}}
-                                    <li style="width: 80%; background-color:#e7ab3c" class="quick-view"><a href="/product?productid={{this.productid}}">+ Quick View</a></li>
-                                     <li class="w-icon" style="cursor: pointer;"><a ><i class="far fa-heart"></i></a></li> 
+                                    <li class="quick-view" style="width:100%;cursor: pointer;"><a onclick="addToWishList('{{this._id}}')" style="color:#e7ab3c;background-color:#e1dada"><i class="far fa-heart mr-2" ></i>WISH LIST</a></li>
+                                     {{!-- <li class="w-icon" style="cursor: pointer;"><a ><i class="far fa-heart"></i></a></li>  --}}
                                 </ul>
                             </div>
                             <div class="pi-text">
@@ -510,3 +510,73 @@
         </div>
     </section> 
     <!-- Latest Blog Section End -->
+
+
+
+
+          <script src="javascripts/users/jquery-3.3.1.min.js"></script>
+
+
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+ function addToWishList(productId){
+
+    $.ajax({
+        url:'/addtowishlist',
+        data:{
+            productId,
+          
+        },
+        method:'post',
+        success:(response)=>{
+    if(response.sessionrequired){
+        location.href = '/userlogin' 
+    }
+    else if(response.exist){
+        const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 1800,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
+
+Toast.fire({
+  icon: 'warning',
+  title: 'Item is removed from wishlist'
+})
+    }else{
+        const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 1800,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
+
+Toast.fire({
+  icon: 'success',
+  title: 'Item added to wishlist'
+})
+    }
+
+        }
+    })
+    
+     }
+
+
+</script>
+  
+
+
