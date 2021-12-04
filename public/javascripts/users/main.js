@@ -764,7 +764,7 @@ function outofstock(){
 
 
     
-    swal("Are you sure you want to remove "+productname+" from cart ?", {
+    swal("Are you sure do you want to remove "+productname+" from cart ?", {
         buttons: true,
       }).then((willdelete)=>{
 if(willdelete){
@@ -1104,7 +1104,7 @@ function buynowplaceOrder(userId){
 function deleteotheraddress(addressId){
 
 
-    swal("Are you sure you want to remove this address ?", {
+    swal("Are you sure you do want to remove this address ?", {
         buttons: true,
       }).then((willdelete)=>{
 if(willdelete){
@@ -1180,10 +1180,65 @@ function cancelproduct(orderId,proId,size){
     
 //      }
 
+// function removeFromWishlist(proId){
+// document.getElementById(proId).classList.add('selectsize')
+// $.ajax({
+//     url:'/removefromwishlistpage?productId='+proId,
+//     method:'get',
+//     success:(response)=>{
+// if(response.status){
+
+
+
+// }
+//     }
+// })
+
+
+// }
+
 
 
  
 
+function removeFromWishlist(proId,productname){
+ 
+
+    swal("Are you sure do you want to remove "+productname+" from wislist?", {
+        buttons: true,
+      }).then((willdelete)=>{
+if(willdelete){
+    $.ajax({
+        url:'/removefromwishlistpage?productId='+proId,
+        method:'get',
+        success:(response)=>{
+    if(response.status){
+        document.getElementById(proId).classList.add('selectsize')
+      location.reload();
+    
+     
+    
+    
+    }
+        }
+    })
+
+}
+      
+
+      })
+
+
+
+
+
+
+  
+    
+    
+    }
+    
+    
 
 
  
