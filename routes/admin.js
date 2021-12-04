@@ -52,14 +52,20 @@ router.get('/',verifyLogin,async function(req, res, next) {
 
    let todayOrders = await producthelpers.todayOrders(todayDate);
 
- 
-  
+   let result1 =   await producthelpers.startCategoryOffers(todayDate);
 
-   producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
-    producthelpers.deleteCategoryoffers(todayDate).then(()=>{
-      res.render('admin/dashboard', { admin:true,totalorders,revenue,totalUsers,totalProducts,topSellingProducts,recenteOrders,todaySales,todayOrders});
-    })
-  })
+
+    let result2 = await producthelpers.startProductOffers(todayDate);
+  
+    producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
+      producthelpers.deleteExpiredCategoryoffers(todayDate).then(()=>{
+        res.render('admin/dashboard', { admin:true,totalorders,revenue,totalUsers,totalProducts,topSellingProducts,recenteOrders,todaySales,todayOrders});
+      })
+     })
+     
+ 
+    
+ 
  
  
 
@@ -978,11 +984,21 @@ router.get('/categoryoffermanagment',async(req,res)=>{
   let categoryData =await categoryhelpers.getCategory();
   let categoryOffers = await producthelpers.getAllCategoryOffers();
   let todayDate = new Date().toISOString().slice(0, 10);
+  let result1 =   await producthelpers.startCategoryOffers(todayDate);
+
+
+  let result2 = await producthelpers.startProductOffers(todayDate);
+
+
   producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
-    producthelpers.deleteCategoryoffers(todayDate).then(()=>{
-      res.render('admin/categoryoffermanagment',{admin:true,categoryData,categoryofferExistError,categoryOffers})
+    producthelpers.deleteExpiredCategoryoffers(todayDate).then(()=>{
+      res.render('admin/categoryoffermanagment',{admin:true,categoryData,categoryofferExistError,categoryOffers});
+      categoryofferExistError = "";
     })
-  })
+   })
+
+ 
+  
 
 
   categoryofferExistError = ""
@@ -992,6 +1008,7 @@ router.get('/categoryoffermanagment',async(req,res)=>{
 router.post('/categoryoffer',(req,res)=>{
 producthelpers.addCategoryOffer(req.body).then((response)=>{
   if(response.exist){
+   
     categoryofferExistError = "This category already have a offer"
     res.redirect('/admin/categoryoffermanagment')
   }else{
@@ -1030,11 +1047,18 @@ router.get('/productoffermanagment',async(req,res)=>{
   let allproducts =  await producthelpers.getProduct();
   let productOffers = await producthelpers.getAllProductsOffers();
   let todayDate = new Date().toISOString().slice(0, 10);
+  let result1 =   await producthelpers.startCategoryOffers(todayDate);
+
+
+  let result2 = await producthelpers.startProductOffers(todayDate);
+
   producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
-    producthelpers.deleteCategoryoffers(todayDate).then(()=>{
+    producthelpers.deleteExpiredCategoryoffers(todayDate).then(()=>{
       res.render('admin/productoffermanagment',{admin:true,categoryData,allproducts,productofferExistError,productOffers});
+
     })
-  })
+   })
+     
 
 
 

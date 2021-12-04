@@ -110,11 +110,32 @@ let todayDate = new Date().toISOString().slice(0, 10);
 
 
 
- producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
-   producthelpers.deleteCategoryoffers(todayDate).then(()=>{
+
+
+
+   let result1 =   await producthelpers.startCategoryOffers(todayDate);
+
+
+    let result2 = await producthelpers.startProductOffers(todayDate);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
+   producthelpers.deleteExpiredCategoryoffers(todayDate).then(()=>{
     res.render('users/home',{ admin:false,user,cartcount,allCategory,bannerOne,bannerTwo,categorybannerOne,categorybannerTwo,categorybannerThree,productOneForHomecategoryProducts,productTwoForHomecategoryProducts,productOneForHomecategory,productTwoForHomecategory});
    })
- })
+  })
 
 
 
@@ -142,11 +163,21 @@ router.get('/shopcategory',blockCheck,async(req,res)=>{
     let allCategory = await categoryhelpers.getCategory();
     let allBrands  =  await brandhelpers.getBrand();
     let todayDate = new Date().toISOString().slice(0, 10);
+  
+    let result1 =   await producthelpers.startCategoryOffers(todayDate);
+
+
+    let result2 = await producthelpers.startProductOffers(todayDate);
+
+
     producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
-      producthelpers.deleteCategoryoffers(todayDate).then(()=>{
+      producthelpers.deleteExpiredCategoryoffers(todayDate).then(()=>{
         res.render('users/clothings', { admin:false,products,user,cartcount,allCategory,allBrands,allsubcategories});
       })
-    })
+     })
+     
+       
+    
   
   
     
