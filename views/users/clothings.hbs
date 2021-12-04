@@ -166,8 +166,8 @@
                                         </div>
                                         <ul>
                                              {{!-- <li class="w-icon active"><a href="#"><i class="icon_bag_alt"></i></a></li>  --}}
-                                            <li class="quick-view" style="width:80%"><a href="/product?productid={{this.productid}}" style="background-color: #e7ab3c;">+ Quick View</a></li>
-                                         <li class="" style="cursor: pointer;"><a onclick="addToWishList('{{this._id}}')"><i class="far fa-heart"></i></a></li> 
+                                            <li class="quick-view" style="width:100%;cursor: pointer;"><a onclick="addToWishList('{{this._id}}')" style="color:#e7ab3c"><i class="far fa-heart mr-2" ></i>WISH LIST</a></li>
+                                         {{!-- <li class="" style="cursor: pointer;"><a onclick="addTo('{{this._id}}')"><i class="far fa-heart" ></i></a></li>  --}}
                                         </ul>
                                     </div>
                                     <div class="pi-text">
@@ -272,7 +272,7 @@
 
 Toast.fire({
   icon: 'warning',
-  title: 'Product already exist in cart'
+  title: 'Item is removed from wishlist'
 })
     }else{
         const Toast = Swal.mixin({
@@ -289,7 +289,7 @@ Toast.fire({
 
 Toast.fire({
   icon: 'success',
-  title: 'Added to cart succesfully'
+  title: 'Item added to wishlist'
 })
     }
 

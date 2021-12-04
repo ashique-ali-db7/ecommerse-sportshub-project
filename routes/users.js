@@ -17,6 +17,7 @@ const client = require("twilio")(accountId,authToken)
 
 
 var paypal = require('paypal-rest-sdk');
+const { Db } = require('mongodb');
 
 paypal.configure({
   'mode': 'sandbox', //sandbox or live
@@ -194,6 +195,46 @@ quantity.smalloutofstock = true;
   
   
 });
+
+// get product for wishlist modal
+
+
+ router.get('/productwishlist',blockCheck,async function(req, res) {
+   let user = req.session.user;
+   let data = {
+     quantity:{
+
+     },
+     productdetails:{
+       
+     }
+   }
+   
+  //  let cartcount =await producthelpers.getCartCount(req.session.user?._id);
+  //  let allCategory = await categoryhelpers.getCategory();
+ producthelpers.getSingleProductDetails(req.query).then((response)=>{
+console.log("idh setttan");
+  console.log(response);
+   if(response.instock[0].quantity == 0){
+ data.quantity.smalloutofstock = true;
+   }
+   if(response.instock[1].quantity == 0){
+    data.quantity.mediumoutofstock = true;
+       }
+      if(response.instock[2].quantity == 0){
+        data.quantity.largeoutofstock = true;
+          }
+data.productdetails = response;
+  res.send(data);
+ })
+  
+  
+ });
+
+
+
+
+
 
 /* GET checkout. */
 router.get('/checkout',verifyLoginForLoginpage, async(req, res) =>{
@@ -1357,10 +1398,12 @@ router.get('/wishlist',verifyLoginForLoginpage,async(req,res)=>{
     let cartcount =await producthelpers.getCartCount(req.session.user?._id);
     let allCategory = await categoryhelpers.getCategory();
     let allBrands  =  await brandhelpers.getBrand();
+     let wishlist  = await producthelpers.getWishListProducts(req.session.user._id);
+
     let todayDate = new Date().toISOString().slice(0, 10);
     producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
       producthelpers.deleteCategoryoffers(todayDate).then(()=>{
-        res.render('users/wishlist', { admin:false,user,cartcount,allBrands,allsubcategories,allCategory});
+        res.render('users/wishlist', { admin:false,user,cartcount,allBrands,allsubcategories,allCategory,wishlist});
       })
     })
 
@@ -1397,6 +1440,13 @@ res.json(response)
 })
 
 
+
+router.get('/removefromwishlistpage',(req,res)=>{
+  let proId = req.query.productId;
+  producthelpers.removeProductFromWishlistPage(proId,req.session.user._id).then(()=>{
+    res.json({status:true})
+  })
+})
 
 
 
