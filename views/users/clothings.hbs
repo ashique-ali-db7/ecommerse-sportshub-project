@@ -20,7 +20,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-2 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter" >
-                    <div class="filter-widget">
+                    {{!-- <div class="filter-widget">
                         <h4 class="fw-title">Sub categories</h4>
                         <ul class="filter-catagories">
                             {{#each allsubcategories}}
@@ -29,15 +29,43 @@
                          
                         </ul>
                         <hr>
+                    </div> --}}
+
+
+  <div class="filter-widget">
+                        <h4 class="fw-title">Subcategories</h4>
+                        <div class="fw-brand-check">
+                            {{#each allsubcategories}}
+                            <div class="bc-item">
+                                <label for="bc-calvin{{this.subcategory}}">
+                                    {{this.subcategory}}
+                                    <input type="checkbox" id="bc-calvin{{this.subcategory}}">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                           {{/each}}
+                            {{!-- <div class="bc-item">
+                                <label for="bc-tommy">
+                                    Tommy Hilfiger
+                                    <input type="checkbox" id="bc-tommy">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div> --}}
+                            <hr>
+                        </div>
                     </div>
+
+
+
+
                     <div class="filter-widget">
                         <h4 class="fw-title">Brand</h4>
                         <div class="fw-brand-check">
                             {{#each allBrands}}
                             <div class="bc-item">
-                                <label for="bc-calvin">
+                                <label for="bc-calvin{{this.brandName}}">
                                     {{this.brandName}}
-                                    <input type="checkbox" id="bc-calvin">
+                                    <input type="checkbox" id="bc-calvin{{this.brandName}}">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>

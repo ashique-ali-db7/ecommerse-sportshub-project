@@ -144,7 +144,8 @@
                         </div> --}}
                         
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-1"></div>
+                    <div class="col-lg-4 ">
                       <p style="color: red;" id="placeordervalidation" class="selectsize" >You should select address and payment method for place order</p>
                        {{#if paypalcancel}}
   <p style="color: red;" id="paypalcancel" hidden>{{paypalcancel}}</p>
@@ -153,17 +154,20 @@
                         {{!-- <div class="checkout-content">
                             <input type="text" placeholder="Enter Your Coupon Code">
                         </div> --}}
-                        <div  class="place-order ">
+                        <div  class="place-order">
                         
                             <div class="order-total shadow p-3 mb-5 bg-body rounded">
                                 <ul class="order-table">
-                                    {{!-- <li>Product <span>Total</span></li> --}}
+                                
+                                     {{!-- <li>Product <span>Total</span></li>  --}}
                                     {{#each cartItems}}
                                     <li class="fw-normal">{{this.productdetails.productname}} x {{this.quantity}} <span>{{this.subtotal}}</span></li>
                                   
                                     {{/each}}
-                                    {{!-- <li class="fw-normal">Subtotal <span>$240.00</span></li> --}}
-                                    <li class="total-price">Total <span>{{total}}</span></li>
+                                     <li class="fw-normal">coupon discounts<span style="color:#e7ab3c;cursor:pointer"  data-toggle="modal" data-target="#applycoupen">APPLY</span>
+                                     <p style="color: red;font-size:0.8rem;">{{couponAlreadyUsedError}}</p>
+                                     </li>
+                                    <li class="total-price">Delivery charge<span id="">FREE</span><br><br>Coupen discount<span id="coupendiscount">0</span><br><br> Total <span id="totalcheckoutprice">{{total}}</span></li>
                                 </ul>
                                 <div class="payment-check">
                                     <div class="pc-item">
@@ -202,6 +206,43 @@
         </div>
     </section>
     <!-- Shopping Cart Section End -->
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="applycoupen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">APPLY COUPON</h5>
+        <button type="button" class="close" data-dismiss="modal" id="closemodal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+     
+      <div class="modal-body">
+      <div>
+        <input type="text" id="coupencode" name="coupencode" placeholder="coupen code" style="width:100%;border:1px solid grey;height:50px">
+      </div>
+      <div id="errormessage" style="background-color: rgb(248, 245, 245);color:red">
+
+      </div>
+      </div>
+      <div class="modal-footer">
+       
+        <button onclick="applycoupen()"  style="width:100%;background-color:#e7ab3c;border:none" class="btn btn-primary">Apply</button>
+    
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 
 
 

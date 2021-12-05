@@ -15,7 +15,14 @@
     <input type="text" name="banner1heading" id=""><br>
      <label for="">Description</label><br>
     <textarea name="banner1description" id="" cols="40" rows="5"></textarea><br>
-     <label for="">Banner image</label><br>
+     <label for="" class="mt-1">Shop now button direction</label><br>
+  <select name="firstmainbannercategory" id="">
+         {{#each categoryData}}
+         <option>{{this.category}}</option>
+         {{/each}}
+     </select><br>
+
+     <label for="" class="mt-1">Banner image</label><br>
      <input type="file" name="banner1image" id="banner1image" onchange="return BannerOneFileValidation()" > <div id="imagePreviewBannerOne" class="mt-2"></div><br>
        <button type="submit" class="btn btn-primary">Submit</button>
 </form>
@@ -40,7 +47,13 @@
     <input type="text" name="banner2heading" id=""><br>
      <label for="">Description</label><br>
     <textarea name="banner2description" id="" cols="40" rows="5"></textarea><br>
-     <label for="">Banner image</label><br>
+     <label for="" class="mt-1">Shop now button direction</label><br>
+  <select name="secondmainbannercategory" id="">
+         {{#each categoryData}}
+         <option>{{this.category}}</option>
+         {{/each}}
+     </select><br>
+     <label for="" class="mt-1">Banner image</label><br>
      <input type="file" name="banner2image" id="banner2image" onchange="return BannerTwoFileValidation()"><div id="imagePreviewBannerTwo" class="mt-2"></div><br>
      <button type="submit" class="btn btn-primary mt-2">Submit</button>
 </form>
@@ -112,8 +125,9 @@
     <div class="row">
   <div class="card-body col-4 ">
    <h6>Category banner one</h6>
-<form action="/admin/categorybannerone" method="post" enctype="multipart/form-data">
+<form action="/admin/categorybannerone" method="post" id="categorybannerone" enctype="multipart/form-data">
        <select name="subbannercategoryone" id="">
+         <option selected="true" disabled="disabled">{{categoryBannerOne.category}}</option> 
          {{#each categoryData}}
          <option>{{this.category}}</option>
          {{/each}}
@@ -130,8 +144,9 @@
   <div class="card-body col-4">
     <h6>Category banner two</h6>
 
-     <form action="/admin/categorybannertwo" method="post" enctype="multipart/form-data">
+     <form action="/admin/categorybannertwo" method="post" id="categorybannertwo" enctype="multipart/form-data">
        <select name="subbannercategorytwo" id="">
+          <option selected="true" disabled="disabled">{{categoryBannerTwo.category}}</option> 
           {{#each categoryData}}
          <option>{{this.category}}</option>
          {{/each}}
@@ -153,8 +168,9 @@
      <h6>Category banner three</h6>
 
 
-     <form action="/admin/categorybannerthree" method="post" enctype="multipart/form-data">
+     <form action="/admin/categorybannerthree" method="post" id="categorybannerthree" enctype="multipart/form-data">
        <select name="subbannercategorythree" id="">
+          <option selected="true" disabled="disabled">{{categoryBannerThree.category}}</option> 
          {{#each categoryData}}
          <option>{{this.category}}</option>
          {{/each}}
@@ -178,8 +194,9 @@
     <div class="col-6">
   <div class="card-body">
    <P>Category wise products want to show in home page</P>
-   <form action="/admin/homepageproductsone" method="post" enctype="multipart/form-data">
+   <form action="/admin/homepageproductsone" method="post" id="homepageproductsone" enctype="multipart/form-data">
         <select name="category" id="">
+          <option selected="true" disabled="disabled">{{homeProductsOne.category}}</option> 
          {{#each categoryData}}
          <option>{{this.category}}</option>
          {{/each}}
@@ -193,8 +210,9 @@
 <div class="col-6">
    <div class="card-body">
    <P>Category wise products want to show in home page</P>
-   <form action="/admin/homepageproductstwo" method="post" enctype="multipart/form-data">
+   <form action="/admin/homepageproductstwo" method="post" id="homepageproductstwo" enctype="multipart/form-data">
         <select name="category" id="">
+          <option selected="true" disabled="disabled">{{homeProductsTwo.category}}</option>
          {{#each categoryData}}
          <option>{{this.category}}</option>
          {{/each}}

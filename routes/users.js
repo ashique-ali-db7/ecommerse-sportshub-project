@@ -36,6 +36,7 @@ var blockedError = "";
 var cartItemsEmpty = "";
 var existDefaultAddress = "";
 var paypalcancel = "";
+var couponAlreadyUsedError = "";
 
 
 // verify login middleware
@@ -120,6 +121,7 @@ let todayDate = new Date().toISOString().slice(0, 10);
 
 
 
+ let result3 = await producthelpers.startCoupenOffers(todayDate);
 
 
 
@@ -127,17 +129,18 @@ let todayDate = new Date().toISOString().slice(0, 10);
 
 
 
+ console.log("moneeee");
 
-
+producthelpers.coupendelete(todayDate).then(()=>{
 
 
   producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
    producthelpers.deleteExpiredCategoryoffers(todayDate).then(()=>{
     res.render('users/home',{ admin:false,user,cartcount,allCategory,bannerOne,bannerTwo,categorybannerOne,categorybannerTwo,categorybannerThree,productOneForHomecategoryProducts,productTwoForHomecategoryProducts,productOneForHomecategory,productTwoForHomecategory});
-   })
-  })
+   });
+  });
 
-
+});
 
   
 });
@@ -278,9 +281,10 @@ router.get('/checkout',verifyLoginForLoginpage, async(req, res) =>{
       let total =  await producthelpers.getTotalAmount(req.session.user._id);
       let cartItems = await producthelpers.getCartProducts(userId);
       if(cartItems.length>=1){
-        res.render('users/checkout',{ admin:false,user,notheader:true,defaultaddress,otheraddress,total,cartItems,userId,existDefaultAddress,paypalcancel});
+        res.render('users/checkout',{ admin:false,user,notheader:true,defaultaddress,otheraddress,total,cartItems,userId,existDefaultAddress,paypalcancel,couponAlreadyUsedError});
         existDefaultAddress = "";
         paypalcancel = "";
+        couponAlreadyUsedError=""
       }else{
        
         res.redirect('/')
@@ -825,9 +829,12 @@ router.post('/otheraddressedit',(req,res)=>{
  
 
   let products = await userhelpers.getCartProductList(userId);
-  
 
-  let totalPrice =  await producthelpers.getTotalAmount(userId);
+ let  totalPrice =  await producthelpers.getTotalAmount(userId);
+
+ 
+
+
   req.session.totalPrice = totalPrice;
   
   let sampleprice = (totalPrice/70).toFixed(2);
@@ -1477,6 +1484,62 @@ router.get('/removefromwishlistpage',(req,res)=>{
   producthelpers.removeProductFromWishlistPage(proId,req.session.user._id).then(()=>{
     res.json({status:true})
   })
+});
+
+
+router.post('/applycoupen',(req,res)=>{
+result = {}
+
+  let coupencode = req.body.coupencode;
+  
+ producthelpers.checkCoupen(coupencode,req.session.user._id).then(async(response)=>{
+  //  if(response.alreadyused){
+  //    couponAlreadyUsedError = "This coupen is already used";
+  //    res.redirect('/checkout');
+  //  }
+
+if(response.notexist){
+result.notexist = true;
+res.send(result);
+}
+else if(response.alreadyused){
+  result.alreadyused = true;
+  res.send(result);
+}
+else{
+  let total =  await producthelpers.getTotalAmount(req.session.user._id);
+  
+  
+  
+  let price = total;
+  let offer = (price/100)*response.coupenpercentage;
+  let offerprice = (price - offer).toFixed(0);
+  offerprice = Number(offerprice);
+  let coupenOfferPrice = offerprice;
+
+  req.session.user.coupenOfferPrice = coupenOfferPrice;
+
+let savedprice = total - coupenOfferPrice;
+
+
+ 
+
+result.savedprice = savedprice;
+result.coupenOfferPrice = coupenOfferPrice;
+    result.exist = true;
+res.send(result);
+
+
+  
+    //  res.send(result);
+     
+    
+
+}
+
+ })
+ 
+
 })
 
 
