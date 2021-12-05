@@ -1076,7 +1076,8 @@ $(document).ready(function() {
    
     $('#productoffertable').DataTable();
     $('#categoryoffertable').DataTable();
-    
+    $('#coupenoffertable').DataTable();
+ 
 
   
 } );
@@ -1248,6 +1249,99 @@ $("#brandvalidationform").validate({
   
 });
 
+$("#categorybannerone").validate({
+    rules:{
+       
+        subbannercategoryone:{
+            required:true,
+           
+        },
+        categorybannerimage1:{
+            required:true,
+           
+        },
+      
+        
+    }
+   
+  
+});
+
+$("#categorybannertwo").validate({
+    rules:{
+       
+        subbannercategorytwo:{
+            required:true,
+           
+        },
+        categorybannerimage2:{
+            required:true,
+           
+        },
+      
+        
+    }
+   
+  
+});
+
+$("#categorybannerthree").validate({
+    rules:{
+       
+        subbannercategorythree:{
+            required:true,
+           
+        },
+        categorybannerimage3:{
+            required:true,
+           
+        },
+      
+        
+    }
+   
+  
+});
+
+$("#homepageproductsone").validate({
+    rules:{
+       
+        category:{
+            required:true,
+           
+        },
+        productbanner1image:{
+            required:true,
+           
+        },
+      
+        
+    }
+   
+  
+});
+
+$("#homepageproductstwo").validate({
+    rules:{
+       
+        category:{
+            required:true,
+           
+        },
+        productbanner2image:{
+            required:true,
+           
+        },
+      
+        
+    }
+   
+  
+});
+
+
+
+
 $("#productoffer").validate({
     rules:{
        
@@ -1266,6 +1360,38 @@ $("#productoffer").validate({
            
         },
         profferenddate:{
+            required:true,
+           
+        }
+        
+    }
+   
+  
+});
+
+
+$("#coupenoffer").validate({
+    rules:{
+       
+        coupencode:{
+            required:true,
+           
+        },
+        coupencount:{
+            required:true,
+            number:true,
+            
+           
+        },
+        coupenpercentage:{
+            required:true,
+            max:100
+        },
+        coupenstartdate:{
+            required:true,
+           
+        },
+        coupenenddate:{
             required:true,
            
         }
@@ -1725,6 +1851,32 @@ if(willdelete){
 }
       })
 
+
+}
+
+function deletecoupenoffer(coupencode){
+
+    swal("Are you sure you want to remove "+coupencode+"?", {
+        buttons: true,
+      }).then((willdelete)=>{
+if(willdelete){
+
+    $.ajax({
+        url:'/admin/deletecoupenoffer?coupencode='+coupencode,
+        method:'get',
+        success:(response)=>{
+    if(response.status){
+location.reload();
+    }else{
+
+    }
+        }
+    })
+
+}else{
+
+}
+      })
 
 }
 

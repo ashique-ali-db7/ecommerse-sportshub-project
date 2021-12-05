@@ -143,7 +143,7 @@
 
 <div class="col-md-4">
 <div class="card" style="height: 40%;">
-
+{{#if todaySales}}
   <div class="card-body" style="background-color: rgb(91, 31, 146);color:#fff">
 <h3>Today sales</h3>
 {{#each todaySales}}
@@ -151,15 +151,31 @@
 <h2 class="text-center"><i class="fas fa-rupee-sign " style="font-size:2rem"></i>{{this.todaytotal}}</h2>
 {{/each}}
   </div>
+{{else}}
 
+ <div class="card-body" style="background-color: rgb(91, 31, 146);color:#fff">
+<h3>Today sales</h3>
+
+<p></p>
+<h2 class="text-center"><i class="fas fa-rupee-sign " style="font-size:2rem"></i>0</h2>
+
+  </div>
+
+
+{{/if}}
 </div>
 <div class="card" style="height: 40%;margin-top:17%">
   <div class="card-body" style="background-color: rgb(136, 25, 64);color:#fff">
 <h3>Today orders</h3>
+{{#if todayOrders}}
 {{#each todayOrders}}
 <p>{{this._id}}</p>
 <h2 class="text-center">{{this.count}}</h2>
 {{/each}}
+{{else}}
+<p>{{this._id}}</p>
+<h2 class="text-center">0</h2>
+{{/if}}
   </div>
 </div>
 

@@ -17,7 +17,9 @@ var productExistError = "";
 var varsubcategoryError = "";
 var invalidusername = "";
 let categoryofferExistError = "";
-let productofferExistError = ""
+let productofferExistError = "";
+let coupenCountError = "";
+let coupenExistError = ""
 
 const verifyLogin = (req,res,next)=>{
   if(req.session.admin){
@@ -695,7 +697,15 @@ router.get('/bannermanagment',async(req,res)=>{
     let categoryData =await categoryhelpers.getCategory();
     let bannerOne = await categoryhelpers.getBannerOne();
 let bannerTwo = await categoryhelpers.getBannerTwo();
-    res.render('admin/bannermanagment',{admin:true,categoryData,bannerOne,bannerTwo});
+let categoryBannerOne = await categoryhelpers.categoryBannerOne();
+let categoryBannerTwo = await categoryhelpers.categoryBannerTwo();
+let categoryBannerThree = await categoryhelpers.categoryBannerThree();
+let homeProductsOne = await categoryhelpers.homeProductsOne();
+let homeProductsTwo = await categoryhelpers.homeProductsTwo();
+
+
+
+    res.render('admin/bannermanagment',{admin:true,categoryData,bannerOne,bannerTwo,categoryBannerOne,categoryBannerTwo,categoryBannerThree,homeProductsOne,homeProductsTwo});
   }else{
     res.redirect('/admin/adminlogin');
   }
@@ -1103,9 +1113,44 @@ router.get('/deleteproductoffer',(req,res)=>{
 
 router.get('/coupenmanagment',async(req,res)=>{
   let categoryData =await categoryhelpers.getCategory();
-  res.render('admin/coupenmanagment',{admin:true,categoryData})
+  let coupendetails = await categoryhelpers.getCoupenDetails();
+
+  console.log(coupendetails);
+  res.render('admin/coupenmanagment',{admin:true,categoryData,coupenCountError,coupenExistError,coupendetails})
+  coupenCountError = "";
+  coupenExistError = "";
 });
 
+
+// post coupen offer
+router.post('/coupenoffer',(req,res)=>{
+console.log(req.body);
+ if(req.body.coupencount <= 0){
+   coupenCountError = "coupen count should be greater than one"
+   res.redirect('/admin/coupenmanagment')
+ }else{
+
+categoryhelpers.addCoupen(req.body).then((response)=>{
+  if(response.exist){
+    coupenExistError = "This coupen already exist"
+    res.redirect('/admin/coupenmanagment')
+  }else{
+    res.redirect('/admin/coupenmanagment')
+  }
+})
+
+
+ }
+
+})
+
+// get delete single coupen
+
+router.get('/deletecoupenoffer',(req,res)=>{
+  categoryhelpers.deleteCoupen(req.query.coupencode).then(()=>{
+    res.json({status:true})
+  })
+})
 
 
 /* GET admin logout. */

@@ -903,14 +903,14 @@ resolve();
            
           
               {
-                  $sort:{_id:1}
+                  $sort:{_id:-1}
               },
-              {
-                  $limit:7
-              }
+               {
+                   $limit:7
+               }
         ]).toArray();
-    
-      resolve(data)
+    console.log(data);
+       resolve(data)
     })
    
    
@@ -1417,7 +1417,7 @@ startCategoryOffers:(date)=>{
     return new Promise(async(resolve,reject)=>{
         let data =  await db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).find({startDateIso:{$lte:startDateIso}}).toArray();
        
-        if(data){
+        if(data.length>0){
             await data.map(async(onedata)=>{
 
                 let productsForoffer =  await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:onedata.category,offer:{$exists:false}}).toArray();
@@ -1453,7 +1453,7 @@ deleteExpiredCategoryoffers:(date)=>{
     return new Promise(async(resolve,reject)=>{
         let data =  await db.get().collection(collections.CATEGORYOFFER_DETAILS_COLLECTION).find({endDateIso:{$lte:endDateIso}}).toArray();
        
-        if(data){
+        if(data.length>0){
           
            await data.map(async(onedata)=>{
               
@@ -1498,7 +1498,7 @@ startProductOffers:(date)=>{
     return new Promise(async(resolve,reject)=>{
         let data = await db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).find({prostartDateIso:{$lte:prostartDateIso}}).toArray();
        
-  if(data){
+  if(data.length>0){
 
     await data.map(async(onedata)=>{
             let productdetails = await  db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).findOne({productname:onedata.productname});
@@ -1519,7 +1519,91 @@ resolve();
     })
 
 
+},
+startCoupenOffers:(date)=>{
+    let startIsoDate =  new Date(date);
+    return new Promise(async(resolve,reject)=>{
+
+      let data = await db.get().collection(collections.COUPEN_DETAILS_COLLECTION).find({coupenIsoStartDate:{$lte:startIsoDate}}).toArray();
+
+      if(data.length>0){
+await data.map((onedata)=>{
+db.get().collection(collections.COUPEN_DETAILS_COLLECTION).updateOne({coupencode:onedata.coupencode},{$set:{available:true}})
+});
+resolve();
+      }else{
+          resolve();
+      }
+
+    })
+},
+
+coupendelete:(date)=>{
+    let endIsoDate =  new Date(date);
+    return new Promise(async(resolve,reject)=>{
+
+let data =await db.get().collection(collections.COUPEN_DETAILS_COLLECTION).find({coupenIsoEndDate:{$lte:endIsoDate}}).toArray();
+if(data.length>0){
+
+await data.map((onedata)=>{
+    db.get().collection(collections.COUPEN_DETAILS_COLLECTION).deleteOne({coupencode:onedata.coupencode});
+})
+resolve();
+}else{
+    resolve();
 }
 
+})
+},
+
+
+checkCoupen:(coupencode,userId)=>{
+console.log(coupencode,userId);
+    return new Promise(async(resolve,reject)=>{
+ let response = {}
+
+
+     let coupenexist = await db.get().collection(collections.COUPEN_DETAILS_COLLECTION).findOne({coupencode:coupencode});
+
+if(coupenexist){
+ 
+    let data =await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+          
+        {
+            $match:{userId:objectId(userId)}
+    },
+    {
+        $match:{coupen:coupencode}
+    }
+ 
+]).toArray();
+
+if(data.length>0){
+   
+ response.alreadyused = true;
+ resolve(response);
+}else{
+
+resolve(coupenexist);
+}
+
+
+}else{
+
+response.notexist = true;
+resolve(response);
+
+
+
+}
+
+    
+
+
+
+
+    })
+
+}
 
 }

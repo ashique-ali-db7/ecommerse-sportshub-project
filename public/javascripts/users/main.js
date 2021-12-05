@@ -16,6 +16,8 @@
 
 
 
+
+
 //   const Toast = Swal.mixin({
 //      toast: true,
 //      position: 'top-end',
@@ -1229,17 +1231,40 @@ if(willdelete){
       })
 
 
-
-
-
-
-  
     
-    
+    }
+
+
+    function applycoupen(){
+       
+       let coupencode =  document.getElementById('coupencode').value
+       $.ajax({
+           url:'/applycoupen',
+           data:{
+            coupencode:coupencode,
+         
+            
+        },
+           method:'post',
+           success:(response)=>{
+               if(response.notexist){
+                   document.getElementById('errormessage').innerHTML = "Invalid coupen code"
+               }
+               else if (response.alreadyused){
+                document.getElementById('errormessage').innerHTML = "This coupen is already used";
+               }
+               else if(response.exist){
+                 
+              document.getElementById('coupendiscount').textContent = response.savedprice;
+              document.getElementById('totalcheckoutprice').textContent = response.coupenOfferPrice;
+              document.getElementById("closemodal").click();
+               }
+
+               }
+           }
+
+       )
     }
     
     
-
-
- 
-    
+  
