@@ -840,8 +840,10 @@ if(req.query.coupencheck != 0){
   }
 }
 
-
+if(req.session?.user?.coupencode){
   req.session.user.coupencode = req.query.couponcode;
+}
+ 
 
 
 
@@ -860,7 +862,7 @@ if(req.query.coupencheck != 0){
  
  
 
- userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId,req.session.user.coupencode).then(()=>{
+ userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId,req.session?.user?.coupencode).then(()=>{
  
 
  
@@ -966,9 +968,11 @@ router.get('/buynowplace-order',async(req,res)=>{
     totalPrice = req.session.user.coupenOfferPrice
   }
 }
-
-
+if(req.session?.user?.coupencode){
   req.session.user.coupencode = req.query.couponcode;
+}
+
+  
 
 
  req.session.totalPrice = totalPrice;
@@ -986,7 +990,7 @@ let  totalpriceForpaypal =  sampleprice.toString();
 
 
 
-userhelpers.buynowplaceOrder(deliveryaddressAndMethod,products,totalPrice,userId,req.session.user.coupencode).then(()=>{
+userhelpers.buynowplaceOrder(deliveryaddressAndMethod,products,totalPrice,userId,req.session?.user?.coupencode).then(()=>{
 
 
 

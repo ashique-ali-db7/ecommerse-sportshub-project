@@ -1096,7 +1096,6 @@ $(document).ready(function() {
 
 
 
-
 //modal
  function updateproductdetails(){
      console.log("monnee")
@@ -2111,6 +2110,17 @@ location.reload();
 //         }) 
     
     
+
+
+$(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    } );
+} );
+
 
    
     
