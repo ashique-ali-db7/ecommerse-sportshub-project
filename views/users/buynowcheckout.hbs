@@ -164,11 +164,14 @@
                                     <li class="fw-normal">{{this.productdetails.productname}} x {{this.quantity}} <span>{{this.subtotal}}</span></li>
                                   
                                     {{/each}}
-                                    {{!-- <li class="fw-normal">Subtotal <span>$240.00</span></li> --}}
-                                    <li class="total-price">Total <span>{{total}}</span></li>
+                                     <li class="fw-normal">coupon discounts<span style="color:#da5626;cursor:pointer"  data-toggle="modal" data-target="#applycoupen"><b>APPLY</b> </span>
+                                     <p style="color: red;font-size:0.8rem;">{{couponAlreadyUsedError}}</p>
+                                     </li>
+                                    <li class="total-price">Delivery charge<span id="">FREE</span><br><br>Coupen discount<span id="coupendiscount">0</span><br><br>Total <span id="totalcheckoutprice">{{total}}</span></li>
                                 </ul>
                                 <div class="payment-check">
                                     <div class="pc-item">
+                                      <p id="coupencodechecking" hidden>1</p>
                                         <label for="pc-check">
                                            Cash on delivery
                                             <input type="checkbox" onclick="paymentMethod('cod')" value="cod" id="pc-check">
@@ -205,7 +208,33 @@
     </section>
     <!-- Shopping Cart Section End -->
 
+<!-- Modal -->
+<div class="modal fade" id="applycoupen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">APPLY COUPON</h5>
+        <button type="button" class="close" data-dismiss="modal" id="closemodal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+     
+      <div class="modal-body">
+      <div>
+        <input type="text" id="coupencode" name="coupencode" placeholder="coupen code" style="width:100%;border:1px solid grey;height:50px">
+      </div>
+      <div id="errormessage" style="background-color: rgb(248, 245, 245);color:red">
 
+      </div>
+      </div>
+      <div class="modal-footer">
+       
+        <button onclick="applycoupen()"  style="width:100%;background-color:#e7ab3c;border:none" class="btn btn-primary">Apply</button>
+    
+      </div>
+    </div>
+  </div>
+</div>
 
 {{!-- modal --}}
 <div class="modal fade" id="modaladdressForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"

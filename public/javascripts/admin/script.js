@@ -1784,6 +1784,30 @@ document.getElementById('enddateedit').value  = response.caofferenddate;
 }
 
 
+
+
+
+function couponOfferEdit(id){
+   
+    $.ajax({
+        url:'/admin/coupenoffereditdata?coupenofferid='+id,
+        method:'get',
+        success:(response)=>{
+            if(response){
+document.getElementById('coupondiscountedit').value = response.coupenpercentage;
+document.getElementById('disabledoption').innerHTML = response.coupencode;
+document.getElementById('couponhiddencategory').value = response.coupencode;
+document.getElementById('couponstartdateedit').value  = response.coupenstartdate;
+document.getElementById('couponenddateedit').value  = response.coupenenddate;
+
+            }else{
+
+            }
+        }
+
+    })
+}
+
 function deletecategoryoffer(category,offerpercentage){
      
     swal("Are you sure you want to remove "+category+" offer ?", {

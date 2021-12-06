@@ -1037,6 +1037,14 @@ res.send(response);
 });
 
 
+router.get('/coupenoffereditdata',(req,res)=>{
+  producthelpers.coupenoffereditdataForEdit(req.query.coupenofferid).then((response)=>{
+   
+res.send(response);
+  })
+});
+
+
 router.post('/editcategoryoffer',(req,res)=>{
  producthelpers.editCategoryOffer(req.body).then(()=>{
    res.redirect('/admin/categoryoffermanagment')

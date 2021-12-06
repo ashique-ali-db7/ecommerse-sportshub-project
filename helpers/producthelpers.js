@@ -525,6 +525,16 @@ categoryoffereditdataForEdit:(id)=>{
         resolve(categoryoffer);
     })
 },
+
+
+
+coupenoffereditdataForEdit:(id)=>{
+    return new Promise(async(resolve,reject)=>{
+        let coupenoffer = await db.get().collection(collections.COUPEN_DETAILS_COLLECTION).findOne({_id:objectId(id)});
+        resolve(coupenoffer);
+    })
+},
+
 editCategoryOffer:(data)=>{
     let endDateIso =  new Date(data.caofferenddate)
     data.endDateIso = endDateIso;
@@ -639,8 +649,8 @@ return new Promise(async(resolve,reject)=>{
  return new Promise(async(resolve,reject)=>{
 
   let existingProductOffer =  await db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).find({proendDateIso:{$lte:proendDateIso}}).toArray();
-console.log(existingProductOffer);
-    if(existingProductOffer){
+
+    if(existingProductOffer.length>0){
    await  existingProductOffer.map(async(onedata)=>{
        db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).deleteOne({productname:onedata.productname});
     let product =  await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).findOne({productname:onedata.productname});
@@ -1558,26 +1568,29 @@ resolve();
 
 
 checkCoupen:(coupencode,userId)=>{
-console.log(coupencode,userId);
+
     return new Promise(async(resolve,reject)=>{
  let response = {}
 
 
-     let coupenexist = await db.get().collection(collections.COUPEN_DETAILS_COLLECTION).findOne({coupencode:coupencode});
+     let coupenexist = await db.get().collection(collections.COUPEN_DETAILS_COLLECTION).findOne({coupencode:coupencode,available:true});
 
 if(coupenexist){
  
-    let data =await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+    let data =await db.get().collection(collections.COUPEN_DETAILS_COLLECTION).aggregate([
           
         {
-            $match:{userId:objectId(userId)}
+            $match:{coupencode:coupencode}
     },
     {
-        $match:{coupen:coupencode}
+        $unwind:"$users"
+    },
+    {
+        $match:{users:objectId(userId)}
     }
  
 ]).toArray();
-
+console.log(data);
 if(data.length>0){
    
  response.alreadyused = true;
