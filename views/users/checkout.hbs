@@ -164,11 +164,12 @@
                                     <li class="fw-normal">{{this.productdetails.productname}} x {{this.quantity}} <span>{{this.subtotal}}</span></li>
                                   
                                     {{/each}}
-                                     <li class="fw-normal">coupon discounts<span style="color:#e7ab3c;cursor:pointer"  data-toggle="modal" data-target="#applycoupen">APPLY</span>
+                                     <li class="fw-normal">coupon discounts<span style="color:#e7563c;cursor:pointer"  data-toggle="modal" data-target="#applycoupen"><b>APPLY</b> </span>
                                      <p style="color: red;font-size:0.8rem;">{{couponAlreadyUsedError}}</p>
                                      </li>
                                     <li class="total-price">Delivery charge<span id="">FREE</span><br><br>Coupen discount<span id="coupendiscount">0</span><br><br> Total <span id="totalcheckoutprice">{{total}}</span></li>
                                 </ul>
+                                <p id="coupencodechecking" hidden>1</p>
                                 <div class="payment-check">
                                     <div class="pc-item">
                                         <label for="pc-check">

@@ -892,6 +892,8 @@ function paymentMethod(method){
 }
 
 function placeOrder(userId){
+    let couponcheck = document.getElementById('coupendiscount').textContent;
+  let couponcode =   document.getElementById("coupencodechecking").innerHTML;
 if(typeof placeOrderAddressId === 'undefined' || typeof paymentMethodForOrder === 'undefined'){
     // document.getElementById("placeordervalidation").classList.remove("selectsize")
     // setTimeout(function(){ 
@@ -901,7 +903,7 @@ if(typeof placeOrderAddressId === 'undefined' || typeof paymentMethodForOrder ==
 }else{
 
     $.ajax({
-        url:'/place-order?deliveryaddress='+placeOrderAddressId+"&paymentmethod="+paymentMethodForOrder+"&userId="+userId,
+        url:'/place-order?deliveryaddress='+placeOrderAddressId+"&paymentmethod="+paymentMethodForOrder+"&userId="+userId+"&coupencheck="+couponcheck+"&couponcode="+couponcode,
         method:'get',
         success:(response)=>{
      if(response.codsuccess){
@@ -999,6 +1001,8 @@ function verifyPayment(payment,order){
 //buynowwww
 
 function buynowplaceOrder(userId){
+    let couponcheck = document.getElementById('coupendiscount').textContent;
+    let couponcode =   document.getElementById("coupencodechecking").innerHTML;
     if(typeof placeOrderAddressId === 'undefined' || typeof paymentMethodForOrder === 'undefined'){
         // document.getElementById("placeordervalidation").classList.remove("selectsize")
         // setTimeout(function(){ 
@@ -1008,7 +1012,7 @@ function buynowplaceOrder(userId){
     }else{
     
         $.ajax({
-            url:'/buynowplace-order?deliveryaddress='+placeOrderAddressId+"&paymentmethod="+paymentMethodForOrder+"&userId="+userId,
+            url:'/buynowplace-order?deliveryaddress='+placeOrderAddressId+"&paymentmethod="+paymentMethodForOrder+"&userId="+userId+"&coupencheck="+couponcheck+"&couponcode="+couponcode,
             method:'get',
             success:(response)=>{
          if(response.codsuccess){
@@ -1238,6 +1242,7 @@ if(willdelete){
     function applycoupen(){
        
        let coupencode =  document.getElementById('coupencode').value
+      
        $.ajax({
            url:'/applycoupen',
            data:{
@@ -1255,9 +1260,10 @@ if(willdelete){
                }
                else if(response.exist){
                  
-              document.getElementById('coupendiscount').textContent = response.savedprice;
+              document.getElementById('coupendiscount').textContent = "-"+response.savedprice;
               document.getElementById('totalcheckoutprice').textContent = response.coupenOfferPrice;
               document.getElementById("closemodal").click();
+              document.getElementById("coupencodechecking").innerHTML = coupencode;
                }
 
                }
@@ -1266,5 +1272,7 @@ if(willdelete){
        )
     }
     
+
+
     
   

@@ -831,8 +831,17 @@ router.post('/otheraddressedit',(req,res)=>{
   let products = await userhelpers.getCartProductList(userId);
 
  let  totalPrice =  await producthelpers.getTotalAmount(userId);
-
+if(req.query.coupencheck != 0){
  
+  req.session.user.coupen = true;
+  if(req.session.user.coupenOfferPrice){
+    totalPrice = req.session.user.coupenOfferPrice
+  }
+}
+
+
+  req.session.user.coupencode = req.query.couponcode;
+
 
 
   req.session.totalPrice = totalPrice;
@@ -850,7 +859,7 @@ router.post('/otheraddressedit',(req,res)=>{
  
  
 
- userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId).then(()=>{
+ userhelpers.placeOrder(deliveryaddressAndMethod,products,totalPrice,userId,req.session.user.coupencode).then(()=>{
  
 
  
@@ -948,6 +957,19 @@ router.get('/buynowplace-order',async(req,res)=>{
  
 
  let totalPrice =  await producthelpers.getBuyNowTotalAmount(userId);
+
+ if(req.query.coupencheck != 0){
+ 
+  req.session.user.coupen = true;
+  if(req.session.user.coupenOfferPrice){
+    totalPrice = req.session.user.coupenOfferPrice
+  }
+}
+
+
+  req.session.user.coupencode = req.query.couponcode;
+
+
  req.session.totalPrice = totalPrice;
  
  let sampleprice = (totalPrice/70).toFixed(2);
@@ -963,7 +985,7 @@ let  totalpriceForpaypal =  sampleprice.toString();
 
 
 
-userhelpers.buynowplaceOrder(deliveryaddressAndMethod,products,totalPrice,userId).then(()=>{
+userhelpers.buynowplaceOrder(deliveryaddressAndMethod,products,totalPrice,userId,req.session.user.coupencode).then(()=>{
 
 
 
@@ -1070,13 +1092,20 @@ router.post('/verify-payment',async(req,res)=>{
   let totalPrice =  await producthelpers.getTotalAmount(req.session.userId);
 
 
+  if(req.session.user.coupen){
+  
+    if(req.session.user.coupenOfferPrice){
+      totalPrice = req.session.user.coupenOfferPrice
+    }
+  }
 
+  
  
  userhelpers.verifyPayment(req.body).then(()=>{
   //  userhelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
      userhelpers.deleteCartForPayment(req.session.user._id).then(()=>{
     
-       userhelpers.razorpayPlaceorder(deliveryaddressAndMethod,products,totalPrice,req.session.userId).then(()=>{
+       userhelpers.razorpayPlaceorder(deliveryaddressAndMethod,products,totalPrice,req.session.userId,req.session.user.coupencode).then(()=>{
      
         res.json({status:true})
        })
@@ -1107,14 +1136,19 @@ router.post('/buynowverify-payment',async(req,res)=>{
 
   let totalPrice =  await producthelpers.getBuyNowTotalAmount(req.session.userId);
 
-
+  if(req.session.user.coupen){
+  
+    if(req.session.user.coupenOfferPrice){
+      totalPrice = req.session.user.coupenOfferPrice
+    }
+  }
 
  
  userhelpers.verifyPayment(req.body).then(()=>{
   //  userhelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
     //  userhelpers.deleteCartForPayment(req.session.user._id).then(()=>{
     
-       userhelpers. buynowrazorpayPlaceorder(deliveryaddressAndMethod,products,totalPrice,req.session.userId).then(()=>{
+       userhelpers. buynowrazorpayPlaceorder(deliveryaddressAndMethod,products,totalPrice,req.session.userId,req.session.user.coupencode).then(()=>{
      
         res.json({status:true})
        })
@@ -1197,7 +1231,7 @@ res.redirect('/profileaddress')
 // edit default profile address
 router.get('/profileeditdefaultaddress',async(req,res)=>{
   
-  console.log("edamone");
+
  
   let defaultaddress =  await userhelpers.getdefaultaddress(req.session.user._id);
   res.send(defaultaddress);
@@ -1243,7 +1277,12 @@ router.post('/profileotheraddressedit',(req,res)=>{
   
 
   let totalPrice =  await producthelpers.getTotalAmount(req.session.userId);
-
+  if(req.session.user.coupen){
+   
+    if(req.session.user.coupenOfferPrice){
+      totalPrice = req.session.user.coupenOfferPrice
+    }
+  }
  
 
   let sampleprice = (totalPrice/70).toFixed(2);
@@ -1272,7 +1311,7 @@ router.post('/profileotheraddressedit',(req,res)=>{
 
         userhelpers.deleteCartForPayment(req.session.user._id).then(()=>{
     
-          userhelpers.razorpayPlaceorder(deliveryaddressAndMethod,products,totalPrice,req.session.userId).then(()=>{
+          userhelpers.razorpayPlaceorder(deliveryaddressAndMethod,products,totalPrice,req.session.userId,req.session.user.coupencode).then(()=>{
         
           
             console.log(JSON.stringify(payment));
@@ -1308,7 +1347,12 @@ router.get('/buynowsuccess',async(req,res)=>{
   
 
   let totalPrice =  await producthelpers.getBuyNowTotalAmount(req.session.userId);
-
+  if(req.session.user.coupen){
+   
+    if(req.session.user.coupenOfferPrice){
+      totalPrice = req.session.user.coupenOfferPrice
+    }
+  }
  
 
   let sampleprice = (totalPrice/70).toFixed(2);
@@ -1337,7 +1381,7 @@ router.get('/buynowsuccess',async(req,res)=>{
 
         // userhelpers.deleteCartForPayment(req.session.user._id).then(()=>{
     
-          userhelpers.buynowrazorpayPlaceorder(deliveryaddressAndMethod,products,totalPrice,req.session.userId).then(()=>{
+          userhelpers.buynowrazorpayPlaceorder(deliveryaddressAndMethod,products,totalPrice,req.session.userId,req.session.user.coupencode).then(()=>{
         
           
             console.log(JSON.stringify(payment));
@@ -1486,7 +1530,7 @@ router.get('/removefromwishlistpage',(req,res)=>{
   })
 });
 
-
+// post apply coupen
 router.post('/applycoupen',(req,res)=>{
 result = {}
 
@@ -1544,6 +1588,7 @@ res.send(result);
 
 
 
+  
 
 // get user logout
 router.get('/userlogout',(req,res)=>{

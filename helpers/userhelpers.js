@@ -282,7 +282,7 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
      },
 
 
-     placeOrder:(orderdetails,products,total,userId)=>{
+     placeOrder:(orderdetails,products,total,userId,coupencode)=>{
         
        return new Promise(async(resolve,reject)=>{
           
@@ -310,6 +310,10 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
          date:new Date().toISOString().slice(0,10),
          longdate:new Date()
      }
+
+     if(coupencode != 1){
+db.get().collection(collections.COUPEN_DETAILS_COLLECTION).updateOne({coupencode:coupencode},{$push:{users:objectId(userId)}})
+     }
      
      db.get().collection(collections.ORDER_DETAILS_COLLECTION).insertOne(orderObj).then((response)=>{
        
@@ -335,7 +339,7 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
     
 
 
-    buynowplaceOrder:(orderdetails,products,total,userId)=>{
+    buynowplaceOrder:(orderdetails,products,total,userId,coupencode)=>{
         
         return new Promise(async(resolve,reject)=>{
            
@@ -364,6 +368,11 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
           longdate:new Date()
       }
       
+      if(coupencode != 1){
+        db.get().collection(collections.COUPEN_DETAILS_COLLECTION).updateOne({coupencode:coupencode},{$push:{users:objectId(userId)}})
+             }
+
+
       db.get().collection(collections.ORDER_DETAILS_COLLECTION).insertOne(orderObj).then((response)=>{
         
             //  db.get().collection(collections.CART_DETAILS_COLLECTION).remove({user:objectId(userId)})
@@ -478,7 +487,7 @@ resolve();
               }
      ]).toArray();
    
-console.log(vieworderproductdetails);
+
       resolve(vieworderproductdetails);
 
         })
@@ -542,7 +551,7 @@ console.log(vieworderproductdetails);
     },
 
 
-    razorpayPlaceorder:(orderdetails,products,total,userId)=>{
+    razorpayPlaceorder:(orderdetails,products,total,userId,couponcode)=>{
        
         return new Promise(async(resolve,reject)=>{
 
@@ -569,6 +578,10 @@ console.log(vieworderproductdetails);
          total:total,
          date:new Date().toISOString().slice(0,10),
          longdate:new Date()
+     }
+
+     if(couponcode!=1){
+        db.get().collection(collections.COUPEN_DETAILS_COLLECTION).updateOne({coupencode:couponcode},{$push:{users:objectId(userId)}})
      }
      
      db.get().collection(collections.ORDER_DETAILS_COLLECTION).insertOne(orderObj).then((response)=>{
@@ -589,7 +602,7 @@ console.log(vieworderproductdetails);
 
 
 
-    buynowrazorpayPlaceorder:(orderdetails,products,total,userId)=>{
+    buynowrazorpayPlaceorder:(orderdetails,products,total,userId,couponcode)=>{
        
         return new Promise(async(resolve,reject)=>{
 
@@ -618,6 +631,10 @@ console.log(vieworderproductdetails);
          longdate:new Date()
      }
      
+
+     if(couponcode!=1){
+        db.get().collection(collections.COUPEN_DETAILS_COLLECTION).updateOne({coupencode:couponcode},{$push:{users:objectId(userId)}})
+     }
      db.get().collection(collections.ORDER_DETAILS_COLLECTION).insertOne(orderObj).then((response)=>{
        
             // db.get().collection(collections.CART_DETAILS_COLLECTION).remove({user:objectId(userId)})
