@@ -1177,6 +1177,17 @@ router.get('/deletecoupenoffer',(req,res)=>{
   categoryhelpers.deleteCoupen(req.query.coupencode).then(()=>{
     res.json({status:true})
   })
+});
+
+
+// get product report
+router.get('/productreport',(req,res)=>{
+  if(req.session.admin){
+    res.render('admin/productreport',{admin:true})
+  }else{
+    res.redirect('/admin/adminlogin');
+  }
+ 
 })
 
 
