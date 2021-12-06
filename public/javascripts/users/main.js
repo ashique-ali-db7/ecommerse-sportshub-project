@@ -764,7 +764,8 @@ function outofstock(){
    let total =  document.getElementById("total").innerHTML ;
    total = Number(total);
 
-
+ 
+  
     
     swal("Are you sure do you want to remove "+productname+" from cart ?", {
         buttons: true,
@@ -785,7 +786,7 @@ if(willdelete){
         method:'post',
         success:(response)=>{
             document.getElementById("total").innerHTML  = total - subtotal;
-           
+         
             location.reload();
            
         }

@@ -228,6 +228,7 @@ let cartItems =await db.get().collection(collections.CART_DETAILS_COLLECTION)
             foreignField:'_id',
             as:'productdetails'    }
     },
+   
     {
         $project:{
             item:1,quantity:1,size:1,subtotal:1,productdetails:{$arrayElemAt:['$productdetails',0]}
