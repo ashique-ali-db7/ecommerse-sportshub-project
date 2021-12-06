@@ -1795,8 +1795,8 @@ function couponOfferEdit(id){
         success:(response)=>{
             if(response){
 document.getElementById('coupondiscountedit').value = response.coupenpercentage;
-document.getElementById('disabledoption').innerHTML = response.coupencode;
-document.getElementById('couponhiddencategory').value = response.coupencode;
+document.getElementById('coupondisabledoption').innerHTML = response.coupencode;
+document.getElementById('couponhiddencode').value = response.coupencode;
 document.getElementById('couponstartdateedit').value  = response.coupenstartdate;
 document.getElementById('couponenddateedit').value  = response.coupenenddate;
 

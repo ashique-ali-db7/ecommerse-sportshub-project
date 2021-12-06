@@ -1271,6 +1271,23 @@ if(willdelete){
 
        )
     }
+
+    function allAvailableCoupens(){
+        $.ajax({
+            url:'/allAvailableCoupens',
+            method:'get',
+            success:(response)=>{
+                
+ if(response.data.length>0){
+  for(var i=0;i<response.data.length;i++){
+      document.getElementById(i).classList.remove('selectsize');
+      document.getElementById(i).innerHTML = response.data[i].coupencode;
+  }
+ }
+
+            }
+        })
+    }
     
 
 

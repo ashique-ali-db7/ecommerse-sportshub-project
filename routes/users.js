@@ -129,7 +129,7 @@ let todayDate = new Date().toISOString().slice(0, 10);
 
 
 
- console.log("moneeee");
+
 
 producthelpers.coupendelete(todayDate).then(()=>{
 
@@ -193,12 +193,13 @@ router.get('/shopping-cart',verifyLoginForLoginpage, async(req, res, next) =>{
   let cartItems = await producthelpers.getCartProducts(userId);
    let total =  await producthelpers.getTotalAmount(req.session.user._id);
   //  let subtotal = await producthelpers.getSubTotalAmount(req.session.user._id);
+  let cartcount =await producthelpers.getCartCount(req.session.user?._id);
   if(cartItems.length>=1){
     cartItemsEmpty = false;
   }else{
     cartItemsEmpty = true;
   }
-  res.render('users/shoppingnewcart',{ admin:false,user,cartItems,notheader:true,total,cartItemsEmpty});
+  res.render('users/shoppingnewcart',{ admin:false,user,cartItems,total,cartItemsEmpty,cartcount});
 
 });
 
@@ -1587,7 +1588,12 @@ res.send(result);
 })
 
 
-
+// get all available coupens
+router.get('/allAvailableCoupens',(req,res)=>{
+  producthelpers.getAllAvailableCoupens().then((response)=>{
+    res.json({data:response})
+  })
+})
   
 
 // get user logout

@@ -994,8 +994,8 @@ router.get('/categoryoffermanagment',async(req,res)=>{
   let categoryData =await categoryhelpers.getCategory();
   let categoryOffers = await producthelpers.getAllCategoryOffers();
   let todayDate = new Date().toISOString().slice(0, 10);
-  let result1 =   await producthelpers.startCategoryOffers(todayDate);
 
+  let result1 =   await producthelpers.startCategoryOffers(todayDate);
 
   let result2 = await producthelpers.startProductOffers(todayDate);
 
@@ -1046,10 +1046,24 @@ res.send(response);
 
 
 router.post('/editcategoryoffer',(req,res)=>{
+  console.log(req.body);
  producthelpers.editCategoryOffer(req.body).then(()=>{
    res.redirect('/admin/categoryoffermanagment')
  })
-})
+});
+
+router.post('/editcouponoffer',(req,res)=>{
+
+   producthelpers.editCouponOffer(req.body).then(()=>{
+
+
+    let todayDate = new Date().toISOString().slice(0, 10);
+    producthelpers.coupendelete(todayDate).then(()=>{
+      res.redirect('/admin/coupenmanagment');
+    })
+   
+   })
+ })
 
 router.get('/deletecategoryoffer',(req,res)=>{
  
@@ -1122,11 +1136,16 @@ router.get('/deleteproductoffer',(req,res)=>{
 router.get('/coupenmanagment',async(req,res)=>{
   let categoryData =await categoryhelpers.getCategory();
   let coupendetails = await categoryhelpers.getCoupenDetails();
+  let todayDate = new Date().toISOString().slice(0, 10);
+  let result3 = await producthelpers.startCoupenOffers(todayDate);
+  
+  producthelpers.coupendelete(todayDate).then(()=>{
+    res.render('admin/coupenmanagment',{admin:true,categoryData,coupenCountError,coupenExistError,coupendetails})
+    coupenCountError = "";
+    coupenExistError = "";
+  });
 
-  console.log(coupendetails);
-  res.render('admin/coupenmanagment',{admin:true,categoryData,coupenCountError,coupenExistError,coupendetails})
-  coupenCountError = "";
-  coupenExistError = "";
+
 });
 
 

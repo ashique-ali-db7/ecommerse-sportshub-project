@@ -245,7 +245,7 @@ resolve(cartItems)
   changeProductQuantity:(data)=>{
    data.price = Number(data.price)
       data.count = Number(data.count);
-      return new Promise((resolve,reject)=>{
+      return new Promise(async(resolve,reject)=>{
 
         if(data.count == -1){
             db.get().collection(collections.CART_DETAILS_COLLECTION)
@@ -258,15 +258,17 @@ resolve(cartItems)
 
 
 
-        }else{
+        }
+        
+        else{
 
-            db.get().collection(collections.CART_DETAILS_COLLECTION)
-            .updateOne({$and:[{_id:objectId(data.cart),"products":{$elemMatch:{item:objectId(data.product),size:data.size}}}]},
-                        {$inc:{'products.$.quantity':data.count,'products.$.subtotal':data.price}} 
-            ).then(()=>{
+             db.get().collection(collections.CART_DETAILS_COLLECTION)
+             .updateOne({$and:[{_id:objectId(data.cart),"products":{$elemMatch:{item:objectId(data.product),size:data.size}}}]},
+                         {$inc:{'products.$.quantity':data.count,'products.$.subtotal':data.price}} 
+             ).then(()=>{
               
-                resolve({status:true});
-            })
+                 resolve({status:true});
+             })
 
 
 
@@ -563,6 +565,17 @@ editCategoryOffer:(data)=>{
 
     })
 },
+
+editCouponOffer:(data)=>{
+return new Promise(async(resolve,reject)=>{
+    let coupenIsoStartDate = new Date(data.couponfferstartdate);
+    let coupenIsoEndDate = new Date(data.couponofferenddate);
+    db.get().collection(collections.COUPEN_DETAILS_COLLECTION)
+    .updateOne({coupencode:data.coupen},{$set:{coupenpercentage:data.coupondiscountpercentage,coupenstartdate:data.couponfferstartdate,coupenenddate:data.couponofferenddate,coupenIsoStartDate:coupenIsoStartDate,coupenIsoEndDate:coupenIsoEndDate}});
+    resolve()
+})
+},
+
 
 deleteCategoryOffers:(data)=>{
     
@@ -1617,6 +1630,18 @@ resolve(response);
 
     })
 
+},
+
+
+getAllAvailableCoupens:()=>{
+    return new Promise(async(resolve,reject)=>{
+        let data =await db.get().collection(collections.COUPEN_DETAILS_COLLECTION).aggregate([
+            {$match:{available:true}},
+        {$project:{
+            "coupencode":1,"_id":0}}
+        ]).toArray();
+       resolve(data)
+    })
 }
 
 }

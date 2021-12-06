@@ -276,12 +276,12 @@ if(sizeOfProduct){
                 // setTimeout(function(){ 
                 //      document.getElementById("addedcart").classList.add("selectsize")
                 //  }, 1000);
-location.reload();
+
 const Toast = Swal.mixin({
   toast: true,
   position: 'top-end',
   showConfirmButton: false,
-  timer: 1800,
+  timer: 1300,
   timerProgressBar: true,
   didOpen: (toast) => {
     toast.addEventListener('mouseenter', Swal.stopTimer)
@@ -294,8 +294,10 @@ Toast.fire({
   title: 'Added to cart succesfully'
 })
 
+                  setTimeout(function(){ 
+                 location.reload();
+              }, 1300);           
                 
-                  
                   //  Toast.fire({
                     //  icon: 'success',
                   //    title: 'Item added to cart'
