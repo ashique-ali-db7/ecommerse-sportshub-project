@@ -283,7 +283,7 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
 
 
      placeOrder:(orderdetails,products,total,userId,coupencode)=>{
-        
+       console.log(products);
        return new Promise(async(resolve,reject)=>{
           
            if(orderdetails.paymentmethod === 'cod'){
@@ -310,6 +310,28 @@ let getSingleOtherAddressForEdit =  await db.get().collection(collections.USERS_
          date:new Date().toISOString().slice(0,10),
          longdate:new Date()
      }
+
+
+
+      await products.map((oneproduct)=>{
+       
+          
+
+           db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION)
+           .updateOne({$and:[{_id:objectId(oneproduct.item),"instock":{$elemMatch:{size:oneproduct.size}}}]},
+           {$inc:{'instock.$.quantity':-oneproduct.quantity}} 
+ )
+           
+      })
+
+
+
+
+
+
+
+
+
 
      if(coupencode != 1){
 db.get().collection(collections.COUPEN_DETAILS_COLLECTION).updateOne({coupencode:coupencode},{$push:{users:objectId(userId)}})
@@ -367,6 +389,21 @@ db.get().collection(collections.COUPEN_DETAILS_COLLECTION).updateOne({coupencode
           date:new Date().toISOString().slice(0,10),
           longdate:new Date()
       }
+
+
+
+      await products.map((oneproduct)=>{
+     
+        
+
+         db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION)
+         .updateOne({$and:[{_id:objectId(oneproduct.item),"instock":{$elemMatch:{size:oneproduct.size}}}]},
+         {$inc:{'instock.$.quantity':-oneproduct.quantity}} 
+)
+         
+    })
+
+
       
       if(coupencode != 1){
         db.get().collection(collections.COUPEN_DETAILS_COLLECTION).updateOne({coupencode:coupencode},{$push:{users:objectId(userId)}})
@@ -580,6 +617,18 @@ resolve();
          longdate:new Date()
      }
 
+
+     await products.map((oneproduct)=>{
+     
+        
+
+         db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION)
+         .updateOne({$and:[{_id:objectId(oneproduct.item),"instock":{$elemMatch:{size:oneproduct.size}}}]},
+         {$inc:{'instock.$.quantity':-oneproduct.quantity}} 
+)
+         
+    })
+
      if(couponcode!=1){
         db.get().collection(collections.COUPEN_DETAILS_COLLECTION).updateOne({coupencode:couponcode},{$push:{users:objectId(userId)}})
      }
@@ -631,6 +680,17 @@ resolve();
          longdate:new Date()
      }
      
+
+     await products.map((oneproduct)=>{
+     
+        
+
+         db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION)
+         .updateOne({$and:[{_id:objectId(oneproduct.item),"instock":{$elemMatch:{size:oneproduct.size}}}]},
+         {$inc:{'instock.$.quantity':-oneproduct.quantity}} 
+)
+         
+    })
 
      if(couponcode!=1){
         db.get().collection(collections.COUPEN_DETAILS_COLLECTION).updateOne({coupencode:couponcode},{$push:{users:objectId(userId)}})
