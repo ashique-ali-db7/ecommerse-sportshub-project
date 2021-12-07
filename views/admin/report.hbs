@@ -1,0 +1,60 @@
+
+<div class="container p-5">
+
+<div  class="p-3" style="background-color: #fff;border:1px solid rgb(199, 196, 196)">
+<table id="example" class="display nowrap" style="width:100%">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Quantity</th>
+                <th>Revenue</th>
+                <th>Total landing price</th>
+                <th>Profit</th>
+             
+            </tr>
+        </thead>
+        <tbody>
+            {{#each orderReport}}
+            <tr>
+                <td>{{this._id}}</td>
+                <td>{{this.totalQty}}</td>
+                <td>{{this.totalrevenue}}</td>
+                <td>{{this.totalandingprice}}</td>
+                <td>{{this.profit}}</td>
+              
+            </tr>
+         {{/each}}
+           
+        </tbody>
+        {{!-- <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Office</th>
+                <th>Age</th>
+                <th>Start date</th>
+                <th>Salary</th>
+            </tr>
+        </tfoot> --}}
+    </table>
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+  

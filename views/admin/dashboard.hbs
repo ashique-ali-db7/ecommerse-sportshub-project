@@ -153,7 +153,7 @@
   </div>
 {{else}}
 
- <div class="card-body" style="background-color: rgb(91, 31, 146);color:#fff">
+ <div class="card-body" style="background-color: rgb(255, 255, 255);color:black">
 <h3>Today sales</h3>
 
 <p></p>
@@ -165,7 +165,7 @@
 {{/if}}
 </div>
 <div class="card" style="height: 40%;margin-top:17%">
-  <div class="card-body" style="background-color: rgb(136, 25, 64);color:#fff">
+  <div class="card-body" style="background-color: rgb(255, 255, 255);color:black">
 <h3>Today orders</h3>
 {{#if todayOrders}}
 {{#each todayOrders}}
@@ -402,7 +402,7 @@ const myChart2 = new Chart(ctx2, {
 });
 const ctx3 = document.getElementById('myChart3').getContext('2d');
 const myChart3 = new Chart(ctx3, {
-    type: 'doughnut',
+    type: 'pie',
     data: {
         labels: category,
         datasets: [{

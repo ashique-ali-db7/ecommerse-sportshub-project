@@ -166,11 +166,20 @@ router.get('/shopcategory',blockCheck,async(req,res)=>{
     let allCategory = await categoryhelpers.getCategory();
     let allBrands  =  await brandhelpers.getBrand();
     let todayDate = new Date().toISOString().slice(0, 10);
-  
+
+
+
+
+
+
     let result1 =   await producthelpers.startCategoryOffers(todayDate);
-
-
-    let result2 = await producthelpers.startProductOffers(todayDate);
+ 
+ 
+     let result2 = await producthelpers.startProductOffers(todayDate);
+ 
+ 
+ 
+  let result3 = await producthelpers.startCoupenOffers(todayDate);
 
 
     producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
@@ -212,7 +221,7 @@ router.get('/product',blockCheck,async function(req, res) {
   let allCategory = await categoryhelpers.getCategory();
 producthelpers.getSingleProductDetails(req.query).then((response)=>{
 
-console.log(response.instock[2].quantity);
+
   if(response.instock[0].quantity == 0){
 quantity.smalloutofstock = true;
   }
