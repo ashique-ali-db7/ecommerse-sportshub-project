@@ -1181,9 +1181,14 @@ router.get('/deletecoupenoffer',(req,res)=>{
 
 
 // get product report
-router.get('/productreport',(req,res)=>{
+router.get('/report',async(req,res)=>{
   if(req.session.admin){
-    res.render('admin/productreport',{admin:true})
+
+
+ let orderReport = await producthelpers.orderReport()
+
+
+    res.render('admin/report',{admin:true,orderReport})
   }else{
     res.redirect('/admin/adminlogin');
   }

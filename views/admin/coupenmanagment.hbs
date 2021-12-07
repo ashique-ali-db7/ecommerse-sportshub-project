@@ -10,13 +10,13 @@
 
     
      
-<h4 style="text-align: center;">Coupen managment</h4>
+<h4 style="text-align: center;">Coupon managment</h4>
 <p style="color: red;">{{coupenCountError}}</p>
 <p style="color: red;">{{coupenExistError}}</p>
  
  <div class="row mb-3">
           <div class="col-6">
-   <input type="text" placeholder="Coupen code" class="mt-4" name="coupencode"style="width:100%;height:45px;">
+   <input type="text" placeholder="Coupon code" class="mt-4" name="coupencode"style="width:100%;height:45px;">
 </div>
 {{!-- <div class="col-4">
      <input type="number" name="coupencount" placeholder="Coupen count" class="mt-4" style="height:45px;width:100%">
@@ -64,7 +64,7 @@
 
     <tr>
   
-      <th scope="col">Coupen</th>
+      <th scope="col">Coupon</th>
       {{!-- <th scope="col">Coupen count</th> --}}
       <th scope="col">offer percentage</th>
       <th scope="col">Start date</th>
@@ -83,7 +83,7 @@
       <td>{{this.coupenenddate}}</td>
     
        <td><button onclick="couponOfferEdit('{{this._id}}')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalforcouponedit">Edit Offer</button></td> 
-      <td><button class="btn btn-danger" onclick="deletecoupenoffer('{{this.coupencode}}')">Delete coupen</button></td>
+      <td><button class="btn btn-danger" onclick="deletecoupenoffer('{{this.coupencode}}')">Delete coupon</button></td>
     </tr>
     {{/each}}
    

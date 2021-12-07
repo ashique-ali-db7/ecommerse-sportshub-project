@@ -14,7 +14,7 @@ module.exports = {
         data.largequantity = Number(data.largequantity);
         data.price = Number(data.price);
         data.landingprice = Number(data.landingprice);
-
+       data.firstprice = Number(data.firstprice);
 
 
         let smallid = new objectId();
@@ -34,7 +34,7 @@ module.exports = {
 
 
                 await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION)
-                    .insertOne({ productid: data.productid, productname: data.productname, category: data.category, subcategory: data.subcategory, brand: data.brand, landingprice: data.price, price: data.price, description: data.description, instock: [{ id: smallid, size: 's', quantity: data.smallquantity }, { id: mediumid, size: 'm', quantity: data.mediumquantity }, { id: largeid, size: 'l', quantity: data.largequantity }] }).then((data) => {
+                    .insertOne({ productid: data.productid, productname: data.productname, category: data.category, subcategory: data.subcategory, brand: data.brand,firstprice:data.firstprice, landingprice: data.price, price: data.price, description: data.description, instock: [{ id: smallid, size: 's', quantity: data.smallquantity }, { id: mediumid, size: 'm', quantity: data.mediumquantity }, { id: largeid, size: 'l', quantity: data.largequantity }] }).then((data) => {
 
                         response.exist = false;
                         response.data = data;
@@ -1670,6 +1670,75 @@ module.exports = {
                 }
             ]).toArray();
             resolve(data)
+        })
+    },
+
+    orderReport:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let data =  await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+                {
+                  $unwind:"$products"
+             
+                  
+                   } ,
+                   {
+                       $project:{
+                           item:"$products.item",
+                           quantity:"$products.quantity",
+                           subTotal:"$products.subtotal",
+                           size:"$products.size",
+                           status:"$products.status",
+                           date:"$date"
+                       }
+                   },
+                   {
+                       $match:{
+                           $or:[{status:"delivered"},{status:"placed"}]
+                       }
+                   },
+                   {
+                       $lookup:{
+                           from:collections.PRODUCTS_DETAILS_COLLECTION,
+                           localField:"item",
+                           foreignField:"_id",
+                           as:"products"
+                       }
+                   },
+                   {
+                       $unwind:"$products"
+                   },
+               
+                   {
+                    $group: {
+                        _id: "$date",
+                        totalQty:{$sum:"$quantity"},
+                        totalrevenue: { $sum: { $multiply: ['$quantity', '$products.price'] } },
+                         totalandingprice:{$sum:{$multiply: ['$quantity', '$products.firstprice']}},
+                        
+
+                    }
+                   
+                },
+                {
+                    $project:{
+                        _id:1,
+                         totalQty:1,
+                         totalrevenue:1,
+                         totalandingprice:1,
+                         profit:{
+                             $subtract:["$totalrevenue","$totalandingprice"]
+                         }
+                    }
+                },
+                {
+                    $sort:{_id:-1}
+                }
+
+
+
+                
+            ]).toArray();
+            resolve(data);
         })
     }
 

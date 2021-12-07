@@ -1153,6 +1153,11 @@ $("#addproducts").validate({
             required:true,
           
         },
+        
+            firstprice:{
+                required:true
+            }
+        ,
        
         subcategory:{
             required:true
