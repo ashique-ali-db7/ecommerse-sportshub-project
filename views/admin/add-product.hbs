@@ -46,7 +46,7 @@
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid #ced4da;" onchange="formCategory()">
-              <option selected="">select</option>
+              <option selected="" disabled>select</option>
               {{#each categoryData}}
               <option>{{this.category}}</option>
               {{/each}}
@@ -77,6 +77,7 @@
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid #ced4da;">
+     <option selected="" disabled>select</option>
               {{#each brandData}}
               <option>{{this.brandName}}</option>
              {{/each}}

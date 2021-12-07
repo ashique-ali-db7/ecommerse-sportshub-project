@@ -202,13 +202,16 @@ router.get('/shopping-cart',verifyLoginForLoginpage, async(req, res, next) =>{
   let cartItems = await producthelpers.getCartProducts(userId);
    let total =  await producthelpers.getTotalAmount(req.session.user._id);
   //  let subtotal = await producthelpers.getSubTotalAmount(req.session.user._id);
+
+  let cartcount =await producthelpers.getCartCount(req.session.user?._id);
+  let allCategory = await categoryhelpers.getCategory();
  console.log("cartItems",cartItems);
   if(cartItems.length>=1){
     cartItemsEmpty = false;
   }else{
     cartItemsEmpty = true;
   }
-  res.render('users/shoppingnewcart',{ admin:false,user,cartItems,total,cartItemsEmpty,notheader:true});
+  res.render('users/shoppingnewcart',{ admin:false,user,cartItems,total,cartItemsEmpty,notheader:true,cartcount,allCategory,changeheader:true});
 
 });
 
@@ -257,7 +260,7 @@ quantity.smalloutofstock = true;
   //  let cartcount =await producthelpers.getCartCount(req.session.user?._id);
   //  let allCategory = await categoryhelpers.getCategory();
  producthelpers.getSingleProductDetails(req.query).then((response)=>{
-console.log("idh setttan");
+
   console.log(response);
    if(response.instock[0].quantity == 0){
  data.quantity.smalloutofstock = true;
@@ -290,8 +293,10 @@ router.get('/checkout',verifyLoginForLoginpage, async(req, res) =>{
       let otheraddress = await userhelpers.getotheraddress(req.session.user._id);
       let total =  await producthelpers.getTotalAmount(req.session.user._id);
       let cartItems = await producthelpers.getCartProducts(userId);
+      let cartcount =await producthelpers.getCartCount(req.session.user?._id);
+      let allCategory = await categoryhelpers.getCategory();
       if(cartItems.length>=1){
-        res.render('users/checkout',{ admin:false,user,notheader:true,defaultaddress,otheraddress,total,cartItems,userId,existDefaultAddress,paypalcancel,couponAlreadyUsedError});
+        res.render('users/checkout',{ admin:false,user,notheader:true,defaultaddress,otheraddress,total,cartItems,userId,existDefaultAddress,paypalcancel,couponAlreadyUsedError,changeheader:true,cartcount,allCategory});
         existDefaultAddress = "";
         paypalcancel = "";
         couponAlreadyUsedError=""
@@ -1475,8 +1480,10 @@ router.get('/buynowcheckout',verifyLoginForLoginpage, async(req, res) =>{
       let otheraddress = await userhelpers.getotheraddress(req.session.user._id);
       let total =  await producthelpers.getBuyNowTotalAmount(req.session.user._id);
       let cartItems = await producthelpers.getBuyNowProducts(userId);
+      let cartcount =await producthelpers.getCartCount(req.session.user?._id);
+      let allCategory = await categoryhelpers.getCategory();
       // if(cartItems.length>=1){
-        res.render('users/buynowcheckout',{ admin:false,user,notheader:true,defaultaddress,otheraddress,total,cartItems,userId,existDefaultAddress,paypalcancel});
+        res.render('users/buynowcheckout',{ admin:false,user,notheader:true,defaultaddress,otheraddress,total,cartItems,userId,existDefaultAddress,paypalcancel,changeheader:true,cartcount,allCategory});
         existDefaultAddress = "";
         paypalcancel = "";
       // }else{

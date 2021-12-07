@@ -149,10 +149,17 @@
     {{else}}
  {{>user-header}} 
     {{/if}}
+
+
+    {{#if changeheader}}
+ {{>cartandcheckoutheader}}
+    {{/if}}
    
    {{{body}}}
 
    {{#if notheader}}
+
+   
 
     {{else}}
   {{>user-footer}} 

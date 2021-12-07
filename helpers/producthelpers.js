@@ -1673,72 +1673,81 @@ module.exports = {
         })
     },
 
-    orderReport:()=>{
+    orderReport:(startDate,endDate)=>{
+       
         return new Promise(async(resolve,reject)=>{
             let data =  await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
-                {
-                  $unwind:"$products"
+                 {
+              $match:{
+             longdate:{
+                 $gte:startDate,
+                 $lte:endDate
+             }
+                 }},
+                 {
+                   $unwind:"$products"
              
                   
-                   } ,
-                   {
-                       $project:{
-                           item:"$products.item",
-                           quantity:"$products.quantity",
-                           subTotal:"$products.subtotal",
-                           size:"$products.size",
-                           status:"$products.status",
-                           date:"$date"
-                       }
-                   },
-                   {
+                    } ,
+                    {
+                        $project:{
+                            item:"$products.item",
+                            quantity:"$products.quantity",
+                            subTotal:"$products.subtotal",
+                            size:"$products.size",
+                            status:"$products.status",
+                            date:"$date"
+                        }
+                    },
+                    {
                        $match:{
-                           $or:[{status:"delivered"},{status:"placed"}]
-                       }
-                   },
-                   {
-                       $lookup:{
+                            $or:[{status:"delivered"},{status:"placed"}]
+                        }
+                    },
+                    {
+                        $lookup:{
                            from:collections.PRODUCTS_DETAILS_COLLECTION,
-                           localField:"item",
-                           foreignField:"_id",
-                           as:"products"
-                       }
-                   },
+                            localField:"item",
+                            foreignField:"_id",
+                            as:"products"
+                        }
+                    },
                    {
-                       $unwind:"$products"
+                        $unwind:"$products"
                    },
                
-                   {
-                    $group: {
-                        _id: "$date",
-                        totalQty:{$sum:"$quantity"},
-                        totalrevenue: { $sum: { $multiply: ['$quantity', '$products.price'] } },
-                         totalandingprice:{$sum:{$multiply: ['$quantity', '$products.firstprice']}},
+                    {
+                     $group: {
+                         _id: "$date",
+                         totalQty:{$sum:"$quantity"},
+                       totalrevenue: { $sum: { $multiply: ['$quantity', '$products.price'] } },
+                          totalandingprice:{$sum:{$multiply: ['$quantity', '$products.firstprice']}},
                         
 
                     }
                    
-                },
-                {
-                    $project:{
+                 },
+                 {
+                     $project:{
                         _id:1,
-                         totalQty:1,
-                         totalrevenue:1,
-                         totalandingprice:1,
-                         profit:{
-                             $subtract:["$totalrevenue","$totalandingprice"]
-                         }
-                    }
-                },
-                {
-                    $sort:{_id:-1}
-                }
+                          totalQty:1,
+                          totalrevenue:1,
+                          totalandingprice:1,
+                          profit:{
+                              $subtract:["$totalrevenue","$totalandingprice"]
+                          }
+                     }
+                 },
+                 {
+                     $sort:{_id:-1}
+                 }
 
 
 
                 
             ]).toArray();
-            resolve(data);
+            
+             resolve(data);
         })
     }
 
