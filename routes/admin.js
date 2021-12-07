@@ -1180,19 +1180,30 @@ router.get('/deletecoupenoffer',(req,res)=>{
 });
 
 
+
+let orderReport ;
 // get product report
 router.get('/report',async(req,res)=>{
-  if(req.session.admin){
-
-
- let orderReport = await producthelpers.orderReport()
-
-
-    res.render('admin/report',{admin:true,orderReport})
-  }else{
-    res.redirect('/admin/adminlogin');
-  }
  
+
+   if(req.session.admin){
+
+
+
+console.log("hahaha");
+console.log(orderReport);
+    res.render('admin/report',{admin:true,orderReport})
+   }else{
+     res.redirect('/admin/adminlogin');
+   }
+ 
+});
+router.get('/getreport',async(req,res)=>{
+  let startDate =new Date(req.query.startDate);
+  let endDate =new Date(req.query.endDate) ;
+   orderReport = await producthelpers.orderReport(startDate,endDate);
+  
+   res.json({status:true})
 })
 
 

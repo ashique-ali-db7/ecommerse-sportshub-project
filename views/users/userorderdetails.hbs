@@ -29,10 +29,11 @@
         </div>
          <div class="col-9">
  <h5><span>{{this.productdetail.brand}}</span></h5>
- <h6 class="mt-2"><span>{{this.productdetail.productname}}</span></h6>
+ <h6 class="mt-2"><span><b>{{this.productdetail.productname}}</b> </span></h6>
  {{!-- <h6 class="mt-2">Price: <span>{{this.subtotal}}</span></h6> --}}
- <h6 class="mt-2">Size: <span>{{this.size}}</span></h6>
- <h6 class="mt-2">Quantity: <span>{{this.quantity}}</span></h6>
+ <h6 class="mt-2">Size:  <span>{{this.size}}</span></h6>
+ <h6 class="mt-2">Quantity:  <span>{{this.quantity}}</span></h6>
+ <h6 class="mt-2">Address: {{this.deliveryDetails.housename}},{{this.deliveryDetails.street}}<br>{{this.deliveryDetails.district}},{{this.deliveryDetails.state}}<br>{{this.deliveryDetails.pincode}}</h6>
  {{#if this.canceled}}
 
  {{else}}

@@ -745,7 +745,8 @@ getAllOrderedProductForUser:(userId)=>{
              },
               {
                  $project:{
-                  
+                    deliveryDetails:"$deliveryDetails",
+
                      item:"$products.item",
                      quantity:"$products.quantity",
                      size:"$products.size",
@@ -772,14 +773,14 @@ getAllOrderedProductForUser:(userId)=>{
                   },
                   {
                       $project:{
-                          longdate:1,item:1,quantity:1,size:1,status:1,subtotal:1,date:1,canceled:1,delivered:1,productdetail:{$arrayElemAt:['$productdetail',0]}
+                        deliveryDetails:1,longdate:1,item:1,quantity:1,size:1,status:1,subtotal:1,date:1,canceled:1,delivered:1,productdetail:{$arrayElemAt:['$productdetail',0]}
                       }
                   },
                   {
                     $sort:{longdate:-1} 
                   }
         ]).toArray();
-      
+      console.log(vieworderproductdetails);
 
    resolve(vieworderproductdetails);
          

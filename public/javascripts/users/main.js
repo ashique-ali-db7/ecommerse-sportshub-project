@@ -340,6 +340,44 @@ $("#userlogin").validate({
   
 });
 
+
+
+$("#profiledit").validate({
+    rules:{
+        email:{
+            required:true,
+            email:true
+        },
+        fullname:{
+            required:true,
+           
+        },
+        mobilenumber:{
+            required:true,
+            number:true,
+            maxlength:10,
+            minlength:10
+        },
+        country:{
+            required:true
+        },
+        state:{
+            required:true
+        }
+
+
+       
+       
+       
+       
+       
+        
+    }
+   
+  
+});
+
+
 $("#phonenumberpage").validate({
     rules:{
         number:{
