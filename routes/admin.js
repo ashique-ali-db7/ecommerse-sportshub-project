@@ -1180,9 +1180,13 @@ router.get('/deletecoupenoffer',(req,res)=>{
 });
 
 
-
+let allProductdetails;
+let checkallProductdetails = false;
 let orderReport ;
-// get product report
+let checkorderReport = false;
+
+// get sales report
+
 router.get('/report',async(req,res)=>{
  
 
@@ -1190,21 +1194,54 @@ router.get('/report',async(req,res)=>{
 
 
 
-console.log("hahaha");
-console.log(orderReport);
-    res.render('admin/report',{admin:true,orderReport})
+
+    res.render('admin/report',{admin:true,orderReport,checkorderReport})
+    checkorderReport = false;
+    checkallProductdetails = false;
    }else{
      res.redirect('/admin/adminlogin');
    }
  
 });
-router.get('/getreport',async(req,res)=>{
+router.get('/getreport',verifyLogin,async(req,res)=>{
+  
   let startDate =new Date(req.query.startDate);
   let endDate =new Date(req.query.endDate) ;
-   orderReport = await producthelpers.orderReport(startDate,endDate);
+
+    orderReport = await producthelpers.orderReport(startDate,endDate);
+    checkorderReport = true
+  
+
+
+  
   
    res.json({status:true})
-})
+});
+
+
+
+// get product report
+
+router.get('/productreport',async(req,res)=>{
+ 
+
+  if(req.session.admin){
+
+
+    allProductdetails = await producthelpers.allProductsDetails();
+  
+
+   res.render('admin/productreport',{admin:true,allProductdetails,checkallProductdetails})
+ 
+   checkallProductdetails = false;
+  }else{
+    res.redirect('/admin/adminlogin');
+  }
+
+});
+
+
+
 
 
 /* GET admin logout. */

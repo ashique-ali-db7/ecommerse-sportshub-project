@@ -2134,6 +2134,8 @@ function dailysalesreport(){
 
     let startDate = document.getElementById('salesReportStartDate').value;
    let endDate = document.getElementById('salesReportEndDate').value;
+ 
+  
 
       $.ajax({
            url:'/admin/getreport?startDate='+startDate+"&endDate="+endDate,
@@ -2205,3 +2207,5 @@ if(response.status){
         
         });
         
+
+     
