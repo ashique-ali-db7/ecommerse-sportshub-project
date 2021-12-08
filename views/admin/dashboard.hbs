@@ -144,7 +144,8 @@
 <div class="col-md-4">
 <div class="card" style="height: 40%;">
 {{#if todaySales}}
-  <div class="card-body" style="background-color: rgb(255, 255, 255);color:black">
+  <div class="card-body" style="background-color: 
+#DD4A48;color:#fff">
 <h3>Today sales</h3>
 {{#each todaySales}}
 <p>{{this._id}}</p>
@@ -153,7 +154,7 @@
   </div>
 {{else}}
 
- <div class="card-body" style="background-color: rgb(255, 255, 255);color:black">
+ <div class="card-body" style="background-color: #DD4A48;color:#fff">
 <h3>Today sales</h3>
 
 <p></p>
@@ -165,7 +166,7 @@
 {{/if}}
 </div>
 <div class="card" style="height: 40%;margin-top:17%">
-  <div class="card-body" style="background-color: rgb(255, 255, 255);color:black">
+  <div class="card-body" style="background-color: #4F091D;color:#fff">
 <h3>Today orders</h3>
 {{#if todayOrders}}
 {{#each todayOrders}}
@@ -378,12 +379,14 @@ const myChart2 = new Chart(ctx2, {
             label: 'Payment Methods',
             data: paymentcounts,
         backgroundColor: [
+         
+        
             'rgb(145, 22, 201)',
             'rgb(201, 22, 169)',
             'rgb(201, 55, 22)',
             'rgb(22, 201, 201)',
+           'rgb(123, 123, 100)',
             'rgb(201, 201, 22)',
-            'rgb(123, 123, 100)'
         ],
         borderColor: [
             'rgba(255, 99, 132, 1)',
@@ -411,10 +414,11 @@ const myChart3 = new Chart(ctx3, {
         backgroundColor: [
             'rgb(201, 55, 22)',
             'rgb(22, 201, 201)',
-            'rgb(201, 201, 22)',
+            'rgb(201, 22, 169)',
+            
             'rgb(123, 123, 100)',
             'rgb(145, 22, 201)',
-            'rgb(201, 22, 169)',
+            'rgb(201, 201, 22)',
             
            
            

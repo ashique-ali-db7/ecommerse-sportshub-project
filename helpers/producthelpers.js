@@ -7,6 +7,7 @@ const { response } = require('express');
 const { ItemAssignmentContext } = require('twilio/lib/rest/numbers/v2/regulatoryCompliance/bundle/itemAssignment');
 const collection = require('../config/collection');
 const { Collection } = require('mongodb');
+const { USERS_DETAILS_COLLECTION } = require('../config/collection');
 module.exports = {
     addProduct: (data) => {
         data.smallquantity = Number(data.smallquantity);
@@ -1674,7 +1675,7 @@ module.exports = {
     },
 
     orderReport:(startDate,endDate)=>{
-       
+       console.log("h",startDate);
         return new Promise(async(resolve,reject)=>{
             let data =  await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
                  {
@@ -1699,11 +1700,11 @@ module.exports = {
                             date:"$date"
                         }
                     },
-                    {
-                       $match:{
-                            $or:[{status:"delivered"},{status:"placed"}]
-                        }
-                    },
+                     {
+                        $match:{
+                             $or:[{status:"delivered"},{status:"placed"}]
+                         }
+                     },
                     {
                         $lookup:{
                            from:collections.PRODUCTS_DETAILS_COLLECTION,
@@ -1749,6 +1750,41 @@ module.exports = {
             
              resolve(data);
         })
+    },
+    allProductsDetails:()=>{
+return new Promise(async(resolve,reject)=>{
+    let result = await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+ {
+     $unwind:"$products"
+ },
+{
+    $group:{
+        _id:"$userId",
+        totalOrders:{"$sum":1},
+        spend:{"$sum":"$products.subtotal"},
+        productsbuy:{"$sum":"$products.quantity"}
+    }
+},
+{
+    $lookup:{
+        from:collections.USERS_DETAILS_COLLECTION,
+        localField:"_id",
+        foreignField:"_id",
+        as:"userdetails"
+    }
+},
+{
+    $project:{
+        _id:1,totalOrders:1,spend:1,productsbuy:1,userdetails: { $arrayElemAt: ['$userdetails', 0] }
+    }
+}
+
+     
+   
+]).toArray();
+console.log(result);
+  resolve(result);
+})
     }
 
 }
