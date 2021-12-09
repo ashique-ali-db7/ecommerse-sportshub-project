@@ -1785,6 +1785,42 @@ return new Promise(async(resolve,reject)=>{
 console.log(result);
   resolve(result);
 })
+    },
+
+
+    productSearch:(payload)=>{
+        return new Promise(async(resolve,reject)=>{
+            let search = await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION)
+ .find({productname:{$regex: new RegExp(payload+'.*','i')}}).toArray();
+ resolve(search);
+        })
+    },
+
+
+    searchedProduct:(id)=>{
+        return new Promise(async(resolve,reject)=>{
+     
+let product =await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({_id:objectId(id)}).toArray();
+resolve(product);
+
+        })
+    },
+
+
+    allSubCategoryProducts:(category,subCategory)=>{
+        return new Promise(async(resolve,reject)=>{
+
+let data =await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:category,subcategory:subCategory}).toArray();
+resolve(data);
+
+        })
+    },
+    filterBrandProducts:(category,brand)=>{
+        return new Promise(async(resolve,reject)=>{
+            let data = db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:category,brand:brand}).toArray();
+            resolve(data);
+        })
     }
+
 
 }
