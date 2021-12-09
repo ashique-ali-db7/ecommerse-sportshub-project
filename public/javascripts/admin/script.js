@@ -1098,7 +1098,7 @@ $(document).ready(function() {
 
 //modal
  function updateproductdetails(){
-     console.log("monnee")
+   
    document.getElementById("editproduct").submit();
    }
 
@@ -2186,7 +2186,7 @@ if(response.status){
          
    
             var minDate = (year +"-"+ month +"-"+ day); // Results in "YYYY-MM-DD" for today's date 
-       
+            var maxDate = (year +"-"+ month +"-"+ day);
              
       
             // Now to set the max date value for the calendar to be today's date
@@ -2200,7 +2200,8 @@ if(response.status){
             
      
             
-            
+            $('#salesReportStartDate').attr('max',maxDate);
+            $('#salesReportEndDate').attr('max',maxDate);
             $('#birthday1').attr('min',minDate);
             $('#birthday2').attr('min',minDate);
           });
