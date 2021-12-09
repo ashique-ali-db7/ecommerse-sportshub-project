@@ -2,6 +2,10 @@ const { response } = require('express');
 var express = require('express');
 var router = express.Router();
 
+var db = require('../config/connection');
+
+var collections = require('../config/collection');
+
 var producthelpers = require('../helpers/producthelpers');
 var brandhelpers = require('../helpers/brandhelpers');
 var categoryhelpers = require('../helpers/categoryhelpers');
@@ -18,7 +22,7 @@ const client = require("twilio")(accountId,authToken)
 
 var paypal = require('paypal-rest-sdk');
 const { Db } = require('mongodb');
-
+var fs = require('fs');
 paypal.configure({
   'mode': 'sandbox', //sandbox or live
   client_id: process.env.client_id,
@@ -403,7 +407,7 @@ typeof(otpNumber)
     if(resp.valid){
  let user = req.session.tempararysignup;
  userhelpers.addUser(user).then((response)=>{
-   console.log(response)
+
 req.session.user = response;
 req.session.user.loggedIn = true;
 let valid = true;
@@ -1187,6 +1191,7 @@ res.json({status:false,errMsg:''})
 // get user profile
 
 router.get('/userprofile',verifyLoginForLoginpage,async(req,res)=>{
+  let profilepic;
   let user = req.session.user;
   let cartcount =await producthelpers.getCartCount(req.session.user?._id);
   let allCategory = await categoryhelpers.getCategory();
@@ -1198,7 +1203,14 @@ router.get('/userprofile',verifyLoginForLoginpage,async(req,res)=>{
   profileExist = false;
  }
 
-  res.render('users/userprofile',{admin:false,user,cartcount,allCategory,profileExist});
+ if(fs.existsSync('./public/images/profile-images/'+user._id+'.png')){
+  profilepic = true;
+ }else{
+  profilepic = false;
+ }
+
+
+  res.render('users/userprofile',{admin:false,user,cartcount,allCategory,profileExist,profilepic});
 });
 
 
@@ -1613,8 +1625,54 @@ router.get('/allAvailableCoupens',(req,res)=>{
   producthelpers.getAllAvailableCoupens().then((response)=>{
     res.json({data:response})
   })
-})
+});
+
+
+// uoload image
+ 
+router.post('/uploadProfile',(req,res)=>{
+ 
+  console.log(req.files);
+
+  let id = req.body.id;
+ console.log(id);
+ console.log("hi");
+ console.log(req.body);
+    let logo = req.files?.profile_pic;
+
+    if(logo){
+    if(fs.existsSync('./public/images/profile-images/'+id+'.png')){
+
+   
+        fs.unlink('./public/images/profile-images/'+id+'.png', function (err) {
+          if (err) throw err;
+          console.log('File deleted!');
+        });
+      }
+    
+      logo.mv('./public/images/profile-images/'+id+'.png',(err,done)=>{
+        if(!err){
+          res.redirect('/userprofile')
+        }
+        else{
+          console.log(err);
+        }
+      })
+    }
   
+ 
+
+
+
+});
+
+
+router.post('/getSearchProducts',async(req,res)=>{
+  let payload = req.body.payload.trim();
+ let search = await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION)
+ .find({productname:{$regex: new RegExp('^'+payload+'.*','i')}}).toArray();
+ res.send({payload:search})
+})
 
 // get user logout
 router.get('/userlogout',(req,res)=>{

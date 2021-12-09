@@ -1332,3 +1332,113 @@ if(willdelete){
 
     
   
+
+
+    $(document).on("change", ".uploadProfileInput", function () {
+        var triggerInput = this;
+        var currentImg = $(this).closest(".pic-holder").find(".pic").attr("src");
+        var holder = $(this).closest(".pic-holder");
+        var wrapper = $(this).closest(".profile-pic-wrapper");
+        $(wrapper).find('[role="alert"]').remove();
+        var files = !!this.files ? this.files : [];
+        if (!files.length || !window.FileReader) {
+          return;
+        }
+        if (/^image/.test(files[0].type)) {
+          // only image file
+          var reader = new FileReader(); // instance of the FileReader
+          reader.readAsDataURL(files[0]); // read the local file
+
+
+          reader.onloadend = function () {
+            $(holder).addClass("uploadInProgress");
+            $(holder).find(".pic").attr("src", this.result);
+            $(holder).append(
+              '<div class="upload-loader"><div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div></div>'
+            );
+      
+            // Dummy timeout; call API or AJAX below
+
+            document.getElementById("profileupload").submit();
+
+
+            setTimeout(() => {
+              $(holder).removeClass("uploadInProgress");
+              $(holder).find(".upload-loader").remove();
+              // If upload successful
+              if (Math.random() < 0.9) {
+                $(wrapper).append(
+                  '<div class="snackbar show" role="alert"><i class="fa fa-check-circle text-success"></i> Profile image updated successfully</div>'
+                );
+      
+                // Clear input after upload
+                $(triggerInput).val("");
+      
+                setTimeout(() => {
+                  $(wrapper).find('[role="alert"]').remove();
+                }, 3000);
+              } else {
+                $(holder).find(".pic").attr("src", currentImg);
+                $(wrapper).append(
+                  '<div class="snackbar show" role="alert"><i class="fa fa-times-circle text-danger"></i> There is an error while uploading! Please try again later.</div>'
+                );
+      
+                // Clear input after upload
+                $(triggerInput).val("");
+                setTimeout(() => {
+                  $(wrapper).find('[role="alert"]').remove();
+                }, 3000);
+              }
+            }, 1500);
+          };
+        } else {
+          $(wrapper).append(
+            '<div class="alert alert-danger d-inline-block p-2 small" role="alert">Please choose the valid image.</div>'
+          );
+          setTimeout(() => {
+            $(wrapper).find('role="alert"').remove();
+          }, 3000);
+        }
+
+
+
+      });
+      
+
+      $(document).on("click",function() {
+        document.getElementById('searchResults').innerHTML = "";
+      });
+
+      function sendData(e){
+          const searchResults = document.getElementById('searchResults');
+          let match = e.value.match(/^[a-zA-Z]*/);
+          let match2 = e.value.match(/\s*/);
+if(match2[0] === e.value){
+    searchResults.innerHTML = "";
+    return;
+}
+if(match[0] === e.value){
+    fetch('getSearchProducts',{
+        method:'post',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({payload:e.value})
+    }).then(res=>res.json()).then(data=>{
+        let payload = data.payload;
+        searchResults.innerHTML = "";
+        if(payload.length < 1){
+            searchResults.innerHTML = '<p style="background-color:#ffff;color:rgb(89, 87, 87);padding:2%;margin:0">Sorry. Nothing Found</p>'
+            return;
+        }
+        payload.forEach((item,index)=>{
+            if(index > 0) searchResults.innerHTML += '<hr style="margin:0;padding:0">';
+            searchResults.innerHTML += `<p style="background-color:#ffff;color:rgb(89, 87, 87);padding:2%;margin:0">${item.productname}</p>`
+        })
+    })
+
+return;
+
+}
+
+
+
+      }
