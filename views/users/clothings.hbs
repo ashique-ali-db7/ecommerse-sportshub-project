@@ -30,20 +30,25 @@
                         </ul>
                         <hr>
                     </div> --}}
-
+  
 
   <div class="filter-widget">
-                        <h4 class="fw-title">Subcategories</h4>
+      {{#if search}}
+      {{else}}
+             <h4 class="fw-title">Subcategories</h4>
+             {{/if}}
+                       
                         <div class="fw-brand-check">
                             {{#each allsubcategories}}
                             <div class="bc-item">
                                 <label for="bc-calvin{{this.subcategory}}">
                                     {{this.subcategory}}
-                                    <input type="checkbox" id="bc-calvin{{this.subcategory}}">
+                                <input type="checkbox" onclick="subcategoryFilter('{{this.subcategory}}','{{category}}')" id="bc-calvin{{this.subcategory}}">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
                            {{/each}}
+                         
                             {{!-- <div class="bc-item">
                                 <label for="bc-tommy">
                                     Tommy Hilfiger
@@ -59,17 +64,25 @@
 
 
                     <div class="filter-widget">
+                     {{#if search}}
+ {{else}}
                         <h4 class="fw-title">Brand</h4>
+                {{/if}}
                         <div class="fw-brand-check">
+                           
+ {{#if search}}
+ {{else}}
+                           
                             {{#each allBrands}}
                             <div class="bc-item">
                                 <label for="bc-calvin{{this.brandName}}">
                                     {{this.brandName}}
-                                    <input type="checkbox" id="bc-calvin{{this.brandName}}">
+                                    <input type="checkbox" onclick="brandFilter('{{this.brandName}}','{{categoryname}}')" id="bc-calvin{{this.brandName}}">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
                            {{/each}}
+                        {{/if}}
                             {{!-- <div class="bc-item">
                                 <label for="bc-tommy">
                                     Tommy Hilfiger

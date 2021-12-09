@@ -160,11 +160,45 @@ producthelpers.coupendelete(todayDate).then(()=>{
 //   })
 // });
 
+let products;
+let  subcategoryfilter = false;
+let categoryname;
+let brandFilter = false;
 // get all product based on category category
 router.get('/shopcategory',blockCheck,async(req,res)=>{
+ console.log("kkkk");
+ console.log(req.query.categoryname);
   let user = req.session.user;
-    let categoryname =  req.query.categoryname;
-    let products =   await  producthelpers.allCategoryProducts(categoryname);
+
+
+  if(subcategoryfilter){
+
+  }
+  
+  else if(brandFilter){
+
+  }
+  else{
+    console.log("okannallo tennis");
+    categoryname =  req.query.categoryname;
+  }
+
+  
+   
+
+if(subcategoryfilter){
+
+}
+else if(brandFilter){
+
+}
+else{
+  products =   await  producthelpers.allCategoryProducts(categoryname);
+}
+ 
+     
+   
+    
     let allsubcategories =await categoryhelpers.allSubCategories(categoryname);
     let cartcount =await producthelpers.getCartCount(req.session.user?._id);
     let allCategory = await categoryhelpers.getCategory();
@@ -184,20 +218,48 @@ router.get('/shopcategory',blockCheck,async(req,res)=>{
  
  
   let result3 = await producthelpers.startCoupenOffers(todayDate);
-
-
+console.log("jjjj");
+console.log(categoryname);
     producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
       producthelpers.deleteExpiredCategoryoffers(todayDate).then(()=>{
-        res.render('users/clothings', { admin:false,products,user,cartcount,allCategory,allBrands,allsubcategories});
+        res.render('users/clothings', { admin:false,products,user,cartcount,allCategory,allBrands,allsubcategories,categoryname});
+        subcategoryfilter = false;
+        brandFilter = false;
       })
      })
      
-       
     
-  
-  
-    
+});
+
+
+// get  sub category filter
+router.get('/filterSubCategory',async(req,res)=>{
+  categoryname = req.query.categoryname;
+  if(req.query.subcategory){
+    products = await producthelpers.allSubCategoryProducts(req.query.categoryname,req.query.subcategory);
+  if(products.length>0){
+    subcategoryfilter = true;
+    res.send({data:products})
+  }
+   
+  }
 })
+
+
+// get  brand filter
+router.get('/filterBrand',async(req,res)=>{
+  categoryname 
+  if(req.query.brand){
+    products = await producthelpers.filterBrandProducts(categoryname,req.query.brand);
+  if(products.length>0){
+    brandFilter = true;
+res.send({data:products})
+  }
+
+  }
+})
+
+
 
 /* GET shopping cart. */
 router.get('/shopping-cart',verifyLoginForLoginpage, async(req, res, next) =>{
@@ -1669,10 +1731,53 @@ router.post('/uploadProfile',(req,res)=>{
 
 router.post('/getSearchProducts',async(req,res)=>{
   let payload = req.body.payload.trim();
- let search = await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION)
- .find({productname:{$regex: new RegExp('^'+payload+'.*','i')}}).toArray();
- res.send({payload:search})
+  producthelpers.productSearch(payload).then((search)=>{
+    res.send({payload:search})
+  })
+ 
+
+ 
+});
+
+
+router.get('/shopcategorySearchProducts',blockCheck,async(req,res)=>{
+
+
+   let user = req.session.user;
+     let categoryname =  req.query.categoryname;
+     let products =   await  producthelpers.searchedProduct(req.query._id);
+    //  let allsubcategories =await categoryhelpers.allSubCategories(categoryname);
+     let cartcount =await producthelpers.getCartCount(req.session.user?._id);
+     let allCategory = await categoryhelpers.getCategory();
+     let allBrands  =  await brandhelpers.getBrand();
+     let todayDate = new Date().toISOString().slice(0, 10);
+
+
+
+
+     let result1 =   await producthelpers.startCategoryOffers(todayDate);
+ 
+ 
+     let result2 = await producthelpers.startProductOffers(todayDate);
+ 
+ 
+ 
+   let result3 = await producthelpers.startCoupenOffers(todayDate);
+let search = true;
+
+     producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
+       producthelpers.deleteExpiredCategoryoffers(todayDate).then(()=>{
+         res.render('users/clothings', { admin:false,products,user,cartcount,allCategory,search,allBrands});
+       })
+      })
+     
+       
+    
+  
+  
+    
 })
+
 
 // get user logout
 router.get('/userlogout',(req,res)=>{
