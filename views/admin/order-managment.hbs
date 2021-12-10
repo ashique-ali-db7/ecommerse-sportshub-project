@@ -5,20 +5,20 @@
   <thead>
     <tr>
       <th scope="col">Order date</th>
-      {{!-- <th scope="col">User Id</th> --}}
+  
       <th scope="col">Ordered address</th>
       <th scope="col">Payment method</th>
    
       <th scope="col">Total Amount</th>
      <th scope="col">view prodcts</th>
-      {{!-- <th scope="col">Status</th> --}}
+  
     </tr>
   </thead>
   <tbody>
       {{#each allOrders}}
     <tr>
       <td >{{this.date}}</td>
-      {{!-- <td>{{this.userId}}</td> --}}
+   
       <td>{{this.deliveryDetails.housename}}</td>
       <td>{{this.paymentmethod}}</td>
      

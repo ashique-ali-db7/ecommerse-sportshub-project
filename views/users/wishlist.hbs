@@ -4,23 +4,7 @@
             <div class="row ml-5 mr-5">
                <h5 style="margin-left:3%;margin-bottom:2%">My Wishlist</h5>
                 <div class="col-lg-12 order-1 order-lg-2">
-                    {{!-- <div class="product-show-option">
-                        <div class="row">
-                            <div class="col-lg-7 col-md-7">
-                                <div class="select-option">
-                                    <select class="sorting">
-                                        <option value="">Default Sorting</option>
-                                    </select>
-                                    <select class="p-show">
-                                        <option value="">Show:</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-5 col-md-5 text-right">
-                                <p>Show 01- 09 Of 36 Product</p>
-                            </div>
-                        </div>
-                    </div> --}}
+               
                     {{#if wishlist}}
                     <div class="product-list">
                         <div class="row">
@@ -36,9 +20,9 @@
                                             <i class="fas fa-times" onclick="removeFromWishlist('{{this.productdetails._id}}','{{this.productdetails.productname}}')" style="color: #e7503c;fony-size:1rem"></i>
                                         </div>
                                         <ul>
-                                             {{!-- <li class="w-icon active"><a href="#"><i class="icon_bag_alt"></i></a></li>  --}}
+                                           
                                             <li class="quick-view" style="width:100%;cursor: pointer;"><a  style="color:#e7ab3c;" onclick="wishlistAddtoCart('{{this.productdetails.productid}}')" data-toggle="modal" data-target="#exampleModalLong"><i class="fas fa-shopping-cart mr-3"></i>MOVE TO BAG</a></li>
-                                         {{!-- <li class=""><a><i class="far fa-heart"></i></a></li>  --}}
+                                       
                                         </ul>
                                     </div>
                                     <div class="pi-text">
@@ -98,14 +82,14 @@
                                     <p style="color:red" class="selectsize" id="selectsize">please select a size</p>
                                     <p style="color:red" class="selectsize" id="outofstock">Out of stock</p>
       
-                                 {{!-- small --}}
+                            
                                  <div class="col-2">
 
                                       
                                      <div class="sc-item selectsize" id="smalloutofstock">
                                          
                                          <button class="roundmodalbutton"  onclick="outofstock()" style="color: grey;border:1px solid grey"  id="sm-size">S</button>
-                                        {{!-- <label for="sm-size"  style="color: grey;">s</label> --}}
+                                    
                                     </div>
                                   
                                    <div class="sc-item" id="smallstockin">
@@ -115,12 +99,12 @@
                                  
 
 </div>
-                                   {{!-- medium --}}
+                                
                                     <div class="col-2">
                                     
                                     <div class="sc-item selectsize" id="mediumoutofstock">
                                         <button class="roundmodalbutton" onclick="outofstock()" style="color: grey;border:1px solid grey" id="md-size">M</button>
-                                        {{!-- <label for="md-size" style="color: rgb(182, 179, 179);">m</label> --}}
+                                  
                                     </div>
                                  
                                      <div class="sc-item" id="mediumstockin">
@@ -133,14 +117,13 @@
                                   
 </div>
                                     
-                                    {{!-- large --}}
+                                   
                                     <div class="col-2">
                                  
                                      
                                    <div class="sc-item selectsize" id="largeoutofstock">
                                         <button class="roundmodalbutton" onclick="outofstock()" style="color: grey;border:1px solid grey" id="lg-size">L</button>
 
-                                        {{!-- <label for="lg-size" style="color: rgb(182, 179, 179);">l</label> --}}
                                     </div>
                                   
                                    <div class="sc-item" id="largestockin">
@@ -158,11 +141,7 @@
 
 
 
-                                    {{!-- xs --}}
-                                    {{!-- <div class="sc-item">
-                                        <input type="radio" id="xl-size">
-                                        <label for="xl-size">xs</label>
-                                    </div> --}}
+                                 
                                 </div>
 
 
@@ -186,51 +165,13 @@
                     {{/if}}
 
                     
-                    {{!-- <div class="loading-more">
-                        <i class="icon_loading"></i>
-                        <a href="#">
-                            Loading More
-                        </a>
-                    </div> --}}
+                 
                 </div>
             </div>
         </div>
     </section>
     <!-- Product Shop Section End -->
 
-    <!-- Partner Logo Section Begin -->
-    {{!-- <div class="partner-logo">
-        <div class="container">
-            <div class="logo-carousel owl-carousel">
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="images/users/logo-carousel/logo-1.png" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="images/users/logo-carousel/logo-2.png" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="images/users/logo-carousel/logo-3.png" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="images/users/logo-carousel/logo-4.png" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="images/users/logo-carousel/logo-5.png" alt="">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    <!-- Partner Logo Section End -->
   
 
 
@@ -272,10 +213,7 @@ if(sizeOfProduct){
              else if(response.added){
                  cartcounts = Number(cartcounts);
                 document.getElementById('cartcountvalue').innerHTML = cartcounts+1;
-                //  document.getElementById("addedcart").classList.remove("selectsize")
-                // setTimeout(function(){ 
-                //      document.getElementById("addedcart").classList.add("selectsize")
-                //  }, 1000);
+               
 
 const Toast = Swal.mixin({
   toast: true,
@@ -298,18 +236,12 @@ Toast.fire({
                  location.reload();
               }, 1300);           
                 
-                  //  Toast.fire({
-                    //  icon: 'success',
-                  //    title: 'Item added to cart'
-                 //   })
+              
                  
               
              }
              else if(response.exist){
-               //  document.getElementById("existincart").classList.remove("selectsize")
-              //  setTimeout(function(){ 
-                //     document.getElementById("existincart").classList.add("selectsize")
-              //   }, 3000); 
+           
 
 const Toast = Swal.mixin({
   toast: true,

@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-3 border-right">
             <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-              {{!-- <img class="rounded-circle mt-5" width="100px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"> --}}
+             
               <span class="font-weight-bold">{{user.profile.fullname}}</span><span class="text-black-50">{{user.profile.email}}</span><span> </span></div>
             <a href="/userprofile"  class="btn mt-2" style="width: 100%;background-color:#ffff;border:1px solid #e7ab3c">Profile information</a>
              <a href="/profileaddress" class="btn mt-2" style="width: 100%;background-color:#e7ab3c;border:1px solid #e7ab3c">Manage Addresses</a>
@@ -24,14 +24,14 @@
   <div class="card-body">
       <div class="row">
 <div class="col-1">
- {{!-- <input type="radio" style="width: 15px; margin:0%;position:relative; bottom:7%" onclick="checkoutAddress('{{defaultaddress._id}}')" name="input-name" value="{{defaultaddress._id}}"> --}}
+ 
 </div>
 <div class="col-10 ">
  <h5  >{{defaultaddress.name}}</h5>
  <p class="mt-3" ><span>{{defaultaddress.housename}} </span><span>{{defaultaddress.street}} </span><span>{{defaultaddress.district}} </span> <span>{{defaultaddress.state}}</span></p>
  <p>pincode: {{defaultaddress.pincode}}</p>
  <p>mobile number: <span  style="font-size: 1.1rem;color:black">{{defaultaddress.mobilenumber}}</span></p>
-  {{!-- <button style="background-color: #ffff;" class="text-danger" >Remove</button>  --}}
+ 
    <button class="text-primary" style="background-color: #ffff; " onclick="profileeditdefaultaddress('{{defaultaddress._id}}')"  data-toggle="modal" data-target="#modaladdressFormEdit" >Edit</button>
  </div>
  </div>
@@ -45,7 +45,7 @@
   <div class="card-body">
       <div class="row">
 <div class="col-1">
- {{!-- <input type="radio" style="width: 15px; margin:0%;position:relative; bottom:7%" onclick="checkoutAddress('{{defaultaddress._id}}')" name="input-name" value="{{defaultaddress._id}}"> --}}
+
 </div>
 <div class="col-10 ">
  
@@ -68,7 +68,7 @@
            <div class="card-body">
       <div class="row">
           <div class="col-1">
-    {{!-- <input type="radio" style="width: 15px; margin:0%;position:relative; bottom:7%" name="input-name" onclick="checkoutAddress('{{this.address._id}}')" value="{{this.address._id}}"> --}}
+   
     </div>
     <div class="col-10">
  <h5 >{{this.address.name}}</h5>
@@ -90,13 +90,7 @@
 
 
         </div>
-        {{!-- <div class="col-md-4">
-            <div class="p-3 py-5">
-                <div class="d-flex justify-content-between align-items-center experience"><span>Edit Experience</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Experience</span></div><br>
-                <div class="col-md-12"><label class="labels">Experience in Designing</label><input type="text" class="form-control" placeholder="experience" value=""></div> <br>
-                <div class="col-md-12"><label class="labels">Additional Details</label><input type="text" class="form-control" placeholder="additional details" value=""></div>
-            </div>
-        </div> --}}
+      
     </div>
 </div>
 </div>
@@ -112,7 +106,7 @@
 
 
 
-{{!-- modal --}}
+
 <div class="modal fade" id="modaladdressForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -184,7 +178,7 @@
 
 
 
-{{!-- modal edit default address --}}
+
 <div class="modal fade" id="modaladdressFormEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -239,7 +233,7 @@
      
         </div>
        
-{{!-- <input type="checkbox" style="display:inline-block" name="defaultaddress"> <p style="display:inline-block">Default Address</p> --}}
+
      
     
       
@@ -257,7 +251,7 @@
 
 
 
-{{!-- modal edit other address --}}
+
 <div class="modal fade" id="modalotheraddressFormEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -312,7 +306,7 @@
      
         </div>
        
-{{!-- <input type="checkbox" style="display:inline-block" name="defaultaddress"> <p style="display:inline-block">Default Address</p> --}}
+
      
     
       
