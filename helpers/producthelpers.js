@@ -1553,7 +1553,7 @@ module.exports = {
                 await data.map(async (onedata) => {
                     let productdetails = await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).findOne({ productname: onedata.productname });
 
-                    let price = productdetails.landingprice;
+                    let price = productdetails?.landingprice;
                     let offer = (price / 100) * onedata.discount;
                     let offerprice = (price - offer).toFixed(0);
                     offerprice = Number(offerprice);

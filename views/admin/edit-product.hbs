@@ -3,14 +3,7 @@
 <div class=" me-auto ms-auto shadow p-3 mb-5 bg-body rounded" >
    <h1 style="text-align: center;">Edit product</h1>
     <form action="/admin/edit-product?productid={{data.productid}}&id={{data._id}}" onsubmit="return onsubmitForm(this)"  class="mt-5" method="post" id="editproduct" enctype="multipart/form-data">
-{{!--        
-        <div class="mb-3">
-    <p style="color: red;">{{productExistError}}</p> 
-          
-          <label for="" class="form-label">Product Id</label>
-          <input name="productid" value="{{data.productid}}" type="text" class="form-control" >
-         
-        </div> --}}
+
 <div class="row">
 
         <div class="mb-2 col-lg-6 col-sm-12">
@@ -126,49 +119,7 @@
 
           </div>
 
-          {{!-- <div class="mb-3" id="img-preview">
-            <label for="" class="form-label">Image1</label><br>
-            <input type="file" id="image1" name="image1" accept="image/*" onchange="viewMainImage(event)">
-            <img src="" alt="" class="mt-4" style="width: 15rem;height:17rem;display:none" id="imageview1"><br>
-           <img style="width:15rem;height:17rem" src="/images/product-images/{{data._id}}1.png" id="editimageview1" alt="">
-          </div>
-
-   
-           
-
-           <div class="mb-3">
-            <label for="" class="form-label">Image2</label><br>
-           
-            <input type="file" id="image2"  name="image2" accept="image/*" onchange="viewSecondImage(event)">
-             <img src="" alt="" class="mt-4" style="width: 15rem;height:17rem;display:none" id="imageview2"><br>
-             <img style="width:15rem;height:17rem" src="/images/product-images/{{data._id}}2.png" id="editimageview2" alt="">
-          </div>
-
-
-
-           <div class="mb-3">
-            <label for="" class="form-label">Image3</label><br>
-           
-            <input type="file" id="image3" name="image3" accept="image/*" onchange="viewThirdImage(event)">
-             <img src="" alt="" class="mt-4" style="width: 15rem;height:17rem;display:none" id="imageview3"><br>
-              <img style="width:15rem;height:17rem" src="/images/product-images/{{data._id}}3.png" id="editimageview3" alt="">
-          </div>
-
-
-
-
-
-           <div class="mb-3">
-            <label for="" class="form-label">Image4</label><br>
-           
-            <input type="file" id="image4" name="image4" accept="image/*" onchange="viewFourthImage(event)">
-             <img src="" alt="" class="mt-4" style="width: 15rem;height:17rem;display:none" id="imageview4"><br>
-             <img style="width:15rem;height:17rem" src="/images/product-images/{{data._id}}4.png" id="editimageview4" alt="">
-          </div> --}}
-
-
-
-{{!-- crop --}}
+       
 
 
        <div class="col-lg-6">
@@ -244,22 +195,4 @@
 
 
 
- {{!-- <!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Update user</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body" id="modal-body-id">
-        Are you sure do you want to update {{data.productname}}?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button onclick="updateproductdetails()"   type="button" class="btn btn-primary">yes</button>
-      </div>
-    </div>
-  </div>
-</div> --}}
  

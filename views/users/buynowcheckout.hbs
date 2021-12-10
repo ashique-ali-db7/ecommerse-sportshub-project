@@ -5,7 +5,7 @@
     <!-- Shopping Cart Section Begin -->
     <section class="checkout-section spad">
         <div class="container">
-            {{!-- <form action="#" class="checkout-form"> --}}
+      
               <div class="checkout-form">
                 <div class="row">
                     <div class="col-lg-7">
@@ -26,7 +26,7 @@
  <p class="mt-3" ><span>{{defaultaddress.housename}} </span><span>{{defaultaddress.street}} </span><span>{{defaultaddress.district}} </span> <span>{{defaultaddress.state}}</span></p>
  <p>pincode: {{defaultaddress.pincode}}</p>
  <p>mobile number: <span  style="font-size: 1.1rem;color:black">{{defaultaddress.mobilenumber}}</span></p>
-  {{!-- <button style="background-color: #ffff;" class="text-danger" >Remove</button>  --}}
+
    <button class="text-primary" style="background-color: #ffff;" onclick="editdefaultaddress('{{defaultaddress._id}}')"  data-toggle="modal" data-target="#modaladdressFormEdit" >Edit</button>
  </div>
  </div>
@@ -39,7 +39,7 @@
   <div class="card-body">
       <div class="row">
 <div class="col-1">
- {{!-- <input type="radio" style="width: 15px; margin:0%;position:relative; bottom:7%" onclick="checkoutAddress('{{defaultaddress._id}}')" name="input-name" value="{{defaultaddress._id}}"> --}}
+ 
 </div>
 <div class="col-10">
   <button class="btn ml-3 text-danger" style="float: left;border:1px solid #bbb3b3 width:100%" class="btn btn-default btn-rounded mb-4 " data-toggle="modal" data-target="#modaladdressForm"><span class="mr-3" style="font-size: 20px;">+</span><span style="font-size: 25px;">Add new</span></button>
@@ -74,57 +74,7 @@
   </div>
                                 </div>
                                 {{/each}}
-                        {{!-- <div class="checkout-content">
-                            <a href="#" class="content-btn">Click Here To Login</a>
-                        </div> --}}
-          
-
-                                {{!-- <label for="fir">First Name<span>*</span></label>
-                                <input type="text" id="fir">
-                            </div>
-                            <div class="col-lg-6">
-                                <label for="last">Last Name<span>*</span></label>
-                                <input type="text" id="last">
-                            </div>
-                            <div class="col-lg-12">
-                                <label for="cun-name">Company Name</label>
-                                <input type="text" id="cun-name">
-                            </div>
-                            <div class="col-lg-12">
-                                <label for="cun">Country<span>*</span></label>
-                                <input type="text" id="cun">
-                            </div>
-                            <div class="col-lg-12">
-                                <label for="street">Street Address<span>*</span></label>
-                                <input type="text" id="street" class="street-first">
-                                <input type="text">
-                            </div>
-                            <div class="col-lg-12">
-                                <label for="zip">Postcode / ZIP (optional)</label>
-                                <input type="text" id="zip">
-                            </div>
-                            <div class="col-lg-12">
-                                <label for="town">Town / City<span>*</span></label>
-                                <input type="text" id="town">
-                            </div>
-                            <div class="col-lg-6">
-                                <label for="email">Email Address<span>*</span></label>
-                                <input type="text" id="email">
-                            </div>
-                            <div class="col-lg-6">
-                                <label for="phone">Phone<span>*</span></label>
-                                <input type="text" id="phone">
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="create-item">
-                                    <label for="acc-create">
-                                        Create an account?
-                                        <input type="checkbox" id="acc-create">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div> --}}
+                      
                         
                     </div>
                          <div class="col-lg-1"></div>
@@ -134,14 +84,12 @@
   <p style="color: red;" id="paypalcancel" hidden>{{paypalcancel}}</p>
                       {{/if}}
                      
-                        {{!-- <div class="checkout-content">
-                            <input type="text" placeholder="Enter Your Coupon Code">
-                        </div> --}}
+                      
                         <div  class="place-order ">
                         
                             <div class="order-total shadow p-3 mb-5 bg-body rounded">
                                 <ul class="order-table">
-                                    {{!-- <li>Product <span>Total</span></li> --}}
+                               
                                     {{#each cartItems}}
                                     <li class="fw-normal">{{this.productdetails.productname}} x {{this.quantity}} <span>{{this.subtotal}}</span></li>
                                   
@@ -184,7 +132,7 @@
                         </div>
                     </div>
                 </div>
-            {{!-- </form> --}}
+         
             </div>
         </div>
     </section>
@@ -233,7 +181,7 @@
   </div>
 </div>
 
-{{!-- modal --}}
+
 <div class="modal fade" id="modaladdressForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -305,7 +253,7 @@
 
 
 
-{{!-- modal edit default address --}}
+
 <div class="modal fade" id="modaladdressFormEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -360,7 +308,7 @@
      
         </div>
        
-{{!-- <input type="checkbox" style="display:inline-block" name="defaultaddress"> <p style="display:inline-block">Default Address</p> --}}
+
      
     
       
@@ -378,7 +326,7 @@
 
 
 
-{{!-- modal edit other address --}}
+
 <div class="modal fade" id="modalotheraddressFormEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -433,7 +381,7 @@
      
         </div>
        
-{{!-- <input type="checkbox" style="display:inline-block" name="defaultaddress"> <p style="display:inline-block">Default Address</p> --}}
+
      
     
       

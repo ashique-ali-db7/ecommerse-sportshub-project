@@ -150,24 +150,15 @@ producthelpers.coupendelete(todayDate).then(()=>{
 });
 
 
-/* GET clothings view. loginverification not required*/
-// router.get('/clothings',blockCheck,async function(req, res) {
-//   let user = req.session.user;
-//   let cartcount =await producthelpers.getCartCount(req.session.user?._id);
-//   producthelpers.getProduct().then((products)=>{
-   
-//     res.render('users/clothings', { admin:false,products,user,cartcount});
-//   })
-// });
+
 
 let products;
 let  subcategoryfilter = false;
 let categoryname;
 let brandFilter = false;
-// get all product based on category category
+
 router.get('/shopcategory',blockCheck,async(req,res)=>{
- console.log("kkkk");
- console.log(req.query.categoryname);
+
   let user = req.session.user;
 
 
@@ -179,7 +170,7 @@ router.get('/shopcategory',blockCheck,async(req,res)=>{
 
   }
   else{
-    console.log("okannallo tennis");
+ 
     categoryname =  req.query.categoryname;
   }
 
@@ -218,8 +209,8 @@ else{
  
  
   let result3 = await producthelpers.startCoupenOffers(todayDate);
-console.log("jjjj");
-console.log(categoryname);
+
+
     producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
       producthelpers.deleteExpiredCategoryoffers(todayDate).then(()=>{
         res.render('users/clothings', { admin:false,products,user,cartcount,allCategory,allBrands,allsubcategories,categoryname});
@@ -271,7 +262,7 @@ router.get('/shopping-cart',verifyLoginForLoginpage, async(req, res, next) =>{
 
   let cartcount =await producthelpers.getCartCount(req.session.user?._id);
   let allCategory = await categoryhelpers.getCategory();
- console.log("cartItems",cartItems);
+
   if(cartItems.length>=1){
     cartItemsEmpty = false;
   }else{
@@ -327,7 +318,7 @@ quantity.smalloutofstock = true;
   //  let allCategory = await categoryhelpers.getCategory();
  producthelpers.getSingleProductDetails(req.query).then((response)=>{
 
-  console.log(response);
+ 
    if(response.instock[0].quantity == 0){
  data.quantity.smalloutofstock = true;
    }
@@ -408,7 +399,7 @@ let phonenumber = Number(req.body.phonenumber);
       channel:"sms"
     })
     .then((resp)=>{
-      // console.log(resp);
+    
       // res.status(200).json({resp});
       res.render('users/otplogin',{admin:false,phoneNumber,notheader:true,registerotp:true})
     });
@@ -504,7 +495,7 @@ router.get('/userlogin', function(req, res) {
 /* post user login. */
 
 router.post('/userlogin', function(req, res) {
-  console.log(req.body);
+
   userhelpers.checkLogin(req.body).then((response)=>{
     if(response?.blocked){
       blockedError = "you are blocked";
@@ -601,7 +592,7 @@ router.get('/loginresend',verifyLogin,(req,res)=>{
         channel:"sms"
       })
       .then((resp)=>{
-        // console.log(resp);
+      
         // res.status(200).json({resp});
          res.render('users/otplogin',{admin:false,phoneNumber,notheader:true})
       });
@@ -674,7 +665,7 @@ router.post('/loginidentify',(req,res)=>{
           channel:"sms"
         })
         .then((resp)=>{
-          // console.log(resp);
+        
           // res.status(200).json({resp});
           res.render('users/otploginforpassword',{admin:false,phoneNumber,notheader:true})
         });
@@ -699,7 +690,7 @@ router.post('/loginidentify',(req,res)=>{
 
 //password for resend
 router.get('/loginresendpassword',verifyLogin,(req,res)=>{
-  console.log("edamone")
+
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
  let phoneNumber = req.session.phonenumber
 
@@ -712,7 +703,7 @@ router.get('/loginresendpassword',verifyLogin,(req,res)=>{
         channel:"sms"
       })
       .then((resp)=>{
-        // console.log(resp);
+     
         // res.status(200).json({resp});
          res.render('users/otploginforpassword',{admin:false,phoneNumber,notheader:true})
       });
@@ -1407,7 +1398,7 @@ router.post('/profileotheraddressedit',(req,res)=>{
           userhelpers.razorpayPlaceorder(deliveryaddressAndMethod,products,totalPrice,req.session.userId,req.session.user.coupencode).then(()=>{
         
           
-            console.log(JSON.stringify(payment));
+         
          
             res.render('users/ordersuccess',{user,admin:false,user,notheader:true})
           })
