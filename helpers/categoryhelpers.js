@@ -152,7 +152,7 @@ await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
             resolve(bannerTwo);
         })
     },
-    categoryBannerOne:(category)=>{
+    categoryBannerOneadds:(category)=>{
         return new Promise(async(resolve,reject)=>{
             let categoryBannerOnedata = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"one"});
             if(categoryBannerOnedata){
@@ -169,7 +169,9 @@ await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
             }
         })
     },
-    categoryBannerTwo:(category)=>{
+    categoryBannerTwoadds:(category)=>{
+        console.log("hihihihihhihihi");
+        console.log(category);
         return new Promise(async(resolve,reject)=>{
             let categoryBannerTwodata = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"two"});
             if(categoryBannerTwodata){
@@ -186,7 +188,7 @@ await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
             }
         })
     },
-    categoryBannerThree:(category)=>{
+    categoryBannerThreeadds:(category)=>{
         return new Promise(async(resolve,reject)=>{
             let categoryBannerThreedata = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"three"});
             if(categoryBannerThreedata){
@@ -210,6 +212,7 @@ await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
         })
     },
     getCategoryBannerTwo:()=>{
+        console.log("noivide");
         return new Promise(async(resolve,reject)=>{
         let categoryBannerTwo =    await  db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"two"});
         resolve(categoryBannerTwo);
@@ -281,16 +284,20 @@ await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
     },
 
     categoryBannerOne:()=>{
+      
         return new Promise(async(resolve,reject)=>{
    let categorybannerone =await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"one"})
+
    resolve(categorybannerone)
         })
     },
     
 
     categoryBannerTwo:()=>{
+        console.log("ivade");
         return new Promise(async(resolve,reject)=>{
-   let categorybannertwo =await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"two"})
+   let categorybannertwo =await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"two"});
+ 
    resolve(categorybannertwo)
         })
     },
@@ -300,7 +307,7 @@ await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
    
             let categorybannerthree =await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"three"})
             resolve(categorybannerthree)
-
+     
         })
     },
 
