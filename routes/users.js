@@ -958,8 +958,8 @@ if(req.session?.user?.coupencode){
           "payment_method": "paypal"
       },
       "redirect_urls": {
-          "return_url": "http://sportshub.store:3000/success",
-          "cancel_url": "http://sportshub.store:3000/cancel"
+          "return_url": "http://sportshub.store/success",
+          "cancel_url": "http://sportshub.store/cancel"
       },
       "transactions": [{
           "item_list": {
@@ -1086,8 +1086,8 @@ userhelpers.buynowplaceOrder(deliveryaddressAndMethod,products,totalPrice,userId
          "payment_method": "paypal"
      },
      "redirect_urls": {
-         "return_url": "http://sportshub.store:3000/buynowsuccess",
-         "cancel_url": "http://sportshub.store:3000/buynowcancel"
+         "return_url": "http://sportshub.store/buynowsuccess",
+         "cancel_url": "http://sportshub.store/buynowcancel"
      },
      "transactions": [{
          "item_list": {

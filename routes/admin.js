@@ -801,17 +801,24 @@ if(response.exist){
 
 // post category banner one
 router.post('/categorybannerone',(req,res)=>{
-  let category = req.body.subbannercategoryone;
-  let categorybanner1image = req.files?.categorybannerimage1;
-  categoryhelpers.categoryBannerOne(category).then((response)=>{
-    let id = response.id;
-    if(response.exist){
 
+  let category = req.body.subbannercategoryone;
+  console.log("hehhehe");
+  console.log(category);
+  let categorybanner1image = req.files?.categorybannerimage1;
+  categoryhelpers.categoryBannerOneadds(req.body.subbannercategoryone).then((response)=>{
+    let id = response.id;
+   
+    if(response.exist){
+      
       if(categorybanner1image){
-        fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
-          if (err) throw err;
-          console.log('File deleted!');
-        });
+        if(fs.existsSync('./public/images/banner-images/'+id+'.png')){
+          fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
+            if (err) throw err;
+            console.log('File deleted!');
+          });
+        }
+      
         categorybanner1image.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
           if(!err){
             res.redirect('/admin/bannermanagment')
@@ -840,15 +847,18 @@ router.post('/categorybannerone',(req,res)=>{
 router.post('/categorybannertwo',(req,res)=>{
   let category = req.body.subbannercategorytwo;
   let categorybanner2image = req.files?.categorybannerimage2;
-  categoryhelpers.categoryBannerTwo(category).then((response)=>{
+  categoryhelpers.categoryBannerTwoadds(category).then((response)=>{
     let id = response.id;
     if(response.exist){
 
       if(categorybanner2image){
-        fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
-          if (err) throw err;
-          console.log('File deleted!');
-        });
+        if(fs.existsSync('./public/images/banner-images/'+id+'.png')){
+          fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
+            if (err) throw err;
+            console.log('File deleted!');
+          });
+        }
+     
         categorybanner2image.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
           if(!err){
             res.redirect('/admin/bannermanagment')
@@ -878,15 +888,18 @@ router.post('/categorybannerthree',(req,res)=>{
   console.log("edaaaa");
   let category = req.body.subbannercategorythree;
   let categorybanner3image = req.files?.categorybannerimage3;
-  categoryhelpers.categoryBannerThree(category).then((response)=>{
+  categoryhelpers.categoryBannerThreeadds(category).then((response)=>{
     let id = response.id;
     if(response.exist){
 
       if(categorybanner3image){
-        fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
-          if (err) throw err;
-          console.log('File deleted!');
-        });
+        if(fs.existsSync('./public/images/banner-images/'+id+'.png')){
+          fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
+            if (err) throw err;
+            console.log('File deleted!');
+          });
+        }
+    
         categorybanner3image.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
           if(!err){
             res.redirect('/admin/bannermanagment')
