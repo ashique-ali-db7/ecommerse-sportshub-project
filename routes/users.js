@@ -102,7 +102,7 @@ let categorybannerTwo = await categoryhelpers.getCategoryBannerTwo();
 let categorybannerThree = await categoryhelpers.getCategoryBannerThree();
 
 let productOneForHomecategory = await categoryhelpers.categoryProductOneForHome();
-let productOneForHomecategorysubcategory = await categoryhelpers.allSubCategories(productOneForHomecategory.category);
+let productOneForHomecategorysubcategory = await categoryhelpers.allSubCategories(productOneForHomecategory?.category);
 let productOneForHomecategoryProducts = await producthelpers.categoryProductOneForHomeProducts(productOneForHomecategory.category);
 
 
