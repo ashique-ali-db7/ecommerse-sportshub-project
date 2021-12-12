@@ -3799,7 +3799,7 @@ border: none;
 
 .register-login-section {
 	padding-top: 72px;
-	padding-bottom: 80px;
+	padding-bottom: 0px;
 }
 
 .register-form h2,
@@ -3943,7 +3943,7 @@ border: none;
 
 @media only screen and (min-width: 1200px) {
 	.container {
-		max-width: 1350px;
+		max-width: 1250px;
 	}
 }
 
