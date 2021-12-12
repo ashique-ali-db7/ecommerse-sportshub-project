@@ -149,11 +149,20 @@
 
 
   <div class="profile-pic-wrapper" style="height:170px">
+{{#if profilepic}}
+
+{{else}}
+<h6>Add your profile photo</h6>
+{{/if}}
+
+        
     <div class="pic-holder">
       <!-- uploaded pic shown here -->
       {{#if profilepic}}
+
       <img id="profilePic" class="pic" src="/images/profile-images/{{user._id}}.png">
       {{else}}
+  
  <img id="profilePic" class="pic" src="/images/profile-images/Blank-profile.png">
       {{/if}}
   
