@@ -1185,6 +1185,12 @@ function cancelproduct(orderId,proId,size){
 
     // document.getElementById(proId+size+"uo").innerHTML = "Canceled";
 
+    swal("Are you sure do you want to cancel this product ?", {
+        buttons: true,
+      }).then((willdelete)=>{
+if(willdelete){
+
+
     $.ajax({
         url:'/usercancelorder?orderId='+orderId+'&proId='+proId+'&size='+size,
         method:'get',
@@ -1195,6 +1201,14 @@ function cancelproduct(orderId,proId,size){
         
         }
     })
+
+
+}else{
+
+}
+      })
+
+
 }
 
 
