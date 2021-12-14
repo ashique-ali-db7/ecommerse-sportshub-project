@@ -162,7 +162,7 @@ img {
 .sidebar {
     margin: 0;
     padding: 0;
-    width: 250px;
+    width: 280px;
     background-color: #142F43;
     position: fixed;
     height: 100%;
@@ -191,7 +191,7 @@ img {
   
   /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
   div.content {
-    margin-left: 250px;
+    margin-left: 300px;
   
     padding: 0px 16px;
     height: 1000px;
