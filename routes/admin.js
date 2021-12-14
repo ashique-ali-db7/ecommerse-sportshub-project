@@ -940,10 +940,12 @@ let id = response.id;
 if(response.exist){
 
   if(productBannerOneImage){
+    if(fs.existsSync('./public/images/banner-images/'+id+'.png')){
     fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
       if (err) throw err;
       console.log('File deleted!');
     });
+  }
     productBannerOneImage.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
       if(!err){
         res.redirect('/admin/bannermanagment')
@@ -979,10 +981,12 @@ router.post('/homepageproductstwo',(req,res)=>{
     if(response.exist){
 
       if(productBannerTwoImage){
+        if(fs.existsSync('./public/images/banner-images/'+id+'.png')){
         fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
           if (err) throw err;
           console.log('File deleted!');
         });
+      }
         productBannerTwoImage.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
           if(!err){
             res.redirect('/admin/bannermanagment')
