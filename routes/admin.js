@@ -722,10 +722,12 @@ router.post('/firstmainbanner',(req,res)=>{
     let id =response.id;
 if(response.exist){
   if(banner1image){
+    if(fs.existsSync('./public/images/banner-images/'+id+'.png')){
     fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
       if (err) throw err;
       console.log('File deleted!');
     });
+  }
     banner1image.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
       if(!err){
         res.redirect('/admin/bannermanagment')
@@ -765,10 +767,15 @@ router.post('/secondmainbanner',(req,res)=>{
     let id =response.id;
 if(response.exist){
   if(banner2image){
+
+    if(fs.existsSync('./public/images/banner-images/'+id+'.png')){
+
+   
     fs.unlink('./public/images/banner-images/'+id+'.png', function (err) {
       if (err) throw err;
       console.log('File deleted!');
     });
+     }
     banner2image.mv('./public/images/banner-images/'+id+'.png',(err,done)=>{
       if(!err){
         res.redirect('/admin/bannermanagment')
