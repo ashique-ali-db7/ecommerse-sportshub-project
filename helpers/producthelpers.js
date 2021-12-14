@@ -1017,10 +1017,10 @@ module.exports = {
                     $unwind: "$products"
                 },
 
-                {
-                    $match: { 'products.status': 'delivered' }
+                // {
+                //     $match: { 'products.status': 'delivered' }
 
-                },
+                // },
                 {
                     $project: {
                         item: "$products.item",
