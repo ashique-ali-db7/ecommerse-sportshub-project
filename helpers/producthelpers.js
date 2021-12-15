@@ -521,6 +521,7 @@ module.exports = {
 
             if (productAlreadyHaveOffer) {
                 response.exist = true;
+               
                 resolve(response);
             } else {
                 db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).insertOne(data);
@@ -1820,6 +1821,15 @@ resolve(data);
             let data = db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:category,brand:brand}).toArray();
             resolve(data);
         })
+    },
+
+    profileSaveDetails:(userId)=>{
+  return new Promise(async(resolve,reject)=>{
+      let data =await db.get().collection(collections.USERS_DETAILS_COLLECTION).findOne({_id:objectId(userId)});
+
+      resolve(data);
+
+  })
     }
 
 

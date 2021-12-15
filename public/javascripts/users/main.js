@@ -363,6 +363,9 @@ $("#profiledit").validate({
         },
         state:{
             required:true
+        },
+        location:{
+            required:true
         }
 
 
@@ -417,10 +420,7 @@ $("#profleedit").validate({
             maxlength:10,
             minlength:10
         },
-        location:{
-            required:true,
-            
-        },
+      
         country:{
             required:true,
             
@@ -644,7 +644,9 @@ $("#profilsub").validate({
             required:true,
            
         },
-       
+       location:{
+           required:true
+       }
 
 
        
@@ -1292,15 +1294,21 @@ if(willdelete){
     }
 
 
-    function applycoupen(){
-       
+    function applycoupen(check){
+        console.log(check);
+        let which ;
+       if(check === '1'){
+           which = 1;
+       }else{
+        which = 0;
+       }
        let coupencode =  document.getElementById('coupencode').value
-      
+  
        $.ajax({
            url:'/applycoupen',
            data:{
             coupencode:coupencode,
-         
+             which:which
             
         },
            method:'post',
@@ -1312,7 +1320,7 @@ if(willdelete){
                 document.getElementById('errormessage').innerHTML = "This coupen is already used";
                }
                else if(response.exist){
-                 
+                 console.log(response);
               document.getElementById('coupendiscount').textContent = "-"+response.savedprice;
               document.getElementById('totalcheckoutprice').textContent = response.coupenOfferPrice;
               document.getElementById("closemodal").click();
@@ -1324,6 +1332,12 @@ if(willdelete){
 
        )
     }
+
+
+
+
+
+
 
     function allAvailableCoupens(){
         $.ajax({

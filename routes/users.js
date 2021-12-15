@@ -911,7 +911,8 @@ if(req.query.coupencheck != 0){
   }
 }
 
-if(req.session?.user?.coupencode){
+if(req.session?.user?.coupen){
+ 
   req.session.user.coupencode = req.query.couponcode;
 }
  
@@ -1039,7 +1040,7 @@ router.get('/buynowplace-order',async(req,res)=>{
     totalPrice = req.session.user.coupenOfferPrice
   }
 }
-if(req.session?.user?.coupencode){
+if(req.session?.user?.coupen){
   req.session.user.coupencode = req.query.couponcode;
 }
 
@@ -1181,7 +1182,7 @@ router.post('/verify-payment',async(req,res)=>{
   //  userhelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
      userhelpers.deleteCartForPayment(req.session.user._id).then(()=>{
     
-       userhelpers.razorpayPlaceorder(deliveryaddressAndMethod,products,totalPrice,req.session.userId,req.session.user.coupencode).then(()=>{
+       userhelpers.razorpayPlaceorder(deliveryaddressAndMethod,products,totalPrice,req.session.userId,req.session?.user?.coupencode).then(()=>{
      
         res.json({status:true})
        })
@@ -1248,6 +1249,7 @@ router.get('/userprofile',verifyLoginForLoginpage,async(req,res)=>{
   let user = req.session.user;
   let cartcount =await producthelpers.getCartCount(req.session.user?._id);
   let allCategory = await categoryhelpers.getCategory();
+  let userDetails = await producthelpers.profileSaveDetails(req.session.user?._id);
   let profileExist
   if(user.profile){
     profileExist = true;
@@ -1263,7 +1265,7 @@ router.get('/userprofile',verifyLoginForLoginpage,async(req,res)=>{
  }
 
 
-  res.render('users/userprofile',{admin:false,user,cartcount,allCategory,profileExist,profilepic});
+  res.render('users/userprofile',{admin:false,user,cartcount,allCategory,profileExist,profilepic,userDetails});
 });
 
 
@@ -1619,7 +1621,7 @@ router.get('/removefromwishlistpage',(req,res)=>{
 // post apply coupen
 router.post('/applycoupen',(req,res)=>{
 result = {}
-
+let total;
   let coupencode = req.body.coupencode;
   
  producthelpers.checkCoupen(coupencode,req.session.user._id).then(async(response)=>{
@@ -1637,9 +1639,16 @@ else if(response.alreadyused){
   res.send(result);
 }
 else{
-  let total =  await producthelpers.getTotalAmount(req.session.user._id);
+
+if(req.body.which === '1'){
+   total =  await producthelpers.getBuyNowTotalAmount(req.session.user._id);
+}else{
+ total =  await producthelpers.getTotalAmount(req.session.user._id);
+}
+
+ 
   
-  
+  console.log("tot",total);
   
   let price = total;
   let offer = (price/100)*response.coupenpercentage;
@@ -1657,6 +1666,8 @@ let savedprice = total - coupenOfferPrice;
 result.savedprice = savedprice;
 result.coupenOfferPrice = coupenOfferPrice;
     result.exist = true;
+    console.log("kkkkkk");
+    console.log(result);
 res.send(result);
 
 

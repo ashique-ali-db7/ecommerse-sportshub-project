@@ -312,8 +312,8 @@ a:hover {
                         <div class="col">
                             <div class="row text-muted">{{this.productdetails.brand}}</div>
                             <div class="row">{{this.productdetails.productname}}</div>
-                            <div style="color: #e7ab3c;" class="row">{{this.productdetails.price}}</div>
-                               <div class="row" style="font-size: 1.2rem;">size:<span style="color: #524e4e;">{{this.size}}</span> </div>
+                            <div style="color: #e7ab3c;" class="row"><span style="color: black;">Price: </span>{{this.productdetails.price}}</div>
+                               <div class="row" style="font-size: 1.2rem;">size:<span style="color: #e7ab3c;">{{this.size}}</span> </div>
                         </div>
                         <div class="col "> <button class="mone" id="{{this.productdetails._id}}{{this.size}}-" onclick="changeQuantity('{{this._id}}','{{this.productdetails._id}}','{{this.size}}',-1,'{{../user._id}}',{{this.productdetails.price}})">-</button>
                         <span id="{{this.productdetails._id}}{{this.size}}" >{{this.quantity}}</span>

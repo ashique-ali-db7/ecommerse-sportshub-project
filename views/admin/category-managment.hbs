@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
- <div class="card mt-5 col-lg-6 shadow p-3 mb-5 bg-body rounded">
+ <div class="card mt-5 col-lg-5 shadow p-3 mb-5 bg-body rounded">
         <div class="card-header">
           Add category
         </div>
@@ -18,16 +18,16 @@
               {{#each categoryData}}
               <option >{{this.category}}</option>
               {{/each}}
-            </select>
-            <a   class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delete</a>
+            </select><br>
+            <a   class="btn btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delete</a>
           </form>
            
 
 
         </div>
       </div>
-
-      <div class="card mt-5 col-lg-6 shadow p-3 mb-5 bg-body rounded">
+<div class="col-lg-2"></div>
+      <div class="card mt-5 col-lg-5 shadow p-3 mb-5 bg-body rounded">
         <div class="card-header">
           Add sub category
         </div>
@@ -40,8 +40,8 @@
               <option >{{this.category}}</option>
              {{/each}}
             </select><br>
-            <input type="text" name="subcategory" class="mt-4">
-            <button type="submit" class="btn btn-primary ms-4">Add sub category</button>
+            <input type="text" name="subcategory" class="mt-4"><br>
+            <button type="submit" class="btn btn-primary  mt-3">Add sub category</button>
             <p style="color: red;">{{subcategoryExistError}}</p>
             </form>
         </div>

@@ -990,6 +990,7 @@ border: none;
 .hero-items .owl-nav button[type=button].owl-next {
 	left: auto;
 	right: 40px;
+	display: none;
 }
 
 /*---------------------

@@ -1,6 +1,13 @@
 
 
 
+
+
+
+
+
+
+
 document.addEventListener("DOMContentLoaded", function (event) {
 
     function OTPInput() {
@@ -32,14 +39,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-  
-
-
-
-
 let timerOn = true;
 
 function timer(remaining) {
+    console.log("haha");
   var m = Math.floor(remaining / 60);
   var s = remaining % 60;
   
@@ -67,9 +70,15 @@ function timer(remaining) {
 }
 
 
+    timer(45);
 
 
-timer(45);
+
+
+
+
+
+
 
 
 

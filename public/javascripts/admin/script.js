@@ -1244,10 +1244,7 @@ $("#brandvalidationform").validate({
             required:true,
            
         },
-        logo:{
-            required:true,
-           
-        }
+       
         
     }
    
@@ -1357,7 +1354,8 @@ $("#productoffer").validate({
         discount:{
             required:true,
             number:true,
-            max:100
+            max:100,
+            min:1
            
         },
         profferstartdate:{
@@ -1390,7 +1388,8 @@ $("#coupenoffer").validate({
         },
         coupenpercentage:{
             required:true,
-            max:100
+            max:100,
+            min:1
         },
         coupenstartdate:{
             required:true,
@@ -1414,7 +1413,8 @@ $("#editproductoffer").validate({
         discountpercentageproduct:{
             required:true,
             number:true,
-            max:100
+            max:100,
+            min:1
            
         },
         profferstartdate:{
@@ -1443,7 +1443,8 @@ $("#categoryoffer").validate({
         discountpercentage:{
             required:true,
             number:true,
-            max:100
+            max:100,
+            min:1
            
         },
         caofferstartdate:{
@@ -1469,7 +1470,8 @@ $("#editcategoryoffer").validate({
         discountpercentage:{
             required:true,
             number:true,
-            max:100
+            max:100,
+            min:1
            
         },
         caofferstartdate:{
