@@ -247,7 +247,7 @@ router.get('/deletebrand',verifyLogin,(req,res)=>{
 
 
 // edit brand
-router.get('/editbrand',(req,res)=>{
+router.get('/editbrand',verifyLogin,(req,res)=>{
   brandhelpers.getSingleBrand(req.query).then((response)=>{
   let singleBrand = response;
   console.log(brandExistError);
@@ -476,10 +476,12 @@ router.post('/edit-product',(req,res)=>{
     let image3 = req.files?.image3;
     let image4 = req.files?.image4;
     if(image1){
+      if(fs.existsSync('./public/images/product-images/'+id+'1.png')){
       fs.unlink('./public/images/product-images/'+id+'1.png', function (err) {
         if (err) throw err;
         console.log('File deleted!');
       });
+    }
       image1.mv('./public/images/product-images/'+id+'1.png',(err,done)=>{
         if(!err){
           
@@ -490,10 +492,12 @@ router.post('/edit-product',(req,res)=>{
       })
     }
     if(image2){
+      if(fs.existsSync('./public/images/product-images/'+id+'2.png')){
       fs.unlink('./public/images/product-images/'+id+'2.png', function (err) {
         if (err) throw err;
         console.log('File deleted!');
       });
+    }
       image2.mv('./public/images/product-images/'+id+'2.png',(err,done)=>{
         if(!err){
           
@@ -504,10 +508,12 @@ router.post('/edit-product',(req,res)=>{
       })
     }
     if(image3){
+      if(fs.existsSync('./public/images/product-images/'+id+'3.png')){
       fs.unlink('./public/images/product-images/'+id+'3.png', function (err) {
         if (err) throw err;
         console.log('File deleted!');
       });
+    }
       image3.mv('./public/images/product-images/'+id+'3.png',(err,done)=>{
         if(!err){
           
@@ -518,10 +524,12 @@ router.post('/edit-product',(req,res)=>{
       })
     }
     if(image4){
+      if(fs.existsSync('./public/images/product-images/'+id+'4.png')){
       fs.unlink('./public/images/product-images/'+id+'4.png', function (err) {
         if (err) throw err;
         console.log('File deleted!');
       });
+    }
       image4.mv('./public/images/product-images/'+id+'4.png',(err,done)=>{
         if(!err){
           res.redirect('/admin/view-product');
@@ -581,7 +589,7 @@ router.get('/deleteproduct',verifyLogin,(req,res)=>{
 
 // user managment
 
-router.get('/usermanagment',(req,res)=>{
+router.get('/usermanagment',verifyLogin,(req,res)=>{
   userhelpers.getAllUsers().then((response)=>{
     let allusers = response
     res.render('admin/user-managment',{admin:true,allusers});
@@ -646,7 +654,7 @@ router.post('/adminlogin',(req,res)=>{
 }),
 
 // get order managment
-router.get('/ordermanagment',(req,res)=>{
+router.get('/ordermanagment',verifyLogin,(req,res)=>{
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
 if(req.session.admin){
   userhelpers.getOrderDetails().then((response)=>{
@@ -680,7 +688,7 @@ if(req.session.admin){
  })
 
 //view orderd products
-router.get('/orderproductsview',(req,res)=>{
+router.get('/orderproductsview',verifyLogin,(req,res)=>{
   
 
   let orderid =  req.query.orderid;
@@ -692,7 +700,7 @@ router.get('/orderproductsview',(req,res)=>{
  
 });
 
-router.get('/bannermanagment',async(req,res)=>{
+router.get('/bannermanagment',verifyLogin,async(req,res)=>{
   if(req.session.admin){
     let categoryData =await categoryhelpers.getCategory();
     let bannerOne = await categoryhelpers.getBannerOne();
@@ -1014,7 +1022,7 @@ router.post('/homepageproductstwo',(req,res)=>{
 
 // get category offer managment
 
-router.get('/categoryoffermanagment',async(req,res)=>{
+router.get('/categoryoffermanagment',verifyLogin,async(req,res)=>{
   let categoryData =await categoryhelpers.getCategory();
   let categoryOffers = await producthelpers.getAllCategoryOffers();
   let todayDate = new Date().toISOString().slice(0, 10);
@@ -1098,7 +1106,7 @@ router.get('/deletecategoryoffer',(req,res)=>{
 
 // get product offer managment
 
-router.get('/productoffermanagment',async(req,res)=>{
+router.get('/productoffermanagment',verifyLogin,async(req,res)=>{
   let categoryData =await categoryhelpers.getCategory();
   let allproducts =  await producthelpers.getProduct();
   let productOffers = await producthelpers.getAllProductsOffers();
@@ -1110,22 +1118,27 @@ router.get('/productoffermanagment',async(req,res)=>{
 
   producthelpers.deleteExpiredproductoffers(todayDate).then(()=>{
     producthelpers.deleteExpiredCategoryoffers(todayDate).then(()=>{
+      console.log("hahahahhaha");
+      console.log(productofferExistError);
       res.render('admin/productoffermanagment',{admin:true,categoryData,allproducts,productofferExistError,productOffers});
-
+      productofferExistError = "";
     })
    })
      
 
 
 
-  productofferExistError = "";
+
 });
 
 
 router.post('/productoffer',(req,res)=>{
   producthelpers.addProductOffer(req.body).then((response)=>{
     if(response.exist){
+    
       productofferExistError = "This product already have a offer";
+      console.log("monehdhsdva");
+      console.log("idh",productofferExistError);
       res.redirect('/admin/productoffermanagment')
     }else{
       res.redirect('/admin/productoffermanagment')
@@ -1157,7 +1170,7 @@ router.get('/deleteproductoffer',(req,res)=>{
 })
 //coupen managment
 
-router.get('/coupenmanagment',async(req,res)=>{
+router.get('/coupenmanagment',verifyLogin,async(req,res)=>{
   let categoryData =await categoryhelpers.getCategory();
   let coupendetails = await categoryhelpers.getCoupenDetails();
   let todayDate = new Date().toISOString().slice(0, 10);
@@ -1211,7 +1224,7 @@ let checkorderReport = false;
 
 // get sales report
 
-router.get('/report',async(req,res)=>{
+router.get('/report',verifyLogin,async(req,res)=>{
  
 
    if(req.session.admin){
@@ -1246,7 +1259,7 @@ router.get('/getreport',verifyLogin,async(req,res)=>{
 
 // get product report
 
-router.get('/productreport',async(req,res)=>{
+router.get('/productreport',verifyLogin,async(req,res)=>{
  
 
   if(req.session.admin){

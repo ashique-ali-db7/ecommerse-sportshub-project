@@ -64,7 +64,7 @@
       <th scope="col">Offer %</th>
       <th scope="col">start date</th>
       <th scope="col">End date</th>
-       <th scope="col">Edit</th>
+       {{!-- <th scope="col">Edit</th> --}}
         <th scope="col">Delete</th>
     </tr>
   </thead>
@@ -75,7 +75,7 @@
       <td>{{this.discount}}</td>
       <td>{{this.profferstartdate}}</td>
       <td>{{this.profferenddate}}</td>
-       <td><button onclick="productOfferEdit('{{this._id}}')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalforproductedit">Edit Offer</button></td>
+       {{!-- <td><button onclick="productOfferEdit('{{this._id}}')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalforproductedit">Edit Offer</button></td> --}}
       <td><button class="btn btn-danger" onclick="deleteproductoffer('{{this.productname}}')">Delete Offer</button></td>
     </tr>
     {{/each}}

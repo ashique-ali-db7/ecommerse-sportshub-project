@@ -6,7 +6,7 @@
                     <div class="breadcrumb-text product-more">
                         <a href="/"><i class="fa fa-home"></i> Home</a>
                         
-                        <span>Rgister</span>
+                        <span>Signup</span>
                                          <div class="logo" style="float:right">
                           
                              
@@ -28,7 +28,7 @@
                 <div class="col-lg-1"></div>
                 <div class="col-lg-4 offset-lg-3 shadow p-3 mt-2 bg-body rounded" style="background-color: #fafafa;">
                     <div class="register-form">
-                        <h4>Register</h4>
+                        {{!-- <h4 class="mb-3" style="color: rgb(99, 92, 92);">Signup</h4> --}}
                         <form action="/register" id="register-form" method="post">
                             <div class="group-input">
                               
@@ -38,7 +38,7 @@
                             <div class="group-input">
                                   
                            
-                                <input type="text" placeholder="Phone number" name="phonenumber" id="username">
+                                <input type="number" placeholder="Phone number" name="phonenumber" id="username" minlength="10" maxlength="10">
                             </div>
 
                             <div class="group-input">

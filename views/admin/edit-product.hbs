@@ -33,7 +33,7 @@
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid #ced4da;" onchange="formCategory()">
-              <option selected="true" disabled="disabled">{{data.category}}</option>    
+              <option selected="true" value="{{data.category}}">{{data.category}}</option>    
               {{#each categoryData}}
               <option>{{this.category}}</option>
               {{/each}}
@@ -50,7 +50,7 @@
     background-clip: padding-box;
     border: 1px solid #ced4da;">
             
-             <option selected="true" disabled="disabled">{{data.subcategory}}</option> 
+             <option selected="true" value="{{data.subcategory}}">{{data.subcategory}}</option> 
   
             </select>
          
@@ -107,7 +107,7 @@
            <textarea name="description" id="" style="color: #212529;
     background-color: #fff;
     background-clip: padding-box;
-    border: 1px solid #ced4da;"  cols="50" rows="5">{{data.description}}</textarea>
+    border: 1px solid #ced4da;"  cols="35" rows="5">{{data.description}}</textarea>
            
           </div>
 

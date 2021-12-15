@@ -301,11 +301,11 @@
 
                 <form action="/profile" method="post" id="profilsub">
                 <div class="row mt-2">
-                    <div class="col-md-6"><label class="labels">Full Name</label><input type="text" class="form-control" placeholder="full name" value="" name="fullname"></div>
-                                  <div class="col-md-6"><label class="labels">Email ID</label><input type="text" class="form-control" placeholder="enter email id" value="" name="email"></div>
+                    <div class="col-md-6"><label class="labels">Full Name</label><input type="text" class="form-control" placeholder="full name" value="{{userDetails.name}}" name="fullname"></div>
+                                  <div class="col-md-6"><label class="labels">Email ID</label><input type="text" class="form-control" placeholder="enter email id" value="{{userDetails.emailaddress}}" name="email"></div>
                 </div>
                 <div class="row mt-3">
-                     <div class="col-md-6"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="enter phone number" value="" name="mobilenumber"></div>
+                     <div class="col-md-6"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="enter phone number" value="{{userDetails.phonenumber}}" name="mobilenumber"></div>
                     <div class="col-md-6"><label class="labels">Location</label><input type="text" name="location" class="form-control" placeholder="enter your location" value=""></div>
 
                   

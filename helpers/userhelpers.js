@@ -283,7 +283,7 @@ module.exports = {
 
 
     placeOrder: (orderdetails, products, total, userId, coupencode) => {
-        console.log(products);
+      
         return new Promise(async (resolve, reject) => {
 
             if (orderdetails.paymentmethod === 'cod') {
