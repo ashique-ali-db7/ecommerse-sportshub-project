@@ -1,5 +1,8 @@
 <style>
-       div.scroll {
+
+
+  @media only screen and (min-width: 1200px) {
+  div.scroll {
                
               
               
@@ -9,6 +12,17 @@
                 overflow-y: auto;
                 text-align:justify;
             }
+}
+
+
+ @media only screen and (max-width: 1200px) {
+ .adrressorder{
+display: none;
+ }
+}
+
+
+     
 </style>
 
 
@@ -45,7 +59,7 @@
 
  <h6 class="mt-2">Size:  <span>{{this.size}}</span></h6>
  <h6 class="mt-2">Quantity:  <span>{{this.quantity}}</span></h6>
- <h6 class="mt-2">Address: {{this.deliveryDetails.housename}},{{this.deliveryDetails.street}}<br>{{this.deliveryDetails.district}},{{this.deliveryDetails.state}}<br>{{this.deliveryDetails.pincode}}</h6>
+ <h6 class="mt-2 adrressorder">Address: {{this.deliveryDetails.housename}},{{this.deliveryDetails.street}}<br>{{this.deliveryDetails.district}},{{this.deliveryDetails.state}}<br>{{this.deliveryDetails.pincode}}</h6>
  {{#if this.canceled}}
 
  {{else}}
