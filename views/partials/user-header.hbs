@@ -1,7 +1,34 @@
 
-  
+  <style>
+      /* Style the navbar */
+
+@media only screen and (min-width: 1200px) {
+#navbar {
+  overflow: hidden;
+
+}
+}
+
+
+
+
+/* Navbar links */
+
+
+
+
+/* The sticky class is added to the navbar with JS when it reaches its scroll position */
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+
+  </style>
     <!-- Header Section Begin -->
-    <header class="header-section" id="headerid" style="position: fixed;width:100%;background-color: #fff;z-index: 1000;">
+     {{!-- <header class="header-section" id="headerid" style="position: fixed;width:100%;background-color: #fff;z-index: 1000;"> --}}
+    <header class="header-section" id="headerid" >
      
     
          
@@ -66,7 +93,7 @@
                 </div>
             </div>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" id="navbar" style="z-index: 1000;">
             <div class="container">
              
                 <nav class="nav-menu mobile-menu">
@@ -88,3 +115,24 @@
         </div>
     </header>
     <!-- Header End -->
+
+
+    <script>
+        // When the user scrolls the page, execute myFunction
+window.onscroll = function() {myFunction()};
+
+// Get the navbar
+var navbar = document.getElementById("navbar");
+
+// Get the offset position of the navbar
+var sticky = navbar.offsetTop;
+
+// Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+function myFunction() {
+  if (window.pageYOffset >= sticky) {
+    navbar.classList.add("sticky")
+  } else {
+    navbar.classList.remove("sticky");
+  }
+}
+    </script>
