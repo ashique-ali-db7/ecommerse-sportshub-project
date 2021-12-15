@@ -1,7 +1,7 @@
 
   
     <!-- Header Section Begin -->
-    <header class="header-section" id="headerid">
+    <header class="header-section" id="headerid" style="position: fixed;width:100%;background-color: #fff;z-index: 1000;">
      
     
          
@@ -71,11 +71,11 @@
              
                 <nav class="nav-menu mobile-menu">
                     <ul>
-                        <li class="active"><a href="/">Home</a></li>
+                        <li class="active" ><a href="/">Home</a></li>
                         
                       
                         {{#each allCategory}}
-                        <li><a href="/shopcategory?categoryname={{this.category}}">{{this.category}}</a></li>
+                        <li id="{{this.category}}nav"><a href="/shopcategory?categoryname={{this.category}}">{{this.category}}</a></li>
                        {{/each}}
                           
                         </li>
