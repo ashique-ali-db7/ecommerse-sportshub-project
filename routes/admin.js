@@ -281,6 +281,8 @@ router.get('/editbrand',verifyLogin,(req,res)=>{
           console.log(err);
         }
       })
+    }else{
+      res.redirect('/admin//brand-managment')
     }
   
   })
