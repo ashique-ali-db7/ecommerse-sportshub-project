@@ -12,7 +12,7 @@
                             <div class="col-lg-3 col-sm-6" id="{{this.productdetails._id}}">
                                 <div class="product-item">
                                     <div class="pi-pic">
-                                   <a href="/product?productid={{this.productdetails.productid}}"><img  src="http://3.110.223.170/images/product-images/{{this.productdetails._id}}1.png" alt=""></a>     
+                                   <a href="/product?productid={{this.productdetails.productid}}"><img  src="https://sportshub.store/images/product-images/{{this.productdetails._id}}1.png" alt=""></a>     
                                         {{#if productdetails.offer}}
                                          <div style="background-color:#e7ab3c" class="sale pp-sale">{{this.productdetails.offerpercentage}} %off</div>
                                          {{/if}}
@@ -160,7 +160,7 @@
                   
                     {{else}}
                     <div class="d-flex justify-content-center">
-<img src="http://3.110.223.170/images/users/wishlistempty2.png" style="" alt="image">
+<img src="https://sportshub.store/images/users/wishlistempty2.png" style="" alt="image">
 </div>
                     {{/if}}
 
@@ -285,7 +285,7 @@ function wishlistAddtoCart(id){
         success:(response)=>{
              
           document.getElementById('brandnamemodal').innerHTML = response.productdetails.brand;
-          document.getElementById('proimagemodal').src = "http://3.110.223.170/images/product-images/"+response.productdetails._id+"1.png"
+          document.getElementById('proimagemodal').src = "https://sportshub.store/images/product-images/"+response.productdetails._id+"1.png"
 
 document.getElementById('modalproductname').innerHTML = response.productdetails.productname;
 
