@@ -107,7 +107,7 @@ input[type="number"]:nth-child(n+4) {
     <div class="container height-100 d-flex justify-content-center align-items-center" >
         <div class="position-relative">
             <div class="card p-2 text-center">
-                <h3 style="color: red;" class="text-center otperror" id="error">Invalid otp</h3>
+                <h5 style="color: red;" class="text-center otperror" id="error">Invalid otp</h5>
                 <h6>Please enter the one time password <br> to verify your account</h6>
            
                 <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2"> 
@@ -160,9 +160,9 @@ input[type="number"]:nth-child(n+4) {
                 <div class="mt-4"> <button  id="btn-submit" class="btn btn-danger px-4 validate" onclick="otpform()">Validate</button> </div>
              {{/if}}
             </div>
-            <div class="card-2 row">
+            <div class="card-2 row" style="width: 100%;">
     
-  <div class="content d-flex justify-content-center align-items-center"> <p id="timeleft" class="mt-3">Resend otp in: </p> <span id="timer"></span></div>
+  <div class="content d-flex justify-content-center align-items-center"> <p id="timeleft" class="mt-3">Resend otp in: </p> <span id="timer"></span></div><br>
                    {{#if registerotp}}
                 <div class="content d-flex justify-content-center align-items-center " > <a id="resend" href="/registerresend"  class="text-decoration-none ms-3 otprequest" >Resend</a> </div>
                 {{else}}

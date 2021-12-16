@@ -254,6 +254,7 @@ res.send({data:products})
 
 /* GET shopping cart. */
 router.get('/shopping-cart',verifyLoginForLoginpage, async(req, res, next) =>{
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
   let user = req.session.user;
   let userId = req.session.user._id;
   let cartItems = await producthelpers.getCartProducts(userId);
@@ -352,15 +353,12 @@ router.get('/checkout',verifyLoginForLoginpage, async(req, res) =>{
       let cartItems = await producthelpers.getCartProducts(userId);
       let cartcount =await producthelpers.getCartCount(req.session.user?._id);
       let allCategory = await categoryhelpers.getCategory();
-      if(cartItems.length>=1){
+    
         res.render('users/checkout',{ admin:false,user,notheader:true,defaultaddress,otheraddress,total,cartItems,userId,existDefaultAddress,paypalcancel,couponAlreadyUsedError,changeheader:true,cartcount,allCategory});
         existDefaultAddress = "";
         paypalcancel = "";
         couponAlreadyUsedError=""
-      }else{
-       
-        res.redirect('/')
-      }
+  
  
 });
 

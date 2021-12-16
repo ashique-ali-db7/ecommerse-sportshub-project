@@ -1433,9 +1433,7 @@ if(willdelete){
       });
       
 
-      $(document).on("click",function() {
-        document.getElementById('searchResults').innerHTML = "";
-      });
+     
 
       function sendData(e){
           const searchResults = document.getElementById('searchResults');

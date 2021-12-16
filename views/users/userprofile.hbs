@@ -148,7 +148,7 @@
 
 
 
-  <div class="profile-pic-wrapper" style="height:170px">
+  {{!-- <div class="profile-pic-wrapper" style="height:170px">
 {{#if profilepic}}
 
 {{else}}
@@ -184,7 +184,7 @@
   
     </hr>
    
-  </div>
+  </div> --}}
 
 
 
@@ -345,3 +345,8 @@
 
 
 
+<script>
+   $(document).on("click",function() {
+        document.getElementById('searchResults').innerHTML = "";
+      });
+</script>

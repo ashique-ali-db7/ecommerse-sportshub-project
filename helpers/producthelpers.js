@@ -596,7 +596,7 @@ module.exports = {
             let coupenIsoStartDate = new Date(data.couponfferstartdate);
             let coupenIsoEndDate = new Date(data.couponofferenddate);
             db.get().collection(collections.COUPEN_DETAILS_COLLECTION)
-                .updateOne({ coupencode: data.coupen }, { $set: { coupenpercentage: data.coupondiscountpercentage, coupenstartdate: data.couponfferstartdate, coupenenddate: data.couponofferenddate, coupenIsoStartDate: coupenIsoStartDate, coupenIsoEndDate: coupenIsoEndDate } });
+                .updateOne({ coupencode: data.coupen }, { $set: { coupenpercentage: data.coupondiscountpercentage, coupenstartdate: data.couponfferstartdate, coupenenddate: data.couponofferenddate, coupenIsoStartDate: coupenIsoStartDate, coupenIsoEndDate: coupenIsoEndDate,available:false } });
             resolve()
         })
     },
@@ -1676,12 +1676,12 @@ module.exports = {
     },
 
     orderReport:(startDate,endDate)=>{
-       console.log("h",startDate);
+     
         return new Promise(async(resolve,reject)=>{
             let data =  await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
                  {
               $match:{
-             longdate:{
+             date:{
                  $gte:startDate,
                  $lte:endDate
              }
