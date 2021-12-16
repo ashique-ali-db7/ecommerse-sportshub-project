@@ -156,7 +156,7 @@ module.exports = {
                     { $unwind: "$products" },
                     { $match: { "products.item": objectId(proId), "products.size": size } },
                 ]).toArray();
-                console.log(userProductExist);
+              
                 if (userProductExist.length > 0) {
                     response.exist = true;
                     resolve(response);

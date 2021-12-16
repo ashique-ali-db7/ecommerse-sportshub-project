@@ -1244,12 +1244,36 @@ $("#brandvalidationform").validate({
             required:true,
            
         },
+        logo:{
+            required:true
+        }
        
         
     }
    
   
 });
+
+
+$("#editbrandvalidationform").validate({
+    rules:{
+       
+        brandName:{
+            required:true,
+           
+        },
+        brandDescription:{
+            required:true,
+           
+        },
+       
+        
+    }
+   
+  
+});
+
+
 
 $("#categorybannerone").validate({
     rules:{
