@@ -276,6 +276,7 @@ router.get('/shopping-cart',verifyLoginForLoginpage, async(req, res, next) =>{
 
 /* GET single product view. loginverification not required*/
 router.get('/product',blockCheck,async function(req, res) {
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
   let user = req.session.user;
   let quantity = {};
   let cartcount =await producthelpers.getCartCount(req.session.user?._id);
