@@ -267,10 +267,12 @@ router.get('/editbrand',verifyLogin,(req,res)=>{
     let logo = req.files?.logo;
 
     if(logo){
+      if(fs.existsSync('./public/images/brand-images/'+id+'.png')){
       fs.unlink('./public/images/brand-images/'+id+'.png', function (err) {
         if (err) throw err;
         console.log('File deleted!');
       });
+    }
       logo.mv('./public/images/brand-images/'+id+'.png',(err,done)=>{
         if(!err){
           res.redirect('/admin/brand-managment')
@@ -1245,7 +1247,7 @@ router.get('/getreport',verifyLogin,async(req,res)=>{
   let startDate =new Date(req.query.startDate);
   let endDate =new Date(req.query.endDate) ;
 
-    orderReport = await producthelpers.orderReport(startDate,endDate);
+    orderReport = await producthelpers.orderReport(req.query.startDate,req.query.endDate);
     checkorderReport = true
   
 

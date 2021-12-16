@@ -2200,7 +2200,8 @@ if(response.status){
             $('#cccc').attr('min',minDate);
             
             
-     
+            $('#couponstartdateedit').attr('min',minDate);
+            $('#couponenddateedit').attr('min',minDate);
             
             $('#salesReportStartDate').attr('max',maxDate);
             $('#salesReportEndDate').attr('max',maxDate);

@@ -34,12 +34,17 @@
                                 <div class="pd-title">
                                     <span>{{response.brand}}</span>
                                     <h2>{{response.productname}}</h2>
-                                    <a href="#" class="heart-icon"><i class="icon_heart_alt"></i></a>
+                                    {{!-- <a href="#" class="heart-icon"><i class="icon_heart_alt"></i></a> --}}
                                 </div>
                                
                                 <div class="pd-desc">
                                     <p>{{response.description}}</p>
+                                   {{#if response.offer}}
                                     <h4>{{response.price}} <span>{{response.landingprice}}</span></h4>
+                                    {{else}}
+   <h4>{{response.price}} </h4>
+
+                                    {{/if}}
                                 </div>
                                 {{#if response.offer}}
                                 <div style="margin:0">
@@ -121,14 +126,14 @@
                                     <li><span>CATEGORY:</span>{{response.category}}<li>
                                     <li><span>SUBCATEGORY:</span>{{response.subcategory}}</li>
                                 </ul>
-                                <div class="pd-share">
+                                {{!-- <div class="pd-share">
                                
                                     <div class="pd-social">
                                         <a href="#"><i class="ti-facebook"></i></a>
                                         <a href="#"><i class="ti-twitter-alt"></i></a>
                                         <a href="#"><i class="ti-linkedin"></i></a>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -276,5 +281,7 @@ window.location.href = '/buynowcheckout';
 
 
 
-
+ $(document).on("click",function() {
+        document.getElementById('searchResults').innerHTML = "";
+      });
     </script>
