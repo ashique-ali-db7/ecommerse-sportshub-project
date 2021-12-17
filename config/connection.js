@@ -4,7 +4,7 @@ const state = {
     db:null
 }
 module.exports.connect = function(done){
-    const url = 'mongodb+srv://ashiqueali:kuttithodi123@sportshub.6wexz.mongodb.net/sportshub?retryWrites=true&w=majority'
+    const url = process.env.url
     const dbname = 'sportshub'
 
     mongoClient.connect(url,(err,data)=>{

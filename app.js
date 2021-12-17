@@ -10,6 +10,10 @@ var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 var session = require('express-session');
 
+
+
+const MongoStore = require('connect-mongo')
+
 var app = express();
 var fileUpload = require('express-fileupload')
 var db = require('./config/connection');
@@ -37,7 +41,11 @@ app.use(
     cookie: { maxAge: 1000000000 },
    resave:false,
    saveUninitialized:true,
-    
+    store:MongoStore.create({
+      mongoUrl:process.env.url,
+      ttl: 2*24*60*60,
+      autoRemove:'native'
+    })
   })
 );
 db.connect((err)=>{
