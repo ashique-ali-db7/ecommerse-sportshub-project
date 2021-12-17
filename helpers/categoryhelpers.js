@@ -5,163 +5,164 @@ const { response } = require('express');
 
 module.exports = {
 
-    addCategory:(data)=>{
+    addCategory: (data) => {
 
-        return new Promise(async(resolve,reject)=>{
-  let response = {}
+        return new Promise(async (resolve, reject) => {
+            let response = {}
 
-  let categoryCheck = await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION).findOne({category:data.category});
+            let categoryCheck = await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION).findOne({ category: data.category });
 
-  if(categoryCheck){
-      response.exist = true;
-      resolve(response);
-  }else{
-    await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION).insertOne(data);
-      response.exist = false;
-      resolve(response);
-  }
-         
-
-        });
-
-    },
-
-
-
-    getCategory:()=>{
-
-        return new Promise(async(resolve,reject)=>{
-       let allCategory =  await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION).find().toArray();
-       resolve(allCategory);
-        });
-    },
-
-
-    addSubcategory:(data)=>{
-        return new Promise(async(resolve,reject)=>{
-let response = {};
-          let subcategoryexist = await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
-            .findOne(
-                {'$and':
-            [{category:data.categorySubcategory},{subcategory:data.subcategory}]
-            }
-            );
-
-            if(subcategoryexist){
+            if (categoryCheck) {
                 response.exist = true;
                 resolve(response);
-            }else{
+            } else {
+                await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION).insertOne(data);
+                response.exist = false;
+                resolve(response);
+            }
+
+
+        });
+
+    },
+
+
+
+    getCategory: () => {
+
+        return new Promise(async (resolve, reject) => {
+            let allCategory = await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION).find().toArray();
+            resolve(allCategory);
+        });
+    },
+
+
+    addSubcategory: (data) => {
+        return new Promise(async (resolve, reject) => {
+            let response = {};
+            let subcategoryexist = await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
+                .findOne(
+                    {
+                        '$and':
+                            [{ category: data.categorySubcategory }, { subcategory: data.subcategory }]
+                    }
+                );
+
+            if (subcategoryexist) {
+                response.exist = true;
+                resolve(response);
+            } else {
                 await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
-                .updateOne({category:data.categorySubcategory},{$push:{subcategory:data.subcategory}});
+                    .updateOne({ category: data.categorySubcategory }, { $push: { subcategory: data.subcategory } });
                 response.exist = false;
                 resolve(response);
             }
 
         });
     },
-    deleteCategory:(data)=>{
-        return new Promise(async(resolve,reject)=>{
+    deleteCategory: (data) => {
+        return new Promise(async (resolve, reject) => {
 
-await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
-.deleteOne({category:data.category}).then((result)=>{
-    resolve();
-})
-
-        })
-    },
-
-    deletesubCategory:(data)=>{
-
-        return new Promise(async(resolve,reject)=>{
-        
             await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
-            .updateOne({category:data.category},{$pull:{subcategory:data.subcategory}}).then((data)=>{
-                resolve();
-            })
+                .deleteOne({ category: data.category }).then((result) => {
+                    resolve();
+                })
+
         })
     },
-    getSubcategoriesForForm:(data)=>{
-        return new Promise(async(resolve,reject)=>{
-           let result = await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
-             .findOne({category:data.category});
-             resolve(result);
-  
+
+    deletesubCategory: (data) => {
+
+        return new Promise(async (resolve, reject) => {
+
+            await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
+                .updateOne({ category: data.category }, { $pull: { subcategory: data.subcategory } }).then((data) => {
+                    resolve();
+                })
         })
     },
-    addBannerone:(data)=>{
+    getSubcategoriesForForm: (data) => {
+        return new Promise(async (resolve, reject) => {
+            let result = await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
+                .findOne({ category: data.category });
+            resolve(result);
+
+        })
+    },
+    addBannerone: (data) => {
         console.log(data);
-        return new Promise(async(resolve,reject)=>{
+        return new Promise(async (resolve, reject) => {
             let response = {};
-            let bannerOne =await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({banner:"one"});
-            if(bannerOne){
+            let bannerOne = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ banner: "one" });
+            if (bannerOne) {
                 db.get().collection(collections.BANNER_DETAILS_COLLECTION)
-                .updateOne({banner:"one"},{$set:{bannerOneHeading:data.banner1heading,bannerOneDescription:data.banner1description,category:data.firstmainbannercategory}})
-               
+                    .updateOne({ banner: "one" }, { $set: { bannerOneHeading: data.banner1heading, bannerOneDescription: data.banner1description, category: data.firstmainbannercategory } })
+
                 response.id = bannerOne._id;
                 response.exist = true;
                 resolve(response);
-            }else{
+            } else {
                 db.get().collection(collections.BANNER_DETAILS_COLLECTION)
-                .insertOne({banner:"one",bannerOneHeading:data.banner1heading,bannerOneDescription:data.banner1description,category:data.firstmainbannercategory}).then((response)=>{
-                   
-                    response.id = response.insertedId;
-                    response.exist = false;
-                    resolve(response);
-                })
+                    .insertOne({ banner: "one", bannerOneHeading: data.banner1heading, bannerOneDescription: data.banner1description, category: data.firstmainbannercategory }).then((response) => {
+
+                        response.id = response.insertedId;
+                        response.exist = false;
+                        resolve(response);
+                    })
             }
-           
+
         })
     },
 
 
-    addBannertwo:(data)=>{
+    addBannertwo: (data) => {
 
-        return new Promise(async(resolve,reject)=>{
+        return new Promise(async (resolve, reject) => {
             let response = {};
-            let bannerTwo =await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({banner:"two"});
-            if(bannerTwo){
-                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({banner:"two"},{$set:{bannerTwoHeading:data.banner2heading,bannerTwoDescription:data.banner2description,category:data.secondmainbannercategory}})
-               
+            let bannerTwo = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ banner: "two" });
+            if (bannerTwo) {
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({ banner: "two" }, { $set: { bannerTwoHeading: data.banner2heading, bannerTwoDescription: data.banner2description, category: data.secondmainbannercategory } })
+
                 response.id = bannerTwo._id;
                 response.exist = true;
                 resolve(response);
-            }else{
-                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({banner:"two",bannerTwoHeading:data.banner2heading,bannerTwoDescription:data.banner2description,category:data.secondmainbannercategory}).then((response)=>{
-                   
+            } else {
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({ banner: "two", bannerTwoHeading: data.banner2heading, bannerTwoDescription: data.banner2description, category: data.secondmainbannercategory }).then((response) => {
+
                     response.id = response.insertedId;
                     response.exist = false;
                     resolve(response);
                 })
             }
-           
+
         })
     },
 
 
-    getBannerOne:()=>{
-        return new Promise(async(resolve,reject)=>{
+    getBannerOne: () => {
+        return new Promise(async (resolve, reject) => {
 
-            let bannerOne = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({banner:"one"});
+            let bannerOne = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ banner: "one" });
             resolve(bannerOne);
         })
     },
-    getBannerTwo:()=>{
-        return new Promise(async(resolve,reject)=>{
+    getBannerTwo: () => {
+        return new Promise(async (resolve, reject) => {
 
-            let bannerTwo = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({banner:"two"});
+            let bannerTwo = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ banner: "two" });
             resolve(bannerTwo);
         })
     },
-    categoryBannerOneadds:(category)=>{
-        return new Promise(async(resolve,reject)=>{
-            let categoryBannerOnedata = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"one"});
-            if(categoryBannerOnedata){
-                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({categorybanner:"one"},{$set:{category:category}});
+    categoryBannerOneadds: (category) => {
+        return new Promise(async (resolve, reject) => {
+            let categoryBannerOnedata = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ categorybanner: "one" });
+            if (categoryBannerOnedata) {
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({ categorybanner: "one" }, { $set: { category: category } });
                 response.id = categoryBannerOnedata._id;
                 response.exist = true;
                 resolve(response);
-            }else{
-                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({categorybanner:"one",category:category}).then((response)=>{
+            } else {
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({ categorybanner: "one", category: category }).then((response) => {
                     response.id = response.insertedId;
                     response.exist = false;
                     resolve(response);
@@ -169,18 +170,18 @@ await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
             }
         })
     },
-    categoryBannerTwoadds:(category)=>{
+    categoryBannerTwoadds: (category) => {
         console.log("hihihihihhihihi");
         console.log(category);
-        return new Promise(async(resolve,reject)=>{
-            let categoryBannerTwodata = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"two"});
-            if(categoryBannerTwodata){
-                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({categorybanner:"two"},{$set:{category:category}});
+        return new Promise(async (resolve, reject) => {
+            let categoryBannerTwodata = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ categorybanner: "two" });
+            if (categoryBannerTwodata) {
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({ categorybanner: "two" }, { $set: { category: category } });
                 response.id = categoryBannerTwodata._id;
                 response.exist = true;
                 resolve(response);
-            }else{
-                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({categorybanner:"two",category:category}).then((response)=>{
+            } else {
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({ categorybanner: "two", category: category }).then((response) => {
                     response.id = response.insertedId;
                     response.exist = false;
                     resolve(response);
@@ -188,16 +189,16 @@ await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
             }
         })
     },
-    categoryBannerThreeadds:(category)=>{
-        return new Promise(async(resolve,reject)=>{
-            let categoryBannerThreedata = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"three"});
-            if(categoryBannerThreedata){
-                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({categorybanner:"three"},{$set:{category:category}});
+    categoryBannerThreeadds: (category) => {
+        return new Promise(async (resolve, reject) => {
+            let categoryBannerThreedata = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ categorybanner: "three" });
+            if (categoryBannerThreedata) {
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({ categorybanner: "three" }, { $set: { category: category } });
                 response.id = categoryBannerThreedata._id;
                 response.exist = true;
                 resolve(response);
-            }else{
-                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({categorybanner:"three",category:category}).then((response)=>{
+            } else {
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({ categorybanner: "three", category: category }).then((response) => {
                     response.id = response.insertedId;
                     response.exist = false;
                     resolve(response);
@@ -205,47 +206,47 @@ await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
             }
         })
     },
-    getCategoryBannerOne:()=>{
-        return new Promise(async(resolve,reject)=>{
-        let categoryBannerOne =    await  db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"one"});
-        resolve(categoryBannerOne);
+    getCategoryBannerOne: () => {
+        return new Promise(async (resolve, reject) => {
+            let categoryBannerOne = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ categorybanner: "one" });
+            resolve(categoryBannerOne);
         })
     },
-    getCategoryBannerTwo:()=>{
+    getCategoryBannerTwo: () => {
         console.log("noivide");
-        return new Promise(async(resolve,reject)=>{
-        let categoryBannerTwo =    await  db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"two"});
-        resolve(categoryBannerTwo);
+        return new Promise(async (resolve, reject) => {
+            let categoryBannerTwo = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ categorybanner: "two" });
+            resolve(categoryBannerTwo);
         })
     },
-    getCategoryBannerThree:()=>{
-        return new Promise(async(resolve,reject)=>{
-        let categoryBannerThree =    await  db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"three"});
-        resolve(categoryBannerThree);
+    getCategoryBannerThree: () => {
+        return new Promise(async (resolve, reject) => {
+            let categoryBannerThree = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ categorybanner: "three" });
+            resolve(categoryBannerThree);
         })
     },
-    allSubCategories:(categoryname)=>{
-        return new Promise(async(resolve,reject)=>{
+    allSubCategories: (categoryname) => {
+        return new Promise(async (resolve, reject) => {
             let subcategories = await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION).aggregate([
-                {$match:{category:categoryname}},
-                {$unwind:"$subcategory"},
-               
-                
+                { $match: { category: categoryname } },
+                { $unwind: "$subcategory" },
+
+
             ]).toArray();
             resolve(subcategories);
         })
     },
-    homepageproductsone:(category)=>{
-        return new Promise(async(resolve,reject)=>{
-            let categoryhomeproductsone = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({homeproducts:"one"});
-            if(categoryhomeproductsone){
-                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({homeproducts:"one"},{$set:{category:category}});
+    homepageproductsone: (category) => {
+        return new Promise(async (resolve, reject) => {
+            let categoryhomeproductsone = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ homeproducts: "one" });
+            if (categoryhomeproductsone) {
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({ homeproducts: "one" }, { $set: { category: category } });
                 response.id = categoryhomeproductsone._id;
                 response.exist = true;
                 resolve(response);
-               
-            }else{
-                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({homeproducts:"one",category:category}).then((response)=>{
+
+            } else {
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({ homeproducts: "one", category: category }).then((response) => {
                     response.id = response.insertedId;
                     response.exist = false;
                     resolve(response);
@@ -253,16 +254,16 @@ await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
             }
         })
     },
-    homepageproductstwo:(category)=>{
-        return new Promise(async(resolve,reject)=>{
-            let categoryhomeproductstwo = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({homeproducts:"two"});
-            if(categoryhomeproductstwo){
-                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({homeproducts:"two"},{$set:{category:category}});
+    homepageproductstwo: (category) => {
+        return new Promise(async (resolve, reject) => {
+            let categoryhomeproductstwo = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ homeproducts: "two" });
+            if (categoryhomeproductstwo) {
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).updateOne({ homeproducts: "two" }, { $set: { category: category } });
                 response.id = categoryhomeproductstwo._id;
                 response.exist = true;
                 resolve(response);
-            }else{
-                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({homeproducts:"two",category:category}).then((response)=>{
+            } else {
+                db.get().collection(collections.BANNER_DETAILS_COLLECTION).insertOne({ homeproducts: "two", category: category }).then((response) => {
                     response.id = response.insertedId;
                     response.exist = false;
                     resolve(response);
@@ -270,104 +271,104 @@ await db.get().collection(collections.CATEGORY_DETAILS_COLLECTION)
             }
         })
     },
-    categoryProductOneForHome:()=>{
-        return new Promise(async(resolve,reject)=>{
-            let productcategoryOne = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({homeproducts:"one"});
+    categoryProductOneForHome: () => {
+        return new Promise(async (resolve, reject) => {
+            let productcategoryOne = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ homeproducts: "one" });
             resolve(productcategoryOne);
         })
     },
-    categoryProductTwoForHome:()=>{
-        return new Promise(async(resolve,reject)=>{
-            let productcategoryTwo = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({homeproducts:"two"});
+    categoryProductTwoForHome: () => {
+        return new Promise(async (resolve, reject) => {
+            let productcategoryTwo = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ homeproducts: "two" });
             resolve(productcategoryTwo);
         })
     },
 
-    categoryBannerOne:()=>{
-      
-        return new Promise(async(resolve,reject)=>{
-   let categorybannerone =await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"one"})
+    categoryBannerOne: () => {
 
-   resolve(categorybannerone)
+        return new Promise(async (resolve, reject) => {
+            let categorybannerone = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ categorybanner: "one" })
+
+            resolve(categorybannerone)
         })
     },
-    
 
-    categoryBannerTwo:()=>{
+
+    categoryBannerTwo: () => {
         console.log("ivade");
-        return new Promise(async(resolve,reject)=>{
-   let categorybannertwo =await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"two"});
- 
-   resolve(categorybannertwo)
+        return new Promise(async (resolve, reject) => {
+            let categorybannertwo = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ categorybanner: "two" });
+
+            resolve(categorybannertwo)
         })
     },
 
-    categoryBannerThree:()=>{
-        return new Promise(async(resolve,reject)=>{
-   
-            let categorybannerthree =await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({categorybanner:"three"})
+    categoryBannerThree: () => {
+        return new Promise(async (resolve, reject) => {
+
+            let categorybannerthree = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ categorybanner: "three" })
             resolve(categorybannerthree)
-     
+
         })
     },
 
-    homeProductsOne:()=>{
-        return new Promise(async(resolve,reject)=>{
-   
-            let homeProductsOne =await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({homeproducts:"one"})
+    homeProductsOne: () => {
+        return new Promise(async (resolve, reject) => {
+
+            let homeProductsOne = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ homeproducts: "one" })
             resolve(homeProductsOne)
 
         })
     },
-    
 
-    homeProductsTwo:()=>{
-        return new Promise(async(resolve,reject)=>{
-   
-            let homeProductsTwo =await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({homeproducts:"two"})
+
+    homeProductsTwo: () => {
+        return new Promise(async (resolve, reject) => {
+
+            let homeProductsTwo = await db.get().collection(collections.BANNER_DETAILS_COLLECTION).findOne({ homeproducts: "two" })
             resolve(homeProductsTwo)
 
         })
     },
 
-    addCoupen:(data)=>{
+    addCoupen: (data) => {
         data.coupenIsoStartDate = new Date(data.coupenstartdate);
         data.coupenIsoEndDate = new Date(data.coupenenddate);
-       return new Promise(async(resolve,reject)=>{
-       let response  = {};
-       let result =  await db.get().collection(collections.COUPEN_DETAILS_COLLECTION).findOne({coupencode:data.coupencode});
+        return new Promise(async (resolve, reject) => {
+            let response = {};
+            let result = await db.get().collection(collections.COUPEN_DETAILS_COLLECTION).findOne({ coupencode: data.coupencode });
 
-       if(result){
-        response.exist = true;
+            if (result) {
+                response.exist = true;
 
-        resolve(response);
+                resolve(response);
 
 
-       }
-       else{
-db.get().collection(collections.COUPEN_DETAILS_COLLECTION).insertOne(data);
-response.added = true;
-resolve(response);
-       }
+            }
+            else {
+                db.get().collection(collections.COUPEN_DETAILS_COLLECTION).insertOne(data);
+                response.added = true;
+                resolve(response);
+            }
 
-       })
+        })
 
     },
 
-    getCoupenDetails:()=>{
-        return new Promise(async(resolve,reject)=>{
-           let details =  await db.get().collection(collections.COUPEN_DETAILS_COLLECTION).find().toArray();
+    getCoupenDetails: () => {
+        return new Promise(async (resolve, reject) => {
+            let details = await db.get().collection(collections.COUPEN_DETAILS_COLLECTION).find().toArray();
 
-           resolve(details)
+            resolve(details)
         })
     },
 
-    deleteCoupen:(coupencode)=>{
-        return new Promise(async(resolve,reject)=>{
-            db.get().collection(collections.COUPEN_DETAILS_COLLECTION).deleteOne({coupencode:coupencode});
+    deleteCoupen: (coupencode) => {
+        return new Promise(async (resolve, reject) => {
+            db.get().collection(collections.COUPEN_DETAILS_COLLECTION).deleteOne({ coupencode: coupencode });
             resolve();
         })
     }
-   
+
 
 }

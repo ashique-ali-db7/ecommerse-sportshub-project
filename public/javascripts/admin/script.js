@@ -12,7 +12,7 @@ $.ajax({
        let arrayCounts = response.subcategory.length;
        var suboptions ;
       let arrayValues = response.subcategory; 
-      console.log(arrayValues);
+     
       var suboptions = "<option value='0'>select</option>";
       for(var i = 0; i<arrayCounts; i++){
         suboptions += "<option value='"+arrayValues[i]+"'>"+arrayValues[i]+"</option>"

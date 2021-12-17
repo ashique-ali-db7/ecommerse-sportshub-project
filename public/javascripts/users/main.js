@@ -168,7 +168,7 @@
     var timerdate = mm + '/' + dd + '/' + yyyy;
     // For demo preview end
 
-    console.log(timerdate);
+   
     
 
     // Use this for real timer date
@@ -1295,7 +1295,7 @@ if(willdelete){
 
 
     function applycoupen(check){
-        console.log(check);
+      
         let which ;
        if(check === '1'){
            which = 1;
@@ -1320,7 +1320,7 @@ if(willdelete){
                 document.getElementById('errormessage').innerHTML = "This coupen is already used";
                }
                else if(response.exist){
-                 console.log(response);
+             
               document.getElementById('coupendiscount').textContent = "-"+response.savedprice;
               document.getElementById('totalcheckoutprice').textContent = response.coupenOfferPrice;
               document.getElementById("closemodal").click();
@@ -1485,7 +1485,7 @@ return;
 
 
       function brandFilter(barandName,category){
-          console.log(barandName);
+        
           $.ajax({
               url:'/filterBrand?brand='+barandName+"&categoryname="+category,
               method:'get',
