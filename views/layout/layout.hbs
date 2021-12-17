@@ -34,12 +34,14 @@
   {{else}}
   {{>admin-sidebar}}
   {{/if}}
-    
+    {{#if login}}
+{{{body}}}
+    {{else}}
        <div class="content">
 {{{body}}}
 
         </div>
-  
+  {{/if}}
     
  <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
 
