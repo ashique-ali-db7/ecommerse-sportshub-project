@@ -1026,7 +1026,7 @@ router.post('/homepageproductstwo',(req,res)=>{
 
 // get category offer managment
 
-router.get('/categoryoffermanagment',verifyLogin,async(req,res)=>{
+router.get('/categoryoffermanagment',async(req,res)=>{
   let categoryData =await categoryhelpers.getCategory();
   let categoryOffers = await producthelpers.getAllCategoryOffers();
   let todayDate = new Date().toISOString().slice(0, 10);
