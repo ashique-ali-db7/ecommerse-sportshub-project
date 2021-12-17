@@ -1752,7 +1752,7 @@ module.exports = {
              resolve(data);
         })
     },
-    allProductsDetails:()=>{
+       allProductsDetails:()=>{
 return new Promise(async(resolve,reject)=>{
     let result = await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
  {
