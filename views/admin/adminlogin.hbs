@@ -43,12 +43,13 @@ form{
         <form class="form-container" action="/admin/adminlogin" method="post">
         <div class="form-group">
           <h4 class="text-center font-weight-bold">Admin Login </h4>
+          <p style="color: red;">{{invalidusername}}</p>
           <label for="InputEmail1" class="mb-2">Email Address</label>
-           <input type="email" class="form-control" id="InputEmail1" name="emailaddress" aria-describeby="emailHelp" placeholder="Enter email">
+           <input type="email" class="form-control" id="InputEmail1" name="emailaddress" aria-describeby="emailHelp" placeholder="Enter email" required>
         </div>
         <div class="form-group">
           <label for="InputPassword1" class="mb-2 mt-1">Password</label>
-          <input type="password" class="form-control" name="password" id="InputPassword1" placeholder="Password">
+          <input type="password" class="form-control" name="password" id="InputPassword1" placeholder="Password" required>
         </div>
         <button type="submit" class="btn btn-primary btn-block mt-3" style="width: 100%;">Submit</button>
         <div class="form-footer">
