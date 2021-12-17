@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 let timerOn = true;
 
 function timer(remaining) {
-    console.log("haha");
+  
   var m = Math.floor(remaining / 60);
   var s = remaining % 60;
   
@@ -95,7 +95,7 @@ function otpform(){
 
     var otpnumber = `${first}${second}${third}${fourth}${fifth}${sixth}`
 
-    console.log(otpnumber);
+  
   
          var phoneNumber = document.getElementById("phonnumber").value;
 
@@ -119,7 +119,7 @@ $.ajax({
 
 function resendotpoflogin(){
    
-console.log("eda");
+
     $.ajax({
         url:'/loginresend',
         method:'get',
@@ -174,13 +174,16 @@ success:(response)=>{
 
 
 function otpformforpasswordchange(){
-
+  
     var first = document.getElementById("first").value;
         var second = document.getElementById("second").value;
         var third = document.getElementById("third").value;
          var fourth = document.getElementById("fourth").value;
          var fifth = document.getElementById("fifth").value;
          var sixth= document.getElementById("sixth").value;
+
+
+
 
          var otpnumber = `${first}${second}${third}${fourth}${fifth}${sixth}`
          var phoneNumber = document.getElementById("phonnumber").value;

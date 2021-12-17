@@ -15,7 +15,7 @@ module.exports = {
         data.largequantity = Number(data.largequantity);
         data.price = Number(data.price);
         data.landingprice = Number(data.landingprice);
-       data.firstprice = Number(data.firstprice);
+        data.firstprice = Number(data.firstprice);
 
 
         let smallid = new objectId();
@@ -35,7 +35,7 @@ module.exports = {
 
 
                 await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION)
-                    .insertOne({ productid: data.productid, productname: data.productname, category: data.category, subcategory: data.subcategory, brand: data.brand,firstprice:data.firstprice, landingprice: data.price, price: data.price, description: data.description, instock: [{ id: smallid, size: 's', quantity: data.smallquantity }, { id: mediumid, size: 'm', quantity: data.mediumquantity }, { id: largeid, size: 'l', quantity: data.largequantity }] }).then((data) => {
+                    .insertOne({ productid: data.productid, productname: data.productname, category: data.category, subcategory: data.subcategory, brand: data.brand, firstprice: data.firstprice, landingprice: data.price, price: data.price, description: data.description, instock: [{ id: smallid, size: 's', quantity: data.smallquantity }, { id: mediumid, size: 'm', quantity: data.mediumquantity }, { id: largeid, size: 'l', quantity: data.largequantity }] }).then((data) => {
 
                         response.exist = false;
                         response.data = data;
@@ -156,7 +156,7 @@ module.exports = {
                     { $unwind: "$products" },
                     { $match: { "products.item": objectId(proId), "products.size": size } },
                 ]).toArray();
-              
+
                 if (userProductExist.length > 0) {
                     response.exist = true;
                     resolve(response);
@@ -258,8 +258,8 @@ module.exports = {
 
 
                 ]).toArray()
-          
-              resolve(cartItems)
+
+            resolve(cartItems)
 
 
         })
@@ -521,7 +521,7 @@ module.exports = {
 
             if (productAlreadyHaveOffer) {
                 response.exist = true;
-               
+
                 resolve(response);
             } else {
                 db.get().collection(collections.PRODUCTOFFER_DETAILS_COLLECTION).insertOne(data);
@@ -596,7 +596,7 @@ module.exports = {
             let coupenIsoStartDate = new Date(data.couponfferstartdate);
             let coupenIsoEndDate = new Date(data.couponofferenddate);
             db.get().collection(collections.COUPEN_DETAILS_COLLECTION)
-                .updateOne({ coupencode: data.coupen }, { $set: { coupenpercentage: data.coupondiscountpercentage, coupenstartdate: data.couponfferstartdate, coupenenddate: data.couponofferenddate, coupenIsoStartDate: coupenIsoStartDate, coupenIsoEndDate: coupenIsoEndDate,available:false } });
+                .updateOne({ coupencode: data.coupen }, { $set: { coupenpercentage: data.coupondiscountpercentage, coupenstartdate: data.couponfferstartdate, coupenenddate: data.couponofferenddate, coupenIsoStartDate: coupenIsoStartDate, coupenIsoEndDate: coupenIsoEndDate, available: false } });
             resolve()
         })
     },
@@ -957,7 +957,7 @@ module.exports = {
                     $limit: 7
                 }
             ]).toArray();
-           
+
             resolve(data)
         })
 
@@ -1675,161 +1675,162 @@ module.exports = {
         })
     },
 
-    orderReport:(startDate,endDate)=>{
-     
-        return new Promise(async(resolve,reject)=>{
-            let data =  await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
-                 {
-              $match:{
-             date:{
-                 $gte:startDate,
-                 $lte:endDate
-             }
-                 }},
-                 {
-                   $unwind:"$products"
-             
-                  
-                    } ,
-                    {
-                        $project:{
-                            item:"$products.item",
-                            quantity:"$products.quantity",
-                            subTotal:"$products.subtotal",
-                            size:"$products.size",
-                            status:"$products.status",
-                            date:"$date"
+    orderReport: (startDate, endDate) => {
+
+        return new Promise(async (resolve, reject) => {
+            let data = await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+                {
+                    $match: {
+                        date: {
+                            $gte: startDate,
+                            $lte: endDate
                         }
-                    },
-                     {
-                        $match:{
-                             $or:[{status:"delivered"},{status:"placed"}]
-                         }
-                     },
-                    {
-                        $lookup:{
-                           from:collections.PRODUCTS_DETAILS_COLLECTION,
-                            localField:"item",
-                            foreignField:"_id",
-                            as:"products"
-                        }
-                    },
-                   {
-                        $unwind:"$products"
-                   },
-               
-                    {
-                     $group: {
-                         _id: "$date",
-                         totalQty:{$sum:"$quantity"},
-                       totalrevenue: { $sum: { $multiply: ['$quantity', '$products.price'] } },
-                          totalandingprice:{$sum:{$multiply: ['$quantity', '$products.firstprice']}},
-                        
+                    }
+                },
+                {
+                    $unwind: "$products"
+
+
+                },
+                {
+                    $project: {
+                        item: "$products.item",
+                        quantity: "$products.quantity",
+                        subTotal: "$products.subtotal",
+                        size: "$products.size",
+                        status: "$products.status",
+                        date: "$date"
+                    }
+                },
+                {
+                    $match: {
+                        $or: [{ status: "delivered" }, { status: "placed" }]
+                    }
+                },
+                {
+                    $lookup: {
+                        from: collections.PRODUCTS_DETAILS_COLLECTION,
+                        localField: "item",
+                        foreignField: "_id",
+                        as: "products"
+                    }
+                },
+                {
+                    $unwind: "$products"
+                },
+
+                {
+                    $group: {
+                        _id: "$date",
+                        totalQty: { $sum: "$quantity" },
+                        totalrevenue: { $sum: { $multiply: ['$quantity', '$products.price'] } },
+                        totalandingprice: { $sum: { $multiply: ['$quantity', '$products.firstprice'] } },
+
 
                     }
-                   
-                 },
-                 {
-                     $project:{
-                        _id:1,
-                          totalQty:1,
-                          totalrevenue:1,
-                          totalandingprice:1,
-                          profit:{
-                              $subtract:["$totalrevenue","$totalandingprice"]
-                          }
-                     }
-                 },
-                 {
-                     $sort:{_id:-1}
-                 }
+
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        totalQty: 1,
+                        totalrevenue: 1,
+                        totalandingprice: 1,
+                        profit: {
+                            $subtract: ["$totalrevenue", "$totalandingprice"]
+                        }
+                    }
+                },
+                {
+                    $sort: { _id: -1 }
+                }
 
 
 
-                
+
             ]).toArray();
-          
-             resolve(data);
+
+            resolve(data);
         })
     },
-       allProductsDetails:()=>{
-return new Promise(async(resolve,reject)=>{
-    let result = await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
- {
-     $unwind:"$products"
- },
-{
-    $group:{
-        _id:"$userId",
-        totalOrders:{"$sum":1},
-        spend:{"$sum":"$products.subtotal"},
-        productsbuy:{"$sum":"$products.quantity"}
-    }
-},
-{
-    $lookup:{
-        from:collections.USERS_DETAILS_COLLECTION,
-        localField:"_id",
-        foreignField:"_id",
-        as:"userdetails"
-    }
-},
-{
-    $project:{
-        _id:1,totalOrders:1,spend:1,productsbuy:1,userdetails: { $arrayElemAt: ['$userdetails', 0] }
-    }
-}
+    allProductsDetails: () => {
+        return new Promise(async (resolve, reject) => {
+            let result = await db.get().collection(collections.ORDER_DETAILS_COLLECTION).aggregate([
+                {
+                    $unwind: "$products"
+                },
+                {
+                    $group: {
+                        _id: "$userId",
+                        totalOrders: { "$sum": 1 },
+                        spend: { "$sum": "$products.subtotal" },
+                        productsbuy: { "$sum": "$products.quantity" }
+                    }
+                },
+                {
+                    $lookup: {
+                        from: collections.USERS_DETAILS_COLLECTION,
+                        localField: "_id",
+                        foreignField: "_id",
+                        as: "userdetails"
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1, totalOrders: 1, spend: 1, productsbuy: 1, userdetails: { $arrayElemAt: ['$userdetails', 0] }
+                    }
+                }
 
-     
-   
-]).toArray();
-console.log(result);
-  resolve(result);
-})
+
+
+            ]).toArray();
+            console.log(result);
+            resolve(result);
+        })
     },
 
 
-    productSearch:(payload)=>{
-        return new Promise(async(resolve,reject)=>{
+    productSearch: (payload) => {
+        return new Promise(async (resolve, reject) => {
             let search = await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION)
- .find({productname:{$regex: new RegExp(payload+'.*','i')}}).toArray();
- resolve(search);
+                .find({ productname: { $regex: new RegExp(payload + '.*', 'i') } }).toArray();
+            resolve(search);
         })
     },
 
 
-    searchedProduct:(id)=>{
-        return new Promise(async(resolve,reject)=>{
-     
-let product =await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({_id:objectId(id)}).toArray();
-resolve(product);
+    searchedProduct: (id) => {
+        return new Promise(async (resolve, reject) => {
+
+            let product = await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({ _id: objectId(id) }).toArray();
+            resolve(product);
 
         })
     },
 
 
-    allSubCategoryProducts:(category,subCategory)=>{
-        return new Promise(async(resolve,reject)=>{
+    allSubCategoryProducts: (category, subCategory) => {
+        return new Promise(async (resolve, reject) => {
 
-let data =await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:category,subcategory:subCategory}).toArray();
-resolve(data);
+            let data = await db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({ category: category, subcategory: subCategory }).toArray();
+            resolve(data);
 
         })
     },
-    filterBrandProducts:(category,brand)=>{
-        return new Promise(async(resolve,reject)=>{
-            let data = db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({category:category,brand:brand}).toArray();
+    filterBrandProducts: (category, brand) => {
+        return new Promise(async (resolve, reject) => {
+            let data = db.get().collection(collections.PRODUCTS_DETAILS_COLLECTION).find({ category: category, brand: brand }).toArray();
             resolve(data);
         })
     },
 
-    profileSaveDetails:(userId)=>{
-  return new Promise(async(resolve,reject)=>{
-      let data =await db.get().collection(collections.USERS_DETAILS_COLLECTION).findOne({_id:objectId(userId)});
+    profileSaveDetails: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let data = await db.get().collection(collections.USERS_DETAILS_COLLECTION).findOne({ _id: objectId(userId) });
 
-      resolve(data);
+            resolve(data);
 
-  })
+        })
     }
 
 
