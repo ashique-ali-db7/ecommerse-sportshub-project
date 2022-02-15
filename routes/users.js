@@ -1,36 +1,32 @@
-const { response } = require('express');
-var express = require('express');
+const { response } = require("express");
+var express = require("express");
 var router = express.Router();
 
-var db = require('../config/connection');
+var db = require("../config/connection");
 
-var collections = require('../config/collection');
+var collections = require("../config/collection");
 
-var producthelpers = require('../helpers/producthelpers');
-var brandhelpers = require('../helpers/brandhelpers');
-var categoryhelpers = require('../helpers/categoryhelpers');
-var userhelpers = require('../helpers/userhelpers');
-var objectId = require('mongodb').ObjectId;
-const session = require('express-session');
+var producthelpers = require("../helpers/producthelpers");
+var brandhelpers = require("../helpers/brandhelpers");
+var categoryhelpers = require("../helpers/categoryhelpers");
+var userhelpers = require("../helpers/userhelpers");
+var objectId = require("mongodb").ObjectId;
+const session = require("express-session");
 
 const serviceId = process.env.serviceId;
 const accountId = process.env.accountId;
 const authToken = process.env.authToken;
 
-const client = require("twilio")(accountId, authToken)
+const client = require("twilio")(accountId, authToken);
 
-
-var paypal = require('paypal-rest-sdk');
-const { Db } = require('mongodb');
-var fs = require('fs');
+var paypal = require("paypal-rest-sdk");
+const { Db } = require("mongodb");
+var fs = require("fs");
 paypal.configure({
-  'mode': 'sandbox', //sandbox or live
+  mode: "sandbox", //sandbox or live
   client_id: process.env.client_id,
-  client_secret: process.env.client_secret
+  client_secret: process.env.client_secret,
 });
-
-
-
 
 var confirmPasswordError = "";
 var emailphonenumberExistError = "";
@@ -42,56 +38,51 @@ var existDefaultAddress = "";
 var paypalcancel = "";
 var couponAlreadyUsedError = "";
 
-
 // verify login middleware
 const verifyLogin = (req, res, next) => {
   if (req.session.user) {
-    res.redirect('/');
-
+    res.redirect("/");
   } else {
     next();
   }
-}
+};
 
 const blockCheck = (req, res, next) => {
   if (req.session.user) {
-
     userhelpers.blockedOrNot(req.session.user.phonenumber).then((response) => {
       if (response.blocked == true) {
-
         req.session.user = null;
-        res.redirect('/');
+        res.redirect("/");
       } else {
         next();
       }
-    })
-
+    });
   } else {
     next();
   }
-}
+};
 
 const verifyLoginForLoginpage = (req, res, next) => {
   if (req.session.user) {
-
     userhelpers.blockedOrNot(req.session.user.phonenumber).then((response) => {
       if (response.blocked == true) {
-
         req.session.user = null;
-        res.redirect('/');
+        res.redirect("/");
       } else {
         next();
       }
-    })
-
+    });
   } else {
-    res.redirect('/userlogin')
+    res.redirect("/userlogin");
   }
-}
+};
 
 /* GET users listing. loginverification not required*/
-router.get('/', blockCheck, async function (req, res, next) {
-  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+router.get("/", blockCheck, async function (req, res, next) {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   let user = req.session.user;
   let cartcount = await producthelpers.getCartCount(req.session.user?._id);
   let allCategory = await categoryhelpers.getCategory();
@@ -101,94 +92,74 @@ router.get('/', blockCheck, async function (req, res, next) {
   let categorybannerTwo = await categoryhelpers.getCategoryBannerTwo();
   let categorybannerThree = await categoryhelpers.getCategoryBannerThree();
 
-  let productOneForHomecategory = await categoryhelpers.categoryProductOneForHome();
-  let productOneForHomecategorysubcategory = await categoryhelpers.allSubCategories(productOneForHomecategory?.category);
-  let productOneForHomecategoryProducts = await producthelpers.categoryProductOneForHomeProducts(productOneForHomecategory.category);
+  let productOneForHomecategory =
+    await categoryhelpers.categoryProductOneForHome();
+  let productOneForHomecategorysubcategory =
+    await categoryhelpers.allSubCategories(productOneForHomecategory?.category);
+  let productOneForHomecategoryProducts =
+    await producthelpers.categoryProductOneForHomeProducts(
+      productOneForHomecategory.category
+    );
 
-
-  let productTwoForHomecategory = await categoryhelpers.categoryProductTwoForHome();
-  let productTwoForHomecategorysubcategory = await categoryhelpers.allSubCategories(productTwoForHomecategory.category);
-  let productTwoForHomecategoryProducts = await producthelpers.categoryProductTwoForHomeProducts(productTwoForHomecategory.category);
-
+  let productTwoForHomecategory =
+    await categoryhelpers.categoryProductTwoForHome();
+  let productTwoForHomecategorysubcategory =
+    await categoryhelpers.allSubCategories(productTwoForHomecategory.category);
+  let productTwoForHomecategoryProducts =
+    await producthelpers.categoryProductTwoForHomeProducts(
+      productTwoForHomecategory.category
+    );
 
   let todayDate = new Date().toISOString().slice(0, 10);
 
-
-
-
-
-
   let result1 = await producthelpers.startCategoryOffers(todayDate);
-
 
   let result2 = await producthelpers.startProductOffers(todayDate);
 
-
-
   let result3 = await producthelpers.startCoupenOffers(todayDate);
 
-
-
-
-
-
-
-
-
   producthelpers.coupendelete(todayDate).then(() => {
-
-
     producthelpers.deleteExpiredproductoffers(todayDate).then(() => {
       producthelpers.deleteExpiredCategoryoffers(todayDate).then(() => {
-        res.render('users/home', { admin: false, user, cartcount, allCategory, bannerOne, bannerTwo, categorybannerOne, categorybannerTwo, categorybannerThree, productOneForHomecategoryProducts, productTwoForHomecategoryProducts, productOneForHomecategory, productTwoForHomecategory });
+        res.render("users/home", {
+          admin: false,
+          user,
+          cartcount,
+          allCategory,
+          bannerOne,
+          bannerTwo,
+          categorybannerOne,
+          categorybannerTwo,
+          categorybannerThree,
+          productOneForHomecategoryProducts,
+          productTwoForHomecategoryProducts,
+          productOneForHomecategory,
+          productTwoForHomecategory,
+        });
       });
     });
-
   });
-
-
 });
-
-
-
 
 let products;
 let subcategoryfilter = false;
 let categoryname;
 let brandFilter = false;
 
-router.get('/shopcategory', blockCheck, async (req, res) => {
-
+router.get("/shopcategory", blockCheck, async (req, res) => {
   let user = req.session.user;
 
-
   if (subcategoryfilter) {
-
-  }
-
-  else if (brandFilter) {
-
-  }
-  else {
-
+  } else if (brandFilter) {
+  } else {
     categoryname = req.query.categoryname;
   }
 
-
-
-
   if (subcategoryfilter) {
-
-  }
-  else if (brandFilter) {
-
-  }
-  else {
+  } else if (brandFilter) {
+  } else {
     products = await producthelpers.allCategoryProducts(categoryname);
   }
-
-
-
 
   let allsubcategories = await categoryhelpers.allSubCategories(categoryname);
   let cartcount = await producthelpers.getCartCount(req.session.user?._id);
@@ -196,94 +167,108 @@ router.get('/shopcategory', blockCheck, async (req, res) => {
   let allBrands = await brandhelpers.getBrand();
   let todayDate = new Date().toISOString().slice(0, 10);
 
-
-
-
-
-
   let result1 = await producthelpers.startCategoryOffers(todayDate);
-
 
   let result2 = await producthelpers.startProductOffers(todayDate);
 
-
-
   let result3 = await producthelpers.startCoupenOffers(todayDate);
-
 
   producthelpers.deleteExpiredproductoffers(todayDate).then(() => {
     producthelpers.deleteExpiredCategoryoffers(todayDate).then(() => {
-      res.render('users/clothings', { admin: false, products, user, cartcount, allCategory, allBrands, allsubcategories, categoryname });
+      res.render("users/clothings", {
+        admin: false,
+        products,
+        user,
+        cartcount,
+        allCategory,
+        allBrands,
+        allsubcategories,
+        categoryname,
+      });
       subcategoryfilter = false;
       brandFilter = false;
-    })
-  })
-
-
+    });
+  });
 });
-
 
 // get  sub category filter
-router.get('/filterSubCategory', async (req, res) => {
+router.get("/filterSubCategory", async (req, res) => {
   categoryname = req.query.categoryname;
   if (req.query.subcategory) {
-    products = await producthelpers.allSubCategoryProducts(req.query.categoryname, req.query.subcategory);
+    products = await producthelpers.allSubCategoryProducts(
+      req.query.categoryname,
+      req.query.subcategory
+    );
     if (products.length > 0) {
       subcategoryfilter = true;
-      res.send({ data: products })
+      res.send({ data: products });
     }
-
   }
-})
-
-
-// get  brand filter
-router.get('/filterBrand', async (req, res) => {
-  categoryname
-  if (req.query.brand) {
-    products = await producthelpers.filterBrandProducts(categoryname, req.query.brand);
-    if (products.length > 0) {
-      brandFilter = true;
-      res.send({ data: products })
-    }
-
-  }
-})
-
-
-
-/* GET shopping cart. */
-router.get('/shopping-cart', verifyLoginForLoginpage, async (req, res, next) => {
-  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  let user = req.session.user;
-  let userId = req.session.user._id;
-  let cartItems = await producthelpers.getCartProducts(userId);
-  let total = await producthelpers.getTotalAmount(req.session.user._id);
-  //  let subtotal = await producthelpers.getSubTotalAmount(req.session.user._id);
-
-  let cartcount = await producthelpers.getCartCount(req.session.user?._id);
-  let allCategory = await categoryhelpers.getCategory();
-
-  if (cartItems.length >= 1) {
-    cartItemsEmpty = false;
-  } else {
-    cartItemsEmpty = true;
-  }
-  res.render('users/shoppingnewcart', { admin: false, user, cartItems, total, cartItemsEmpty, notheader: true, cartcount, allCategory, changeheader: true });
-
 });
 
+// get  brand filter
+router.get("/filterBrand", async (req, res) => {
+  categoryname;
+  if (req.query.brand) {
+    products = await producthelpers.filterBrandProducts(
+      categoryname,
+      req.query.brand
+    );
+    if (products.length > 0) {
+      brandFilter = true;
+      res.send({ data: products });
+    }
+  }
+});
+
+/* GET shopping cart. */
+router.get(
+  "/shopping-cart",
+  verifyLoginForLoginpage,
+  async (req, res, next) => {
+    res.header(
+      "Cache-Control",
+      "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+    );
+    let user = req.session.user;
+    let userId = req.session.user._id;
+    let cartItems = await producthelpers.getCartProducts(userId);
+    let total = await producthelpers.getTotalAmount(req.session.user._id);
+    //  let subtotal = await producthelpers.getSubTotalAmount(req.session.user._id);
+
+    let cartcount = await producthelpers.getCartCount(req.session.user?._id);
+    let allCategory = await categoryhelpers.getCategory();
+
+    if (cartItems.length >= 1) {
+      cartItemsEmpty = false;
+    } else {
+      cartItemsEmpty = true;
+    }
+    res.render("users/shoppingnewcart", {
+      admin: false,
+      user,
+      cartItems,
+      total,
+      cartItemsEmpty,
+      notheader: true,
+      cartcount,
+      allCategory,
+      changeheader: true,
+    });
+  }
+);
 
 /* GET single product view. loginverification not required*/
-router.get('/product', blockCheck, async function (req, res) {
-  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+router.get("/product", blockCheck, async function (req, res) {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   let user = req.session.user;
   let quantity = {};
   let cartcount = await producthelpers.getCartCount(req.session.user?._id);
   let allCategory = await categoryhelpers.getCategory();
   producthelpers.getSingleProductDetails(req.query).then((response) => {
-
-
     if (response.instock[0].quantity == 0) {
       quantity.smalloutofstock = true;
     }
@@ -294,33 +279,29 @@ router.get('/product', blockCheck, async function (req, res) {
       quantity.largeoutofstock = true;
     }
 
-
-
-    res.render('users/product', { admin: false, response, user, quantity, cartcount, allCategory });
-  })
-
-
+    res.render("users/product", {
+      admin: false,
+      response,
+      user,
+      quantity,
+      cartcount,
+      allCategory,
+    });
+  });
 });
 
 // get product for wishlist modal
 
-
-router.get('/productwishlist', blockCheck, async function (req, res) {
+router.get("/productwishlist", blockCheck, async function (req, res) {
   let user = req.session.user;
   let data = {
-    quantity: {
-
-    },
-    productdetails: {
-
-    }
-  }
+    quantity: {},
+    productdetails: {},
+  };
 
   //  let cartcount =await producthelpers.getCartCount(req.session.user?._id);
   //  let allCategory = await categoryhelpers.getCategory();
   producthelpers.getSingleProductDetails(req.query).then((response) => {
-
-
     if (response.instock[0].quantity == 0) {
       data.quantity.smalloutofstock = true;
     }
@@ -332,61 +313,78 @@ router.get('/productwishlist', blockCheck, async function (req, res) {
     }
     data.productdetails = response;
     res.send(data);
-  })
-
-
+  });
 });
 
-
-
-
-
-
 /* GET checkout. */
-router.get('/checkout', verifyLoginForLoginpage, async (req, res) => {
-
-  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+router.get("/checkout", verifyLoginForLoginpage, async (req, res) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   let user = req.session.user;
   let userId = req.session.user?._id;
-  let defaultaddress = await userhelpers.getdefaultaddress(req.session.user._id);
+  let defaultaddress = await userhelpers.getdefaultaddress(
+    req.session.user._id
+  );
   let otheraddress = await userhelpers.getotheraddress(req.session.user._id);
   let total = await producthelpers.getTotalAmount(req.session.user._id);
   let cartItems = await producthelpers.getCartProducts(userId);
   let cartcount = await producthelpers.getCartCount(req.session.user?._id);
   let allCategory = await categoryhelpers.getCategory();
 
-  res.render('users/checkout', { admin: false, user, notheader: true, defaultaddress, otheraddress, total, cartItems, userId, existDefaultAddress, paypalcancel, couponAlreadyUsedError, changeheader: true, cartcount, allCategory });
+  res.render("users/checkout", {
+    admin: false,
+    user,
+    notheader: true,
+    defaultaddress,
+    otheraddress,
+    total,
+    cartItems,
+    userId,
+    existDefaultAddress,
+    paypalcancel,
+    couponAlreadyUsedError,
+    changeheader: true,
+    cartcount,
+    allCategory,
+  });
   existDefaultAddress = "";
   paypalcancel = "";
-  couponAlreadyUsedError = ""
-
-
+  couponAlreadyUsedError = "";
 });
-
 
 /* GET user register. */
 
-router.get('/register', verifyLogin, function (req, res) {
-  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+router.get("/register", verifyLogin, function (req, res) {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   if (req.session.user) {
-    res.redirect('/');
+    res.redirect("/");
   } else {
-    res.render('users/register', { admin: false, confirmPasswordError, emailphonenumberExistError, notheader: true });
+    res.render("users/register", {
+      admin: false,
+      confirmPasswordError,
+      emailphonenumberExistError,
+      notheader: true,
+    });
     confirmPasswordError = "";
     emailphonenumberExistError = "";
   }
-
 });
 
 /* post user register. */
-router.post('/register', verifyLogin, function (req, res) {
+router.post("/register", verifyLogin, function (req, res) {
   req.session.phonenumber = req.body.phonenumber;
   if (req.body.password == req.body.confirmpassword) {
     delete req.body.confirmpassword;
     userhelpers.emailAndPasswordCheck(req.body).then((response) => {
       if (response?.exist) {
-        emailphonenumberExistError = "Entered email or phone number is already exist"
-        res.redirect('/register');
+        emailphonenumberExistError =
+          "Entered email or phone number is already exist";
+        res.redirect("/register");
       } else {
         let phoneNumber = req.body.phonenumber;
         req.session.tempararysignup = req.body;
@@ -395,151 +393,142 @@ router.post('/register', verifyLogin, function (req, res) {
           .services(serviceId)
           .verifications.create({
             to: `+91${phonenumber}`,
-            channel: "sms"
+            channel: "sms",
           })
           .then((resp) => {
-
             // res.status(200).json({resp});
-            res.render('users/otplogin', { admin: false, phoneNumber, notheader: true, registerotp: true })
+            res.render("users/otplogin", {
+              admin: false,
+              phoneNumber,
+              notheader: true,
+              registerotp: true,
+            });
           });
       }
-    })
+    });
   } else {
-    confirmPasswordError = "Password is not matching"
-    res.redirect('/register');
+    confirmPasswordError = "Password is not matching";
+    res.redirect("/register");
   }
-
 });
 
-
-
 //register for resend
-router.get('/registerresend', verifyLogin, (req, res) => {
-  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  let phoneNumber = req.session.phonenumber
-
-
+router.get("/registerresend", verifyLogin, (req, res) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
+  let phoneNumber = req.session.phonenumber;
 
   client.verify
     .services(serviceId)
     .verifications.create({
       to: `+91${req.session.phonenumber}`,
-      channel: "sms"
+      channel: "sms",
     })
     .then((resp) => {
-
-      res.render('users/otplogin', { admin: false, phoneNumber, notheader: true, registerotp: true })
+      res.render("users/otplogin", {
+        admin: false,
+        phoneNumber,
+        notheader: true,
+        registerotp: true,
+      });
     });
-
-
-
-
-
-
-})
-
-
-
-
-
+});
 
 // get register otp check and sessions creation
 router.get("/registerotplogin", (req, res) => {
-
   let phoneNumber = req.query.phonenumber;
   let otpNumber = req.query.otpnumber;
-  typeof (otpNumber)
+  typeof otpNumber;
   client.verify
     .services(serviceId)
     .verificationChecks.create({
       to: "+91" + phoneNumber,
-      code: otpNumber
+      code: otpNumber,
     })
-    .then((resp => {
+    .then((resp) => {
       if (resp.valid) {
         let user = req.session.tempararysignup;
         userhelpers.addUser(user).then((response) => {
-
           req.session.user = response;
           req.session.user.loggedIn = true;
           let valid = true;
           res.send(valid);
-        })
+        });
       } else {
         let valid = false;
 
         res.send(valid);
       }
-    }));
-})
-
-
-
+    });
+});
 
 /* GET user login. */
 
-router.get('/userlogin', function (req, res) {
-  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+router.get("/userlogin", function (req, res) {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   if (req.session.user) {
-    res.redirect('/')
+    res.redirect("/");
   } else {
-    res.render('users/userlogin', { admin: false, loginError, notheader: true, blockedError });
+    res.render("users/userlogin", {
+      admin: false,
+      loginError,
+      notheader: true,
+      blockedError,
+    });
     blockedError = "";
     loginError = "";
   }
-
-
 });
 
 /* post user login. */
 
-router.post('/userlogin', function (req, res) {
-
+router.post("/userlogin", function (req, res) {
   userhelpers.checkLogin(req.body).then((response) => {
     if (response?.blocked) {
       blockedError = "you are blocked";
-      res.redirect('/userlogin');
-    }
-    else {
-
+      res.redirect("/userlogin");
+    } else {
       if (response.exist) {
         req.session.user = response.user;
         req.session.user.loggedIn = true;
 
-
-        res.redirect('/');
+        res.redirect("/");
       } else {
         loginError = "Invalid user name or password";
-        res.redirect('/userlogin');
+        res.redirect("/userlogin");
       }
-
     }
-
-  })
-
+  });
 });
 
-
-
 //get user phonenumber
-router.get('/phonenumberpage', (req, res) => {
-  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+router.get("/phonenumberpage", (req, res) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   if (req.session.user) {
-    res.redirect('/')
+    res.redirect("/");
   } else {
-    res.render('users/phonenumberpage', { admin: false, phonenumberExistError, notheader: true, blockedError });
+    res.render("users/phonenumberpage", {
+      admin: false,
+      phonenumberExistError,
+      notheader: true,
+      blockedError,
+    });
     blockedError = "";
   }
-
-
-
 
   phonenumberExistError = "";
 });
 
-
 //post user phonenumber
-router.post('/phonenumberpage', (req, res) => {
+router.post("/phonenumberpage", (req, res) => {
   req.session.phonenumber = req.body.number;
   // let phoneNumber = req.body.number
   phoneNumber = req.session.phonenumber.toString();
@@ -547,76 +536,66 @@ router.post('/phonenumberpage', (req, res) => {
   userhelpers.phoneNumberChecking(phoneNumber).then((response) => {
     if (response?.blocked) {
       blockedError = "you are blocked";
-      res.redirect('/phonenumberpage');
-
-
+      res.redirect("/phonenumberpage");
     } else {
-
       if (response.exist) {
         client.verify
           .services(serviceId)
           .verifications.create({
             to: `+91${req.session.phonenumber}`,
-            channel: "sms"
+            channel: "sms",
           })
           .then((resp) => {
-
-            res.render('users/otplogin', { admin: false, phoneNumber, notheader: true })
+            res.render("users/otplogin", {
+              admin: false,
+              phoneNumber,
+              notheader: true,
+            });
           });
       } else {
         phonenumberExistError = "Entered phone number does not exist";
-        res.redirect('/phonenumberpage');
-
+        res.redirect("/phonenumberpage");
       }
-
     }
-
-  })
-
-
+  });
 });
 
-
 //login for resend
-router.get('/loginresend', verifyLogin, (req, res) => {
-  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  let phoneNumber = req.session.phonenumber
-
-
+router.get("/loginresend", verifyLogin, (req, res) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
+  let phoneNumber = req.session.phonenumber;
 
   client.verify
     .services(serviceId)
     .verifications.create({
       to: `+91${req.session.phonenumber}`,
-      channel: "sms"
+      channel: "sms",
     })
     .then((resp) => {
-
       // res.status(200).json({resp});
-      res.render('users/otplogin', { admin: false, phoneNumber, notheader: true })
+      res.render("users/otplogin", {
+        admin: false,
+        phoneNumber,
+        notheader: true,
+      });
     });
-
-
-
-
-
-
-})
-
+});
 
 //post otp login
 router.get("/otplogin", (req, res) => {
-
   let phoneNumber = req.query.phonenumber;
   let otpNumber = req.query.otpnumber;
-  typeof (otpNumber)
+  typeof otpNumber;
   client.verify
     .services(serviceId)
     .verificationChecks.create({
       to: "+91" + phoneNumber,
-      code: otpNumber
+      code: otpNumber,
     })
-    .then((resp => {
+    .then((resp) => {
       if (resp.valid) {
         userhelpers.otpLogin(phoneNumber).then((response) => {
           req.session.user = response;
@@ -624,209 +603,181 @@ router.get("/otplogin", (req, res) => {
           req.session.user.loggedIn = true;
           let valid = true;
           res.send(valid);
-        })
+        });
       } else {
         let valid = false;
 
         res.send(valid);
       }
-    }));
-})
-
+    });
+});
 
 //  get forgote password
-router.get('/loginidentify', verifyLogin, (req, res) => {
-  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  res.render('users/loginidentify', { admin: false, notheader: true, phonenumberExistError, blockedError })
+router.get("/loginidentify", verifyLogin, (req, res) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
+  res.render("users/loginidentify", {
+    admin: false,
+    notheader: true,
+    phonenumberExistError,
+    blockedError,
+  });
   phonenumberExistError = "";
   blockedError = "";
 });
 
 //  post forgotten password
-router.post('/loginidentify', (req, res) => {
+router.post("/loginidentify", (req, res) => {
   req.session.phonenumber = req.body.number;
-  let phoneNumber = req.body.number
+  let phoneNumber = req.body.number;
   phoneNumber = phoneNumber.toString();
 
   userhelpers.phoneNumberChecking(phoneNumber).then((response) => {
     if (response?.blocked) {
       blockedError = "you are blocked";
-      res.redirect('/loginidentify');
-
+      res.redirect("/loginidentify");
     } else {
-
-
       if (response.exist) {
         client.verify
           .services(serviceId)
           .verifications.create({
             to: `+91${req.body.number}`,
-            channel: "sms"
+            channel: "sms",
           })
           .then((resp) => {
-
             // res.status(200).json({resp});
-            res.render('users/otploginforpassword', { admin: false, phoneNumber, notheader: true })
+            res.render("users/otploginforpassword", {
+              admin: false,
+              phoneNumber,
+              notheader: true,
+            });
           });
       } else {
         phonenumberExistError = "Entered phone number does not exist";
-        res.redirect('/loginidentify')
-
+        res.redirect("/loginidentify");
       }
-
     }
-
-
-
-
-
-
-
-  })
-
+  });
 });
 
-
 //password for resend
-router.get('/loginresendpassword', verifyLogin, (req, res) => {
-
-  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  let phoneNumber = req.session.phonenumber
-
-
+router.get("/loginresendpassword", verifyLogin, (req, res) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
+  let phoneNumber = req.session.phonenumber;
 
   client.verify
     .services(serviceId)
     .verifications.create({
       to: `+91${req.session.phonenumber}`,
-      channel: "sms"
+      channel: "sms",
     })
     .then((resp) => {
-
       // res.status(200).json({resp});
-      res.render('users/otploginforpassword', { admin: false, phoneNumber, notheader: true })
+      res.render("users/otploginforpassword", {
+        admin: false,
+        phoneNumber,
+        notheader: true,
+      });
     });
-
-
-
-
-
-
-})
-
-
-
-
-
-
+});
 
 //get for password otp
 router.get("/otploginforpassword", (req, res) => {
-
   let phoneNumber = req.query.phonenumber;
   let otpNumber = req.query.otpnumber;
-  typeof (otpNumber)
+  typeof otpNumber;
   client.verify
     .services(serviceId)
     .verificationChecks.create({
       to: "+91" + phoneNumber,
-      code: otpNumber
+      code: otpNumber,
     })
-    .then((resp => {
-
+    .then((resp) => {
       if (resp.valid) {
-
-
         let valid = true;
         res.send(valid);
-
       } else {
         let valid = false;
 
         res.send(valid);
       }
-    }));
+    });
 });
 
-
-
 //get change for password otp
-router.get('/passwordchange', (req, res) => {
-  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+router.get("/passwordchange", (req, res) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   if (req.session.user) {
-
-    res.redirect('/');
-  }
-  else {
+    res.redirect("/");
+  } else {
     let phonenumber = req.query.phonenumber;
-    res.render('users/newpassword', { admin: false, notheader: true, phonenumber })
+    res.render("users/newpassword", {
+      admin: false,
+      notheader: true,
+      phonenumber,
+    });
   }
-
 });
 
 //post change for password otp
-router.post('/passwordchange', (req, res) => {
-
+router.post("/passwordchange", (req, res) => {
   userhelpers.findNumberChangepassword(req.body).then((response) => {
-
     req.session.user = response;
     req.session.user.loggedIn = true;
-    res.redirect('/')
-
-  })
+    res.redirect("/");
+  });
 });
-
-
 
 //get addtocart
 
-router.get('/addtocartproduct', (req, res) => {
-
-  let response = {}
+router.get("/addtocartproduct", (req, res) => {
+  let response = {};
   if (req.session.user) {
     let productSize = req.query.size;
     let productId = req.query.productid;
     let subtotal = req.query.subtotal;
-    let userId = req.session.user._id
+    let userId = req.session.user._id;
 
-    producthelpers.addToCart(productId, productSize, userId, subtotal).then((result) => {
-      if (result.added) {
-        response.added = true;
-        res.json(response);
-      } else if (result.exist) {
-        response.exist = true;
-        res.json(response);
-      }
-    })
-
+    producthelpers
+      .addToCart(productId, productSize, userId, subtotal)
+      .then((result) => {
+        if (result.added) {
+          response.added = true;
+          res.json(response);
+        } else if (result.exist) {
+          response.exist = true;
+          res.json(response);
+        }
+      });
   } else {
     response.sessionrequired = true;
     res.json(response);
   }
-
-})
+});
 
 // increase quantityof cart product
-router.post('/change-product-quantity', (req, res) => {
+router.post("/change-product-quantity", (req, res) => {
   producthelpers.changeProductQuantity(req.body).then(async (response) => {
     response.total = await producthelpers.getTotalAmount(req.body.userId);
     response.updated = true;
     res.json(response);
-
-
-
-  })
+  });
 });
 
 //delete cart product
-router.post('/deletecartproduct', (req, res) => {
-
+router.post("/deletecartproduct", (req, res) => {
   producthelpers.deletecartitems(req.body).then((response) => {
-    res.send("hi")
-  })
-})
-
-
+    res.send("hi");
+  });
+});
 
 // checkout address
 // router.get('/checkout',verifyLoginForLoginpage,(req,res)=>{
@@ -834,732 +785,720 @@ router.post('/deletecartproduct', (req, res) => {
 //   res.render('users/checkout');
 // })
 
-
-
 // address post
-router.post('/addaddress', verifyLoginForLoginpage, (req, res) => {
-
+router.post("/addaddress", verifyLoginForLoginpage, (req, res) => {
   userhelpers.addAddress(req.body, req.session.user._id).then((response) => {
     if (response.default) {
-      existDefaultAddress = "Default address already exist only you can edit it"
-      res.redirect('/checkout')
+      existDefaultAddress =
+        "Default address already exist only you can edit it";
+      res.redirect("/checkout");
+    } else if (response.success) {
+      res.redirect("/checkout");
     }
-    else if (response.success) {
-      res.redirect('/checkout');
-    }
-  })
-})
+  });
+});
 
 //edit default address
 
-router.get('/editdefaultaddress', async (req, res) => {
-
-  let defaultaddress = await userhelpers.getdefaultaddress(req.session.user._id);
+router.get("/editdefaultaddress", async (req, res) => {
+  let defaultaddress = await userhelpers.getdefaultaddress(
+    req.session.user._id
+  );
   res.send(defaultaddress);
 });
 
-router.post('/defaultaddressedit', (req, res) => {
+router.post("/defaultaddressedit", (req, res) => {
   userhelpers.editdefaultaddress(req.body, req.session.user._id).then(() => {
-    res.redirect('/checkout');
-  })
+    res.redirect("/checkout");
+  });
 });
 
 //edit other one address
-router.get('/editotheraddress', async (req, res) => {
-
-
-  userhelpers.editotheraddress(req.query.id, req.session.user._id).then((response) => {
-    res.send(response);
-  })
+router.get("/editotheraddress", async (req, res) => {
+  userhelpers
+    .editotheraddress(req.query.id, req.session.user._id)
+    .then((response) => {
+      res.send(response);
+    });
 });
 
-router.post('/otheraddressedit', (req, res) => {
-  userhelpers.editAndUpdateOtherAddress(req.body, req.session.user._id).then(() => {
-    res.redirect('/checkout');
-  })
-})
-
+router.post("/otheraddressedit", (req, res) => {
+  userhelpers
+    .editAndUpdateOtherAddress(req.body, req.session.user._id)
+    .then(() => {
+      res.redirect("/checkout");
+    });
+});
 
 // place order
 
-router.get('/place-order', async (req, res) => {
-
+router.get("/place-order", async (req, res) => {
   let deliveryaddressid = req.query.deliveryaddress;
   let userId = req.query.userId;
 
   req.session.deliveryaddressid = req.query.deliveryaddress;
   req.session.userId = req.query.userId;
 
-  let deliveryaddressAndMethod = await userhelpers.editotheraddress(deliveryaddressid, userId)
-
-  deliveryaddressAndMethod.paymentmethod = req.query.paymentmethod;
-
-  req.session.paymentmethod = req.query.paymentmethod
-
-
-
-
-  let products = await userhelpers.getCartProductList(userId);
-
-  let totalPrice = await producthelpers.getTotalAmount(userId);
-  if (req.query.coupencheck != 0) {
-
-    req.session.user.coupen = true;
-    if (req.session.user.coupenOfferPrice) {
-      totalPrice = req.session.user.coupenOfferPrice
-    }
-  }
-
-  if (req.session?.user?.coupen) {
-
-    req.session.user.coupencode = req.query.couponcode;
-  }
-
-
-
-
-  req.session.totalPrice = totalPrice;
-
-  let sampleprice = (totalPrice / 70).toFixed(2);
-
-
-  let totalpriceForpaypal = sampleprice.toString();
-
-
-
-
-  let onlinepaymentid = new objectId();
-
-
-
-
-  userhelpers.placeOrder(deliveryaddressAndMethod, products, totalPrice, userId, req.session?.user?.coupencode).then(() => {
-
-
-
-    if (req.query?.paymentmethod === 'cod') {
-      res.json({ codsuccess: true })
-    }
-
-
-    else if (req.query?.paymentmethod === 'razorpay') {
-      userhelpers.generateRazorpay(onlinepaymentid, totalPrice).then((response) => {
-
-
-        res.json(response);
-      })
-
-
-    } else if (req.query?.paymentmethod === 'paypal') {
-
-      var create_payment_json = {
-        "intent": "sale",
-        "payer": {
-          "payment_method": "paypal"
-        },
-        "redirect_urls": {
-          "return_url": "http://sportshub.store/success",
-          "cancel_url": "http://sportshub.store/cancel"
-        },
-        "transactions": [{
-          "item_list": {
-            "items": [{
-
-
-              "price": totalpriceForpaypal,
-              "currency": "USD",
-              "quantity": 1
-            }]
-          },
-          "amount": {
-            "currency": "USD",
-            "total": totalpriceForpaypal
-          },
-          "description": "Sports hub."
-        }]
-      };
-
-      paypal.payment.create(create_payment_json, function (error, payment) {
-        if (error) {
-          throw error;
-        } else {
-          for (let i = 0; i < payment.links.length; i++) {
-            if (payment.links[i].rel === 'approval_url') {
-
-              let url = payment.links[i].href;
-              res.json({ data: true, url: url })
-            }
-          }
-
-        }
-      });
-
-
-
-    }
-
-  })
-
-
-});
-
-
-
-
-//get buynow place order
-
-
-
-router.get('/buynowplace-order', async (req, res) => {
-
-  let deliveryaddressid = req.query.deliveryaddress;
-  let userId = req.query.userId;
-
-  req.session.deliveryaddressid = req.query.deliveryaddress;
-  req.session.userId = req.query.userId;
-
-  let deliveryaddressAndMethod = await userhelpers.editotheraddress(deliveryaddressid, userId)
+  let deliveryaddressAndMethod = await userhelpers.editotheraddress(
+    deliveryaddressid,
+    userId
+  );
 
   deliveryaddressAndMethod.paymentmethod = req.query.paymentmethod;
 
   req.session.paymentmethod = req.query.paymentmethod;
 
+  let products = await userhelpers.getCartProductList(userId);
 
+  let totalPrice = await producthelpers.getTotalAmount(userId);
+  if (req.query.coupencheck != 0) {
+    req.session.user.coupen = true;
+    if (req.session.user.coupenOfferPrice) {
+      totalPrice = req.session.user.coupenOfferPrice;
+    }
+  }
 
+  if (req.session?.user?.coupen) {
+    req.session.user.coupencode = req.query.couponcode;
+  }
+
+  req.session.totalPrice = totalPrice;
+
+  let sampleprice = (totalPrice / 70).toFixed(2);
+
+  let totalpriceForpaypal = sampleprice.toString();
+
+  let onlinepaymentid = new objectId();
+
+  userhelpers
+    .placeOrder(
+      deliveryaddressAndMethod,
+      products,
+      totalPrice,
+      userId,
+      req.session?.user?.coupencode
+    )
+    .then(() => {
+      if (req.query?.paymentmethod === "cod") {
+        res.json({ codsuccess: true });
+      } else if (req.query?.paymentmethod === "razorpay") {
+        userhelpers
+          .generateRazorpay(onlinepaymentid, totalPrice)
+          .then((response) => {
+            res.json(response);
+          });
+      } else if (req.query?.paymentmethod === "paypal") {
+        var create_payment_json = {
+          intent: "sale",
+          payer: {
+            payment_method: "paypal",
+          },
+          redirect_urls: {
+            return_url: "http://sportshub.store/success",
+            cancel_url: "http://sportshub.store/cancel",
+          },
+          transactions: [
+            {
+              item_list: {
+                items: [
+                  {
+                    price: totalpriceForpaypal,
+                    currency: "USD",
+                    quantity: 1,
+                  },
+                ],
+              },
+              amount: {
+                currency: "USD",
+                total: totalpriceForpaypal,
+              },
+              description: "Sports hub.",
+            },
+          ],
+        };
+
+        paypal.payment.create(create_payment_json, function (error, payment) {
+          if (error) {
+            throw error;
+          } else {
+            for (let i = 0; i < payment.links.length; i++) {
+              if (payment.links[i].rel === "approval_url") {
+                let url = payment.links[i].href;
+                res.json({ data: true, url: url });
+              }
+            }
+          }
+        });
+      }
+    });
+});
+
+//get buynow place order
+
+router.get("/buynowplace-order", async (req, res) => {
+  let deliveryaddressid = req.query.deliveryaddress;
+  let userId = req.query.userId;
+
+  req.session.deliveryaddressid = req.query.deliveryaddress;
+  req.session.userId = req.query.userId;
+
+  let deliveryaddressAndMethod = await userhelpers.editotheraddress(
+    deliveryaddressid,
+    userId
+  );
+
+  deliveryaddressAndMethod.paymentmethod = req.query.paymentmethod;
+
+  req.session.paymentmethod = req.query.paymentmethod;
 
   let products = await userhelpers.getBuynowProductList(userId);
-
 
   let totalPrice = await producthelpers.getBuyNowTotalAmount(userId);
 
   if (req.query.coupencheck != 0) {
-
     req.session.user.coupen = true;
     if (req.session.user.coupenOfferPrice) {
-      totalPrice = req.session.user.coupenOfferPrice
+      totalPrice = req.session.user.coupenOfferPrice;
     }
   }
   if (req.session?.user?.coupen) {
     req.session.user.coupencode = req.query.couponcode;
   }
 
-
-
-
   req.session.totalPrice = totalPrice;
 
   let sampleprice = (totalPrice / 70).toFixed(2);
 
-
   let totalpriceForpaypal = sampleprice.toString();
-
-
-
 
   let onlinepaymentid = new objectId();
 
-
-
-
-  userhelpers.buynowplaceOrder(deliveryaddressAndMethod, products, totalPrice, userId, req.session?.user?.coupencode).then(() => {
-
-
-
-    if (req.query?.paymentmethod === 'cod') {
-      res.json({ codsuccess: true })
-    }
-
-
-    else if (req.query?.paymentmethod === 'razorpay') {
-      userhelpers.generateRazorpay(onlinepaymentid, totalPrice).then((response) => {
-
-
-        res.json(response);
-      })
-
-
-    } else if (req.query?.paymentmethod === 'paypal') {
-
-      var create_payment_json = {
-        "intent": "sale",
-        "payer": {
-          "payment_method": "paypal"
-        },
-        "redirect_urls": {
-          "return_url": "http://sportshub.store/buynowsuccess",
-          "cancel_url": "http://sportshub.store/buynowcancel"
-        },
-        "transactions": [{
-          "item_list": {
-            "items": [{
-
-
-              "price": totalpriceForpaypal,
-              "currency": "USD",
-              "quantity": 1
-            }]
+  userhelpers
+    .buynowplaceOrder(
+      deliveryaddressAndMethod,
+      products,
+      totalPrice,
+      userId,
+      req.session?.user?.coupencode
+    )
+    .then(() => {
+      if (req.query?.paymentmethod === "cod") {
+        res.json({ codsuccess: true });
+      } else if (req.query?.paymentmethod === "razorpay") {
+        userhelpers
+          .generateRazorpay(onlinepaymentid, totalPrice)
+          .then((response) => {
+            res.json(response);
+          });
+      } else if (req.query?.paymentmethod === "paypal") {
+        var create_payment_json = {
+          intent: "sale",
+          payer: {
+            payment_method: "paypal",
           },
-          "amount": {
-            "currency": "USD",
-            "total": totalpriceForpaypal
+          redirect_urls: {
+            return_url: "http://sportshub.store/buynowsuccess",
+            cancel_url: "http://sportshub.store/buynowcancel",
           },
-          "description": "Sports hub."
-        }]
-      };
+          transactions: [
+            {
+              item_list: {
+                items: [
+                  {
+                    price: totalpriceForpaypal,
+                    currency: "USD",
+                    quantity: 1,
+                  },
+                ],
+              },
+              amount: {
+                currency: "USD",
+                total: totalpriceForpaypal,
+              },
+              description: "Sports hub.",
+            },
+          ],
+        };
 
-      paypal.payment.create(create_payment_json, function (error, payment) {
-        if (error) {
-          throw error;
-        } else {
-          for (let i = 0; i < payment.links.length; i++) {
-            if (payment.links[i].rel === 'approval_url') {
-
-              let url = payment.links[i].href;
-              res.json({ data: true, url: url })
+        paypal.payment.create(create_payment_json, function (error, payment) {
+          if (error) {
+            throw error;
+          } else {
+            for (let i = 0; i < payment.links.length; i++) {
+              if (payment.links[i].rel === "approval_url") {
+                let url = payment.links[i].href;
+                res.json({ data: true, url: url });
+              }
             }
           }
-
-        }
-      });
-
-
-
-    }
-
-  })
-
-
+        });
+      }
+    });
 });
-
-
-
-
 
 //deleteotheraddress
-router.get('/deleteotheraddress', (req, res) => {
+router.get("/deleteotheraddress", (req, res) => {
   let addressId = req.query.addressid;
   userhelpers.deleteOtheraddress(addressId, req.session.user._id).then(() => {
-    res.json({ status: true })
-  })
+    res.json({ status: true });
+  });
 });
 
-
 //  order success get
-router.get('/ordersuccess', verifyLoginForLoginpage, (req, res) => {
+router.get("/ordersuccess", verifyLoginForLoginpage, (req, res) => {
   let user = req.session.user;
 
-  res.render('users/ordersuccess', { user, admin: false, user, notheader: true })
-})
+  res.render("users/ordersuccess", {
+    user,
+    admin: false,
+    user,
+    notheader: true,
+  });
+});
 
-// post verify payment 
-router.post('/verify-payment', async (req, res) => {
-
-
-  let deliveryaddressAndMethod = await userhelpers.editotheraddress(req.session.deliveryaddressid, req.session.userId)
+// post verify payment
+router.post("/verify-payment", async (req, res) => {
+  let deliveryaddressAndMethod = await userhelpers.editotheraddress(
+    req.session.deliveryaddressid,
+    req.session.userId
+  );
 
   deliveryaddressAndMethod.paymentmethod = req.session.paymentmethod;
-
-
-
 
   let products = await userhelpers.getCartProductList(req.session.userId);
 
-
   let totalPrice = await producthelpers.getTotalAmount(req.session.userId);
 
-
   if (req.session.user.coupen) {
-
     if (req.session.user.coupenOfferPrice) {
-      totalPrice = req.session.user.coupenOfferPrice
+      totalPrice = req.session.user.coupenOfferPrice;
     }
   }
-
-
 
   userhelpers.verifyPayment(req.body).then(() => {
     //  userhelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
-    userhelpers.deleteCartForPayment(req.session.user._id).then(() => {
-
-      userhelpers.razorpayPlaceorder(deliveryaddressAndMethod, products, totalPrice, req.session.userId, req.session?.user?.coupencode).then(() => {
-
-        res.json({ status: true })
+    userhelpers
+      .deleteCartForPayment(req.session.user._id)
+      .then(() => {
+        userhelpers
+          .razorpayPlaceorder(
+            deliveryaddressAndMethod,
+            products,
+            totalPrice,
+            req.session.userId,
+            req.session?.user?.coupencode
+          )
+          .then(() => {
+            res.json({ status: true });
+          });
       })
-
-    })
 
       //  })
       .catch(() => {
-        res.json({ status: false, errMsg: '' })
-      })
-  })
-})
+        res.json({ status: false, errMsg: "" });
+      });
+  });
+});
 
-
-// post buynow verify payment 
-router.post('/buynowverify-payment', async (req, res) => {
-
-
-  let deliveryaddressAndMethod = await userhelpers.editotheraddress(req.session.deliveryaddressid, req.session.userId)
+// post buynow verify payment
+router.post("/buynowverify-payment", async (req, res) => {
+  let deliveryaddressAndMethod = await userhelpers.editotheraddress(
+    req.session.deliveryaddressid,
+    req.session.userId
+  );
 
   deliveryaddressAndMethod.paymentmethod = req.session.paymentmethod;
 
-
-
-
   let products = await userhelpers.getBuynowProductList(req.session.userId);
 
-
-  let totalPrice = await producthelpers.getBuyNowTotalAmount(req.session.userId);
+  let totalPrice = await producthelpers.getBuyNowTotalAmount(
+    req.session.userId
+  );
 
   if (req.session.user.coupen) {
-
     if (req.session.user.coupenOfferPrice) {
-      totalPrice = req.session.user.coupenOfferPrice
+      totalPrice = req.session.user.coupenOfferPrice;
     }
   }
-
 
   userhelpers.verifyPayment(req.body).then(() => {
     //  userhelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
     //  userhelpers.deleteCartForPayment(req.session.user._id).then(()=>{
 
-    userhelpers.buynowrazorpayPlaceorder(deliveryaddressAndMethod, products, totalPrice, req.session.userId, req.session.user.coupencode).then(() => {
-
-      res.json({ status: true })
-    })
+    userhelpers
+      .buynowrazorpayPlaceorder(
+        deliveryaddressAndMethod,
+        products,
+        totalPrice,
+        req.session.userId,
+        req.session.user.coupencode
+      )
+      .then(() => {
+        res.json({ status: true });
+      })
 
       //  })
 
       //  })
       .catch(() => {
-        res.json({ status: false, errMsg: '' })
-      })
-  })
-})
-
-
-
+        res.json({ status: false, errMsg: "" });
+      });
+  });
+});
 
 // get user profile
 
-router.get('/userprofile', verifyLoginForLoginpage, async (req, res) => {
+router.get("/userprofile", verifyLoginForLoginpage, async (req, res) => {
   let profilepic;
   let user = req.session.user;
   let cartcount = await producthelpers.getCartCount(req.session.user?._id);
   let allCategory = await categoryhelpers.getCategory();
-  let userDetails = await producthelpers.profileSaveDetails(req.session.user?._id);
-  let profileExist
+  let userDetails = await producthelpers.profileSaveDetails(
+    req.session.user?._id
+  );
+  let profileExist;
   if (user.profile) {
     profileExist = true;
-  }
-  else {
+  } else {
     profileExist = false;
   }
 
-  if (fs.existsSync('./public/images/profile-images/' + user._id + '.png')) {
+  if (fs.existsSync("./public/images/profile-images/" + user._id + ".png")) {
     profilepic = true;
   } else {
     profilepic = false;
   }
 
-
-  res.render('users/userprofile', { admin: false, user, cartcount, allCategory, profileExist, profilepic, userDetails });
+  res.render("users/userprofile", {
+    admin: false,
+    user,
+    cartcount,
+    allCategory,
+    profileExist,
+    profilepic,
+    userDetails,
+  });
 });
 
-
-
-
 // post user profile
-router.post('/profile', (req, res) => {
+router.post("/profile", (req, res) => {
   userhelpers.saveProfile(req.body, req.session.user._id).then((response) => {
     req.session.user = response;
-    res.redirect('/userprofile')
-  })
+    res.redirect("/userprofile");
+  });
 });
 
 // Edit profile
 
-router.post('/profiledit', (req, res) => {
+router.post("/profiledit", (req, res) => {
   userhelpers.saveProfile(req.body, req.session.user._id).then((response) => {
     req.session.user = response;
-    res.redirect('/userprofile')
-  })
-})
-
+    res.redirect("/userprofile");
+  });
+});
 
 // get profile addresses
-router.get('/profileaddress', async (req, res) => {
+router.get("/profileaddress", async (req, res) => {
   let user = req.session.user;
   let cartcount = await producthelpers.getCartCount(req.session.user?._id);
   let allCategory = await categoryhelpers.getCategory();
-  let defaultaddress = await userhelpers.getdefaultaddress(req.session?.user._id);
+  let defaultaddress = await userhelpers.getdefaultaddress(
+    req.session?.user._id
+  );
   let otheraddress = await userhelpers.getotheraddress(req.session.user._id);
 
-  res.render('users/profileaddress', { admin: false, user, cartcount, allCategory, defaultaddress, otheraddress, existDefaultAddress });
-  existDefaultAddress = ""
+  res.render("users/profileaddress", {
+    admin: false,
+    user,
+    cartcount,
+    allCategory,
+    defaultaddress,
+    otheraddress,
+    existDefaultAddress,
+  });
+  existDefaultAddress = "";
 });
 //profile address post
-router.post('/profileaddaddress', verifyLoginForLoginpage, (req, res) => {
-
+router.post("/profileaddaddress", verifyLoginForLoginpage, (req, res) => {
   userhelpers.addAddress(req.body, req.session.user._id).then((response) => {
     if (response.default) {
-      existDefaultAddress = "Default address already exist only you can edit it"
-      res.redirect('/profileaddress')
+      existDefaultAddress =
+        "Default address already exist only you can edit it";
+      res.redirect("/profileaddress");
+    } else if (response.success) {
+      res.redirect("/profileaddress");
     }
-    else if (response.success) {
-      res.redirect('/profileaddress');
-    }
-  })
+  });
 });
 
 // edit default profile address
-router.get('/profileeditdefaultaddress', async (req, res) => {
-
-
-
-  let defaultaddress = await userhelpers.getdefaultaddress(req.session.user._id);
+router.get("/profileeditdefaultaddress", async (req, res) => {
+  let defaultaddress = await userhelpers.getdefaultaddress(
+    req.session.user._id
+  );
   res.send(defaultaddress);
 });
 
-router.post('/profiledefaultaddressedit', (req, res) => {
+router.post("/profiledefaultaddressedit", (req, res) => {
   userhelpers.editdefaultaddress(req.body, req.session.user._id).then(() => {
-    res.redirect('/profileaddress');
-  })
+    res.redirect("/profileaddress");
+  });
 });
 //  edit other one addres
 
-router.post('/profileotheraddressedit', (req, res) => {
-  userhelpers.editAndUpdateOtherAddress(req.body, req.session.user._id).then(() => {
-    res.redirect('/profileaddress');
-  })
-})
+router.post("/profileotheraddressedit", (req, res) => {
+  userhelpers
+    .editAndUpdateOtherAddress(req.body, req.session.user._id)
+    .then(() => {
+      res.redirect("/profileaddress");
+    });
+});
 
 //get user order details
 
-router.get('/userorderdetails', verifyLoginForLoginpage, async (req, res) => {
+router.get("/userorderdetails", verifyLoginForLoginpage, async (req, res) => {
   let user = req.session.user;
   let cartcount = await producthelpers.getCartCount(req.session.user?._id);
   let allCategory = await categoryhelpers.getCategory();
-  let userAllOrderedProducts = await userhelpers.getAllOrderedProductForUser(req.session.user._id);
-  res.render('users/userorderdetails', { admin: false, user, cartcount, allCategory, userAllOrderedProducts });
+  let userAllOrderedProducts = await userhelpers.getAllOrderedProductForUser(
+    req.session.user._id
+  );
+  res.render("users/userorderdetails", {
+    admin: false,
+    user,
+    cartcount,
+    allCategory,
+    userAllOrderedProducts,
+  });
 });
 
 // paypal success
 
-router.get('/success', async (req, res) => {
+router.get("/success", async (req, res) => {
   let user = req.session.user;
   const payerId = req.query.PayerID;
   const paymentId = req.query.paymentId;
-  let deliveryaddressAndMethod = await userhelpers.editotheraddress(req.session.deliveryaddressid, req.session.userId)
+  let deliveryaddressAndMethod = await userhelpers.editotheraddress(
+    req.session.deliveryaddressid,
+    req.session.userId
+  );
 
   deliveryaddressAndMethod.paymentmethod = req.session.paymentmethod;
-
-
-
 
   let products = await userhelpers.getCartProductList(req.session.userId);
 
-
   let totalPrice = await producthelpers.getTotalAmount(req.session.userId);
   if (req.session.user.coupen) {
-
     if (req.session.user.coupenOfferPrice) {
-      totalPrice = req.session.user.coupenOfferPrice
+      totalPrice = req.session.user.coupenOfferPrice;
     }
   }
 
-
   let sampleprice = (totalPrice / 70).toFixed(2);
-
 
   let totalpriceForpaypal = sampleprice.toString();
 
   const execute_payment_json = {
-    "payer_id": payerId,
-    "transactions": [{
-      "amount": {
-        "currency": "USD",
-        "total": totalpriceForpaypal
-      }
-    }]
+    payer_id: payerId,
+    transactions: [
+      {
+        amount: {
+          currency: "USD",
+          total: totalpriceForpaypal,
+        },
+      },
+    ],
   };
 
-
-  paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
-    if (error) {
-      console.log(error.response);
-      throw error;
-    } else {
-
-
-
-      userhelpers.deleteCartForPayment(req.session.user._id).then(() => {
-
-        userhelpers.razorpayPlaceorder(deliveryaddressAndMethod, products, totalPrice, req.session.userId, req.session.user.coupencode).then(() => {
-
-
-
-
-          res.render('users/ordersuccess', { user, admin: false, user, notheader: true })
-        })
-
-      })
-
+  paypal.payment.execute(
+    paymentId,
+    execute_payment_json,
+    function (error, payment) {
+      if (error) {
+        console.log(error.response);
+        throw error;
+      } else {
+        userhelpers.deleteCartForPayment(req.session.user._id).then(() => {
+          userhelpers
+            .razorpayPlaceorder(
+              deliveryaddressAndMethod,
+              products,
+              totalPrice,
+              req.session.userId,
+              req.session.user.coupencode
+            )
+            .then(() => {
+              res.render("users/ordersuccess", {
+                user,
+                admin: false,
+                user,
+                notheader: true,
+              });
+            });
+        });
+      }
     }
-  });
-
-
-
+  );
 });
-
-
 
 //buynow paypal success
 
-router.get('/buynowsuccess', async (req, res) => {
+router.get("/buynowsuccess", async (req, res) => {
   let user = req.session.user;
   const payerId = req.query.PayerID;
   const paymentId = req.query.paymentId;
-  let deliveryaddressAndMethod = await userhelpers.editotheraddress(req.session.deliveryaddressid, req.session.userId)
+  let deliveryaddressAndMethod = await userhelpers.editotheraddress(
+    req.session.deliveryaddressid,
+    req.session.userId
+  );
 
   deliveryaddressAndMethod.paymentmethod = req.session.paymentmethod;
 
-
-
-
   let products = await userhelpers.getBuynowProductList(req.session.userId);
 
-
-  let totalPrice = await producthelpers.getBuyNowTotalAmount(req.session.userId);
+  let totalPrice = await producthelpers.getBuyNowTotalAmount(
+    req.session.userId
+  );
   if (req.session.user.coupen) {
-
     if (req.session.user.coupenOfferPrice) {
-      totalPrice = req.session.user.coupenOfferPrice
+      totalPrice = req.session.user.coupenOfferPrice;
     }
   }
 
-
   let sampleprice = (totalPrice / 70).toFixed(2);
-
 
   let totalpriceForpaypal = sampleprice.toString();
 
   const execute_payment_json = {
-    "payer_id": payerId,
-    "transactions": [{
-      "amount": {
-        "currency": "USD",
-        "total": totalpriceForpaypal
-      }
-    }]
+    payer_id: payerId,
+    transactions: [
+      {
+        amount: {
+          currency: "USD",
+          total: totalpriceForpaypal,
+        },
+      },
+    ],
   };
 
+  paypal.payment.execute(
+    paymentId,
+    execute_payment_json,
+    function (error, payment) {
+      if (error) {
+        console.log(error.response);
+        throw error;
+      } else {
+        // userhelpers.deleteCartForPayment(req.session.user._id).then(()=>{
 
-  paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
-    if (error) {
-      console.log(error.response);
-      throw error;
-    } else {
+        userhelpers
+          .buynowrazorpayPlaceorder(
+            deliveryaddressAndMethod,
+            products,
+            totalPrice,
+            req.session.userId,
+            req.session.user.coupencode
+          )
+          .then(() => {
+            console.log(JSON.stringify(payment));
 
+            res.render("users/ordersuccess", {
+              user,
+              admin: false,
+              user,
+              notheader: true,
+            });
+          });
 
-
-      // userhelpers.deleteCartForPayment(req.session.user._id).then(()=>{
-
-      userhelpers.buynowrazorpayPlaceorder(deliveryaddressAndMethod, products, totalPrice, req.session.userId, req.session.user.coupencode).then(() => {
-
-
-        console.log(JSON.stringify(payment));
-
-        res.render('users/ordersuccess', { user, admin: false, user, notheader: true })
-      })
-
-      // })
-
+        // })
+      }
     }
-  });
-
-
-
+  );
 });
 
-
-
-
-router.get('/cancel', (req, res) => {
-  paypalcancel = "payment is cancelled you can try again"
-  res.redirect('/checkout')
+router.get("/cancel", (req, res) => {
+  paypalcancel = "payment is cancelled you can try again";
+  res.redirect("/checkout");
 });
 
-router.get('/buynowcancel', (req, res) => {
-  paypalcancel = "payment is cancelled you can try again"
-  res.redirect('/buynowcheckout')
-})
-
+router.get("/buynowcancel", (req, res) => {
+  paypalcancel = "payment is cancelled you can try again";
+  res.redirect("/buynowcheckout");
+});
 
 // userOrderProductcancel
 
-router.get('/usercancelorder', (req, res) => {
-  userhelpers.userChangeOrderStatus(req.query.orderId, req.query.proId, req.query.size).then(() => {
-    res.json({ exist: true })
-  })
+router.get("/usercancelorder", (req, res) => {
+  userhelpers
+    .userChangeOrderStatus(req.query.orderId, req.query.proId, req.query.size)
+    .then(() => {
+      res.json({ exist: true });
+    });
 });
-
 
 //get buy now
 
-router.get('/addToBuyNowProduct', (req, res) => {
-
-  let response = {}
+router.get("/addToBuyNowProduct", (req, res) => {
+  let response = {};
   if (req.session.user) {
     let productSize = req.query.size;
     let productId = req.query.productid;
     let subtotal = req.query.subtotal;
-    let userId = req.session.user._id
+    let userId = req.session.user._id;
 
-    producthelpers.addToBuyProduct(productId, productSize, userId, subtotal).then(() => {
-
-      response.ok = true;
-      res.json(response);
-
-
-
-    })
-
+    producthelpers
+      .addToBuyProduct(productId, productSize, userId, subtotal)
+      .then(() => {
+        response.ok = true;
+        res.json(response);
+      });
   } else {
     response.sessionrequired = true;
     res.json(response);
   }
-
 });
 
-
-
-
 /*buynow GET checkout. */
-router.get('/buynowcheckout', verifyLoginForLoginpage, async (req, res) => {
-
-  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+router.get("/buynowcheckout", verifyLoginForLoginpage, async (req, res) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
   let user = req.session.user;
   let userId = req.session.user?._id;
-  let defaultaddress = await userhelpers.getdefaultaddress(req.session.user._id);
+  let defaultaddress = await userhelpers.getdefaultaddress(
+    req.session.user._id
+  );
   let otheraddress = await userhelpers.getotheraddress(req.session.user._id);
   let total = await producthelpers.getBuyNowTotalAmount(req.session.user._id);
   let cartItems = await producthelpers.getBuyNowProducts(userId);
   let cartcount = await producthelpers.getCartCount(req.session.user?._id);
   let allCategory = await categoryhelpers.getCategory();
   // if(cartItems.length>=1){
-  res.render('users/buynowcheckout', { admin: false, user, notheader: true, defaultaddress, otheraddress, total, cartItems, userId, existDefaultAddress, paypalcancel, changeheader: true, cartcount, allCategory });
+  res.render("users/buynowcheckout", {
+    admin: false,
+    user,
+    notheader: true,
+    defaultaddress,
+    otheraddress,
+    total,
+    cartItems,
+    userId,
+    existDefaultAddress,
+    paypalcancel,
+    changeheader: true,
+    cartcount,
+    allCategory,
+  });
   existDefaultAddress = "";
   paypalcancel = "";
   // }else{
 
   // res.redirect('/')
   // }
-
 });
 
-router.get('/wishlist', verifyLoginForLoginpage, async (req, res) => {
+router.get("/wishlist", verifyLoginForLoginpage, async (req, res) => {
   let user = req.session.user;
   let categoryname = req.query.categoryname;
   // let products =   await  producthelpers.allCategoryProducts(categoryname);
@@ -1572,18 +1511,21 @@ router.get('/wishlist', verifyLoginForLoginpage, async (req, res) => {
   let todayDate = new Date().toISOString().slice(0, 10);
   producthelpers.deleteExpiredproductoffers(todayDate).then(() => {
     producthelpers.deleteCategoryoffers(todayDate).then(() => {
-      res.render('users/wishlist', { admin: false, user, cartcount, allBrands, allsubcategories, allCategory, wishlist });
-    })
-  })
-
-
+      res.render("users/wishlist", {
+        admin: false,
+        user,
+        cartcount,
+        allBrands,
+        allsubcategories,
+        allCategory,
+        wishlist,
+      });
+    });
+  });
 });
 
-
-router.post('/addtowishlist', (req, res) => {
-
+router.post("/addtowishlist", (req, res) => {
   let response = {};
-
 
   if (req.session.user) {
     let productId = req.body.productId;
@@ -1597,104 +1539,85 @@ router.post('/addtowishlist', (req, res) => {
         response.added = true;
         res.json(response);
       }
-    })
-
+    });
   } else {
     response.sessionrequired = true;
-    res.json(response)
+    res.json(response);
   }
+});
 
-
-
-})
-
-
-
-router.get('/removefromwishlistpage', (req, res) => {
+router.get("/removefromwishlistpage", (req, res) => {
   let proId = req.query.productId;
-  producthelpers.removeProductFromWishlistPage(proId, req.session.user._id).then(() => {
-    res.json({ status: true })
-  })
+  producthelpers
+    .removeProductFromWishlistPage(proId, req.session.user._id)
+    .then(() => {
+      res.json({ status: true });
+    });
 });
 
 // post apply coupen
-router.post('/applycoupen', (req, res) => {
-  result = {}
+router.post("/applycoupen", (req, res) => {
+  result = {};
   let total;
   let coupencode = req.body.coupencode;
 
-  producthelpers.checkCoupen(coupencode, req.session.user._id).then(async (response) => {
-    //  if(response.alreadyused){
-    //    couponAlreadyUsedError = "This coupen is already used";
-    //    res.redirect('/checkout');
-    //  }
+  producthelpers
+    .checkCoupen(coupencode, req.session.user._id)
+    .then(async (response) => {
+      //  if(response.alreadyused){
+      //    couponAlreadyUsedError = "This coupen is already used";
+      //    res.redirect('/checkout');
+      //  }
 
-    if (response.notexist) {
-      result.notexist = true;
-      res.send(result);
-    }
-    else if (response.alreadyused) {
-      result.alreadyused = true;
-      res.send(result);
-    }
-    else {
-
-      if (req.body.which === '1') {
-        total = await producthelpers.getBuyNowTotalAmount(req.session.user._id);
+      if (response.notexist) {
+        result.notexist = true;
+        res.send(result);
+      } else if (response.alreadyused) {
+        result.alreadyused = true;
+        res.send(result);
       } else {
-        total = await producthelpers.getTotalAmount(req.session.user._id);
+        if (req.body.which === "1") {
+          total = await producthelpers.getBuyNowTotalAmount(
+            req.session.user._id
+          );
+        } else {
+          total = await producthelpers.getTotalAmount(req.session.user._id);
+        }
+
+        console.log("tot", total);
+
+        let price = total;
+        let offer = (price / 100) * response.coupenpercentage;
+        let offerprice = (price - offer).toFixed(0);
+        offerprice = Number(offerprice);
+        let coupenOfferPrice = offerprice;
+
+        req.session.user.coupenOfferPrice = coupenOfferPrice;
+
+        let savedprice = total - coupenOfferPrice;
+
+        result.savedprice = savedprice;
+        result.coupenOfferPrice = coupenOfferPrice;
+        result.exist = true;
+        console.log("kkkkkk");
+        console.log(result);
+        res.send(result);
+
+        //  res.send(result);
       }
-
-
-
-      console.log("tot", total);
-
-      let price = total;
-      let offer = (price / 100) * response.coupenpercentage;
-      let offerprice = (price - offer).toFixed(0);
-      offerprice = Number(offerprice);
-      let coupenOfferPrice = offerprice;
-
-      req.session.user.coupenOfferPrice = coupenOfferPrice;
-
-      let savedprice = total - coupenOfferPrice;
-
-
-
-
-      result.savedprice = savedprice;
-      result.coupenOfferPrice = coupenOfferPrice;
-      result.exist = true;
-      console.log("kkkkkk");
-      console.log(result);
-      res.send(result);
-
-
-
-      //  res.send(result);
-
-
-
-    }
-
-  })
-
-
-})
-
-
-// get all available coupens
-router.get('/allAvailableCoupens', (req, res) => {
-  producthelpers.getAllAvailableCoupens().then((response) => {
-    res.json({ data: response })
-  })
+    });
 });
 
+// get all available coupens
+router.get("/allAvailableCoupens", (req, res) => {
+  producthelpers.getAllAvailableCoupens().then((response) => {
+    res.json({ data: response });
+  });
+});
 
 // uoload image
 
-router.post('/uploadProfile', (req, res) => {
-
+router.post("/uploadProfile", (req, res) => {
   console.log(req.files);
 
   let id = req.body.id;
@@ -1704,46 +1627,34 @@ router.post('/uploadProfile', (req, res) => {
   let logo = req.files?.profile_pic;
 
   if (logo) {
-    if (fs.existsSync('./public/images/profile-images/' + id + '.png')) {
-
-
-      fs.unlink('./public/images/profile-images/' + id + '.png', function (err) {
-        if (err) throw err;
-        console.log('File deleted!');
-      });
+    if (fs.existsSync("./public/images/profile-images/" + id + ".png")) {
+      fs.unlink(
+        "./public/images/profile-images/" + id + ".png",
+        function (err) {
+          if (err) throw err;
+          console.log("File deleted!");
+        }
+      );
     }
 
-    logo.mv('./public/images/profile-images/' + id + '.png', (err, done) => {
+    logo.mv("./public/images/profile-images/" + id + ".png", (err, done) => {
       if (!err) {
-        res.redirect('/userprofile')
-      }
-      else {
+        res.redirect("/userprofile");
+      } else {
         console.log(err);
       }
-    })
+    });
   }
-
-
-
-
-
 });
 
-
-router.post('/getSearchProducts', async (req, res) => {
+router.post("/getSearchProducts", async (req, res) => {
   let payload = req.body.payload.trim();
   producthelpers.productSearch(payload).then((search) => {
-    res.send({ payload: search })
-  })
-
-
-
+    res.send({ payload: search });
+  });
 });
 
-
-router.get('/shopcategorySearchProducts', blockCheck, async (req, res) => {
-
-
+router.get("/shopcategorySearchProducts", blockCheck, async (req, res) => {
   let user = req.session.user;
   let categoryname = req.query.categoryname;
   let products = await producthelpers.searchedProduct(req.query._id);
@@ -1753,45 +1664,33 @@ router.get('/shopcategorySearchProducts', blockCheck, async (req, res) => {
   let allBrands = await brandhelpers.getBrand();
   let todayDate = new Date().toISOString().slice(0, 10);
 
-
-
-
   let result1 = await producthelpers.startCategoryOffers(todayDate);
 
-
   let result2 = await producthelpers.startProductOffers(todayDate);
-
-
 
   let result3 = await producthelpers.startCoupenOffers(todayDate);
   let search = true;
 
   producthelpers.deleteExpiredproductoffers(todayDate).then(() => {
     producthelpers.deleteExpiredCategoryoffers(todayDate).then(() => {
-      res.render('users/clothings', { admin: false, products, user, cartcount, allCategory, search, allBrands });
-    })
-  })
-
-
-
-
-
-
-})
-
+      res.render("users/clothings", {
+        admin: false,
+        products,
+        user,
+        cartcount,
+        allCategory,
+        search,
+        allBrands,
+      });
+    });
+  });
+});
 
 // get user logout
-router.get('/userlogout', (req, res) => {
-
+router.get("/userlogout", (req, res) => {
   // req.session.userloggedIn = false;
   req.session.user = null;
-  res.redirect('/');
-
-})
-
-
-
-
-
+  res.redirect("/");
+});
 
 module.exports = router;
